@@ -1,0 +1,2 @@
+#TargetFrameworkVersion=v4.0:PlatformToolSet=v140:EnableManagedIncrementalBuild=false:VCToolArchitecture=Native32Bit:WindowsTargetPlatformVersion=8.1
+Release-Lib|Win32|D:\Downloads\tinyxml2-4.0.1\tinyxml2-4.0.1\tinyxml2\|

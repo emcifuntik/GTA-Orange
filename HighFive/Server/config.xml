@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+    <servername>Funtik test server</servername>
+    <port>7788</port>
+    <maxplayers>100</maxplayers>
+    <gamemodes>
+        <gamemode sendObjects="true">lsrp.nut</gamemode>
+    </gamemodes>
+</config>
