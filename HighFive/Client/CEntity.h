@@ -9,6 +9,8 @@ public:
 	CVector3 GetRotationVelocity();
 	void SetMovementVelocity(CVector3 velocity);
 	CVector3 GetMovementVelocity();
+	void GetMoveSpeed(CVector3 & vecMoveSpeed);
+	float GetSpeed();
 	void SetPosition(CVector3 position);
 	CVector3 GetPosition();
 	void SetHeading(float heading);

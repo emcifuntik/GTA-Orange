@@ -35,6 +35,9 @@
 #include <RPC4Plugin.h>
 using namespace RakNet;
 
+// Scripthook types
+#include <../ScriptHookV/Types.h>
+
 // Console coloring
 #include "Console.h"
 
@@ -48,6 +51,5 @@ using namespace RakNet;
 
 // Network objects
 #include "CNetworkPlayer.h"
+#include "CNetworkVehicle.h"
 
-// Scripthook types
-#include <../ScriptHookV/Types.h>

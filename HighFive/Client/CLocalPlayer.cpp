@@ -28,8 +28,8 @@ CLocalPlayer::~CLocalPlayer()
 
 void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 {
-	onfoot.bJumping = onfoot.bJumping;
-	onfoot.fBlendRatio = GetBlendRation();
+	onfoot.bJumping = IsJumping();
+	onfoot.fMoveSpeed = GetBlendRation();
 	onfoot.vecPos = GetPosition();
 	onfoot.vecRot = GetRotation();
 	onfoot.fHeading = GetHeading();
@@ -40,6 +40,9 @@ void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 	onfoot.usArmour = GetArmour();
 	onfoot.ulWeapon = GetCurrentWeapon();
 	onfoot.uAmmo = GetCurrentWeaponAmmo();
+	GetAimPosition(onfoot.vecAim);
+	onfoot.bAiming = CONTROLS::IS_DISABLED_CONTROL_PRESSED(0, 25);
+	onfoot.bShooting = PED::IS_PED_SHOOTING(Handle);
 }
 
 CLocalPlayer * CLocalPlayer::Get()
@@ -120,4 +123,26 @@ void CLocalPlayer::ShowNotification(std::string text)
 	UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
 	UI::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME((char*)text.c_str());
 	UI::_DRAW_NOTIFICATION(FALSE, FALSE);
+}
+
+void CLocalPlayer::GetAimPosition(CVector3& aimPos)
+{
+	bool aiming = CONTROLS::IS_DISABLED_CONTROL_PRESSED(0, 25);
+	bool shooting = PED::IS_PED_SHOOTING(Handle);
+
+	Vector3 _camPos = CAM::GET_GAMEPLAY_CAM_COORD();
+	CVector3 camPos = CVector3(_camPos.x, _camPos.y, _camPos.z);
+	Vector3 _camRot = CAM::GET_GAMEPLAY_CAM_ROT(2);
+	CVector3 camRot = CVector3(_camRot.x, _camRot.y, _camRot.z);
+
+	CUI::PrintText(std::string("Cam pos: ") + camPos.ToString(), 0.6f, 0.7f, 255, 255, 255, 255, 0.3);
+	CUI::PrintText(std::string("Cam rot: ") + camRot.ToString(), 0.6f, 0.73f, 255, 255, 255, 255, 0.3);
+
+	if (aiming || shooting)
+	{
+		aimPos = Utils::ScreenRelToWorld(camPos, camRot, Vector2(0.f, 0.f));
+		CGraphics::Get()->Draw3DText("Aiming here", 0.3f, aimPos.fX, aimPos.fY, aimPos.fZ, { 100, 255, 100, 255 });
+	}
+	else
+		aimPos = { .0f, .0f, .0f };
 }

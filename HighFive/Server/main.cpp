@@ -22,13 +22,15 @@ int main(void)
 	std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_INTENSITY) << maxPlayers << std::endl;
 	CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 
-	CNetworkConnection::Get()->Start(port, maxPlayers);
-	auto netLoop = [=]() {
+	auto netLoop = [=]() 
+	{
+		CNetworkConnection::Get()->Start(maxPlayers, port);
 		for (;;)
 		{
+			RakSleep(15);
 			CNetworkConnection::Get()->Tick();
 			CNetworkPlayer::Tick();
-			
+
 			if (!(GetTickCount() % 1000))
 			{
 				std::stringstream ss;

@@ -22,15 +22,20 @@ void CPedestrian::SetDesiredHeading(float heading)
 	PED::SET_PED_DESIRED_HEADING(Handle, heading);
 }
 
-void CPedestrian::GetMoveSpeed(CVector3& vecMoveSpeed)
-{
-	Vector3 vec = ENTITY::GET_ENTITY_SPEED_VECTOR(Handle, false);
-	vecMoveSpeed = CVector3(vec.x, vec.y, vec.z);
-}
-
 void CPedestrian::TaskMove(CVector3 vecPos, float fMoveSpeed)
 {
 	AI::TASK_GO_STRAIGHT_TO_COORD(Handle, vecPos.fX, vecPos.fY, vecPos.fZ, fMoveSpeed, -1, 0.0f, 0.0f);
+}
+
+void CPedestrian::TaskAimAt(CVector3 vecAim, int duration)
+{
+	AI::TASK_AIM_GUN_AT_COORD(Handle, vecAim.fX, vecAim.fY, vecAim.fZ, duration, 0, 0);
+}
+
+void CPedestrian::TaskShootAt(CVector3 vecAim, int duration)
+{
+	//AI::TASK_SHOOT_AT_COORD(Handle, vecAim.fX, vecAim.fY, vecAim.fZ, duration, 3337513804U);
+	PED::SET_PED_SHOOTS_AT_COORD(Handle, vecAim.fX, vecAim.fY, vecAim.fZ, true);
 }
 
 void CPedestrian::ClearTasks()
@@ -45,7 +50,7 @@ void CPedestrian::SetModel(Hash model)
 
 bool CPedestrian::IsDucking()
 {
-	return (PED::IS_PED_DUCKING(Handle)) ? true : false;
+	return (PED::IS_PED_DUCKING(Handle) ? true : false);
 }
 
 void CPedestrian::SetDucking(bool ducking)
@@ -55,7 +60,7 @@ void CPedestrian::SetDucking(bool ducking)
 
 bool CPedestrian::IsJumping()
 {
-	return (PED::IS_PED_JUMPING(Handle)) ? true : false;
+	return (PED::IS_PED_JUMPING(Handle) ? true : false);
 }
 
 void CPedestrian::TaskJump()
@@ -87,6 +92,7 @@ Hash CPedestrian::GetCurrentWeapon()
 
 void CPedestrian::SetCurrentWeapon(Hash weapon, bool equipNow /*= TRUE*/)
 {
+	WEAPON::GIVE_WEAPON_TO_PED(Handle, weapon, 9999, true, true);
 	WEAPON::SET_CURRENT_PED_WEAPON(Handle, weapon, equipNow);
 }
 

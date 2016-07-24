@@ -28,18 +28,20 @@ bool CNetworkConnection::Connect(std::string host, unsigned short port)
 		socketDescriptor.socketFamily = AF_INET;
 		client->Startup(8, &socketDescriptor, 1);
 		client->SetOccasionalPing(true);
-
-		connection = client->Connect(host.c_str(), port, "", 0);
+		std::stringstream ss;
+		ss << "Connecting to " << host << ":" << port;
+		CChat::Get()->AddChatMessage(ss.str());
+		connection = client->Connect(host.c_str(), port, 0, 0);
 		RakAssert(connection == RakNet::CONNECTION_ATTEMPT_STARTED);
 		bConnected = true;
 		return true;
 	}
-
 	return false;
 }
 
 void CNetworkConnection::Disconnect()
 {
+	bConnected = false;
 	client->Shutdown(300);
 	CChat::Get()->Clear();
 	CLocalPlayer::Get()->ShowNotification("~b~Disconnected");
@@ -116,6 +118,25 @@ void CNetworkConnection::Tick()
 			}
 			case ID_SEND_VEHICLE_DATA:
 			{
+				break;
+			}
+			case ID_VEHICLE_SYNC:
+			{
+				/*int count;
+				bsIn.Read(count);
+				for (int i = 0; i < count; ++i)
+				{
+					VehicleData data;
+					bsIn.Read(data);
+					CNetworkVehicle * veh = CNetworkVehicle::GetByGUID(data.GUID);
+					if (!veh)
+					{
+						veh = new CNetworkVehicle(data.hashModel, data.vecPos.fX, data.vecPos.fY, data.vecPos.fZ, data.vecRot.fZ);
+						veh->m_GUID = data.GUID;
+						CChat::Get()->AddChatMessage("Vehicle created", { 0, 255, 0, 255 });
+					}
+					veh->SetVehicleData(data, 100);
+				}*/
 				break;
 			}
 			case ID_PLAYER_LEFT:

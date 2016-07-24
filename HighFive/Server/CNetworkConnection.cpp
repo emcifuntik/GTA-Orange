@@ -38,8 +38,10 @@ bool CNetworkConnection::Start(unsigned short maxPlayers, unsigned short port)
 				std::cout << "Server not started" << std::endl;
 				exit(EXIT_FAILURE);
 			}
+			else
+				std::cout << "Server started" << std::endl;
 		}
-		server->SetTimeoutTime(10000, RakNet::UNASSIGNED_SYSTEM_ADDRESS);
+		server->SetTimeoutTime(15000, RakNet::UNASSIGNED_SYSTEM_ADDRESS);
 		return true;
 	}
 	return false;
@@ -112,14 +114,11 @@ void CNetworkConnection::Tick()
 
 				bsOut.Write((unsigned char)ID_SEND_PLAYER_DATA);
 				bsOut.Write(packet->guid);
-				/*CVector3 vecPos;
-				player->GetPosition(vecPos);
-				vecPos.fX += 1.f;
-				vecPos.fY += 1.f;
-				player->SetPosition(vecPos);*/
+
 				player->GetOnFootData(data);
 				bsOut.Write(data);
 				server->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, /*RakNet::UNASSIGNED_SYSTEM_ADDRESS*/packet->systemAddress, true);
+				bsOut.Reset();
 				break;
 			}
 			case ID_SEND_VEHICLE_DATA:

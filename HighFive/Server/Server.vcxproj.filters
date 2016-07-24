@@ -16,6 +16,9 @@
     <ClInclude Include="CNetworkConnection.h">
       <Filter>Header Files\Net</Filter>
     </ClInclude>
+    <ClInclude Include="CNetworkVehicle.h">
+      <Filter>Header Files\Net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -31,6 +34,9 @@
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="CNetworkConnection.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkVehicle.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
   </ItemGroup>

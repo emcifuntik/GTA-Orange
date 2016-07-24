@@ -64,6 +64,9 @@ using namespace RakNet;
 #include "../../Shared/CVector3.h"
 #include "../../Shared/NetworkTypes.h"
 
+// Utils
+#include "Utils.h"
+
 // Modification
 #include "Commands.h"
 #include "Memory.h"
@@ -75,8 +78,9 @@ using namespace RakNet;
 #include "CLocalPlayer.h"
 
 // Net
-#include "CNetworkConnection.h"
 #include "CNetworkPlayer.h"
+//#include "CNetworkVehicle.h"
+#include "CNetworkConnection.h"
 
 // Interface
 #include "CChat.h"

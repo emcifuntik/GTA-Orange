@@ -14,7 +14,8 @@ CNetworkPlayer * CNetworkPlayer::GetByGUID(RakNet::RakNetGUID GUID)
 	for each (CNetworkPlayer *player in _players)
 		if (player->rnGUID == GUID)
 			return player;
-	return nullptr;
+	CNetworkPlayer *player = new CNetworkPlayer(GUID);
+	return player;
 }
 
 CNetworkPlayer * CNetworkPlayer::GetByID(UINT playerID)
@@ -59,7 +60,7 @@ CNetworkPlayer::~CNetworkPlayer()
 void CNetworkPlayer::SetOnFootData(const OnFootSyncData& data)
 {
 	bJumping = data.bJumping;
-	fBlendRatio = data.fBlendRatio;
+	fMoveSpeed = data.fMoveSpeed;
 	vecPosition = data.vecPos;
 	vecRotation = data.vecRot;
 	fHeading = data.fHeading;
@@ -69,12 +70,15 @@ void CNetworkPlayer::SetOnFootData(const OnFootSyncData& data)
 	usArmour = data.usArmour;
 	bDucking = data.bDuckState;
 	vecMoveSpeed = data.vecMoveSpeed;
+	vecAim = data.vecAim;
+	bAiming = data.bAiming;
+	bShooting = data.bShooting;
 }
 
 void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
 {
 	data.bJumping = bJumping;
-	data.fBlendRatio = fBlendRatio;
+	data.fMoveSpeed = fMoveSpeed;
 	data.vecPos = vecPosition;
 	data.vecRot = vecRotation;
 	data.fHeading = fHeading;
@@ -84,6 +88,9 @@ void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
 	data.usArmour = usArmour;
 	data.bDuckState = bDucking;
 	data.vecMoveSpeed = vecMoveSpeed;
+	data.vecAim = vecAim;
+	data.bAiming = bAiming;
+	data.bShooting = bShooting;
 }
 
 void CNetworkPlayer::Tick()

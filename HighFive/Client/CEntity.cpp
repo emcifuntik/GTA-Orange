@@ -22,6 +22,17 @@ CVector3 CEntity::GetMovementVelocity()
 	return CVector3(vec.x, vec.y, vec.z);
 }
 
+void CEntity::GetMoveSpeed(CVector3& vecMoveSpeed)
+{
+	Vector3 vec = ENTITY::GET_ENTITY_SPEED_VECTOR(Handle, false);
+	vecMoveSpeed = CVector3(vec.x, vec.y, vec.z);
+}
+
+float CEntity::GetSpeed()
+{
+	return ENTITY::GET_ENTITY_SPEED(Handle);
+}
+
 void CEntity::SetPosition(CVector3 position)
 {
 	ENTITY::SET_ENTITY_COORDS_NO_OFFSET(Handle, position.fX, position.fY, position.fZ, false, false, false);

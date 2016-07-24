@@ -8,8 +8,9 @@ public:
 	~CPedestrian();
 	void SetDesiredHeading(float heading);
 	float GetDesiredHeading() { return CEntity::GetHeading(); }
-	void GetMoveSpeed(CVector3& vecMoveSpeed);
 	void TaskMove(CVector3 vecPos, float fMoveSpeed);
+	void TaskAimAt(CVector3 vecAim, int duration);
+	void TaskShootAt(CVector3 vecAim, int duration);
 	void ClearTasks();
 	void SetCurrentHeading(float heading) { CEntity::SetHeading(heading); }
 	float GetCurrentHeading() { return CEntity::GetHeading(); }

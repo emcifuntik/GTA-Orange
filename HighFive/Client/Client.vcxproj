@@ -17,6 +17,7 @@
     <ClInclude Include="..\..\Shared\NetworkTypes.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CChat.h" />
+    <ClInclude Include="CNetworkVehicle.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CPedestrian.h" />
     <ClInclude Include="CLocalPlayer.h" />
@@ -29,6 +30,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="CUI.h" />
     <ClInclude Include="CVehicle.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CEntity.cpp" />
@@ -61,6 +63,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="CUI.cpp" />
     <ClCompile Include="CVehicle.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{05C92719-05C7-4DED-9024-5489640AD286}</ProjectGuid>

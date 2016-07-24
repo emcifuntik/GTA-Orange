@@ -139,17 +139,34 @@ void CNetworkPlayer::SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float
 	}
 }
 
+void CNetworkPlayer::SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMove, CVector3 aimPos, float moveSpeed, bool shooting)
+{
+	if (IsSpawned())
+	{
+		float tX = (vecPos.fX + (vecMove.fX * 10));
+		float tY = (vecPos.fY + (vecMove.fY * 10));
+		float tZ = (vecPos.fZ + (vecMove.fZ * 10));
+		AI::TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD(Handle, tX, tY,
+			tZ, aimPos.fX, aimPos.fY, aimPos.fZ, moveSpeed, (int)shooting, 0x3F000000, 0x40800000, 1, (shooting ?  0 : 512), 0, 3337513804U);
+	}
+}
+
 void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 {
-	m_BlendRatio = data.fBlendRatio;
+	m_MoveSpeed = data.fMoveSpeed;
 	m_vecMove = data.vecMoveSpeed;
 	m_Jumping = data.bJumping;
+	m_Aiming = data.bAiming;
+	m_Shooting = data.bShooting;
+	m_vecAim = data.vecAim;
 	SetTargetPosition(data.vecPos, ulDelay);
-	SetTargetRotation(data.vecRot, ulDelay);
+	if(!m_Aiming && !m_Shooting)
+		SetTargetRotation(data.vecRot, ulDelay);
 	SetHealth(data.usHealth);
 	SetArmour(data.usArmour);
-	SetCurrentWeapon(data.ulWeapon);
-	SetAmmo(data.ulWeapon, data.uAmmo);
+	if(GetCurrentWeapon() != data.ulWeapon)
+		SetCurrentWeapon(data.ulWeapon, true);
+	//SetAmmo(data.ulWeapon, 9999);
 	SetDucking(data.bDuckState);
 	m_Ducking = data.bDuckState;
 	SetMovementVelocity(data.vecMoveSpeed);
@@ -285,24 +302,68 @@ void CNetworkPlayer::Interpolate()
 	// Are we not getting in/out of a vehicle?
 	if (true)
 	{
-		UpdateTargetPosition();
-		UpdateTargetRotation();
-		SetDucking(m_Ducking);
-		ClearTasks();
-		if (lastBlendRatio != m_BlendRatio)
-			tasksToIgnore = 1;
-		if (m_BlendRatio != .0f && !tasksToIgnore)
-			SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_BlendRatio);
-		else if (tasksToIgnore > 0)
-			tasksToIgnore--;
-		if (m_Jumping)
-		{
-			TaskJump();
-			tasksToIgnore = 2;
-		}
-		lastBlendRatio = m_BlendRatio;
 		SetMovementVelocity(m_vecMove);
-		//UpdateTargetHeading();
+		if (!m_Aiming && !m_Shooting)
+			UpdateTargetRotation();
+		UpdateTargetPosition();
+		SetDucking(m_Ducking);
+		if (lastMoveSpeed != m_MoveSpeed)
+			tasksToIgnore = 1;
+		else if (tasksToIgnore > 0)
+		{
+			if (m_Jumping && tasksToIgnore == 5)
+			{
+				TaskJump();
+				CUI::PrintText("Jumping", 0.6, 0.84, 255, 255, 255, 255, 0.3);
+			}
+			tasksToIgnore--;
+		}
+		else if (!tasksToIgnore)
+			ClearTasks();
+
+		if (!tasksToIgnore)
+		{
+			if (m_Aiming /*&& !m_Shooting*/ && m_MoveSpeed != .0f)
+			{
+				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
+				CUI::PrintText("Aiming and moving", 0.6, 0.8, 255, 255, 255, 255, 0.3);
+			}
+			else if (m_Aiming && !m_Shooting/*&& !m_Shooting*/ && m_MoveSpeed == .0f)
+			{
+				TaskAimAt(m_vecAim, -1);
+				tasksToIgnore = 1;
+			}
+			else if (m_Shooting /*&& !_lastShooting*/ && m_MoveSpeed != .0f)
+			{
+				PED::SET_PED_SHOOT_RATE(Handle, 1000);
+				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
+				TaskShootAt(m_vecAim, -1);
+				tasksToIgnore = 1;
+				CUI::PrintText("Shooting and moving", 0.6, 0.8, 255, 255, 255, 255, 0.3);
+			}
+			else if (m_Shooting /*&& !_lastShooting*/ && m_MoveSpeed == .0f)
+			{
+				PED::SET_PED_SHOOT_RATE(Handle, 1000);
+				tasksToIgnore = 2;
+				TaskShootAt(m_vecAim, -1);
+				CUI::PrintText("Shooting", 0.6, 0.8, 255, 255, 255, 255, 0.3);
+			}
+			else if (m_MoveSpeed != .0f)
+			{
+				SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+				CUI::PrintText("Moving", 0.6, 0.8, 255, 255, 255, 255, 0.3);
+				if (m_Jumping)
+				{
+					tasksToIgnore = 5;
+					CUI::PrintText("Jumping", 0.6, 0.84, 255, 255, 255, 255, 0.3);
+				}
+			}
+		}
+
+		lastMoveSpeed = m_MoveSpeed;
+		_lastJumping = m_Jumping;
+		_lastShooting = m_Shooting;
+		_lastAiming = m_Aiming;
 	}
 }
 

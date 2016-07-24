@@ -20,6 +20,9 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 				CChat::Get()->AddChatMessage("Not connected");
 			else CNetworkConnection::Get()->Disconnect();
 		}
+		if (key == VK_F5) {
+			CLocalPlayer::Get()->GiveWeapon(0x2BE6766B, 9999);
+		}
 		/*if (key == VK_F10) {
 			Vector3 playerOffsetLocation = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(LocalPlayer->playerPed, 0.0, 3.0, 0.0);
 			Hash playermodel1 = GAMEPLAY::GET_HASH_KEY("a_f_y_skater_01");

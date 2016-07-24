@@ -10,9 +10,6 @@
     <Filter Include="Source Files\Interface">
       <UniqueIdentifier>{78facad3-3619-4207-ba3c-24223bab0c65}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Common">
-      <UniqueIdentifier>{1565938b-813b-4225-9282-06c50f7d5fd5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\Modification">
       <UniqueIdentifier>{22572701-4f86-47d0-ac68-b8dd5f445136}</UniqueIdentifier>
     </Filter>
@@ -40,6 +37,15 @@
     <Filter Include="Shared">
       <UniqueIdentifier>{94ae9719-62ca-4b84-8c0a-90014ef0402f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Hooking">
+      <UniqueIdentifier>{2852ff0d-b9b7-47b9-9af6-c31fab60d9e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Hooking">
+      <UniqueIdentifier>{b5142813-dc6c-43f9-9d6c-bbf060fd6fc8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Common">
+      <UniqueIdentifier>{1565938b-813b-4225-9282-06c50f7d5fd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -47,12 +53,6 @@
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
-      <Filter>Source Files\Net</Filter>
-    </ClCompile>
-    <ClCompile Include="Chat.cpp">
-      <Filter>Source Files\Interface</Filter>
     </ClCompile>
     <ClCompile Include="Commands.cpp">
       <Filter>Source Files\Modification</Filter>
@@ -72,21 +72,29 @@
     <ClCompile Include="GameScripts.cpp">
       <Filter>Source Files\Modification</Filter>
     </ClCompile>
-    <ClCompile Include="Memory.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>Source Files\Interface</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files\Interface</Filter>
-    </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="Vehicle.cpp" />
     <ClCompile Include="CVehicle.cpp">
       <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="CChat.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="CGraphics.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="CUI.cpp">
+      <Filter>Source Files\Interface</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetworkConnection.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory.cpp">
+      <Filter>Source Files\Hooking</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,12 +103,6 @@
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="NetworkManager.h">
-      <Filter>Header Files\Net</Filter>
-    </ClInclude>
-    <ClInclude Include="Chat.h">
-      <Filter>Header Files\Interface</Filter>
     </ClInclude>
     <ClInclude Include="Commands.h">
       <Filter>Header Files\Modification</Filter>
@@ -132,18 +134,29 @@
     <ClInclude Include="GameScripts.h">
       <Filter>Header Files\Modification</Filter>
     </ClInclude>
-    <ClInclude Include="Memory.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>Header Files\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files\Interface</Filter>
-    </ClInclude>
-    <ClInclude Include="Vehicle.h" />
     <ClInclude Include="CVehicle.h">
       <Filter>Header Files\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="CChat.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="CGraphics.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="CUI.h">
+      <Filter>Header Files\Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkConnection.h">
+      <Filter>Header Files\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Header Files\Hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="CNetworkVehicle.h">
+      <Filter>Header Files\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
