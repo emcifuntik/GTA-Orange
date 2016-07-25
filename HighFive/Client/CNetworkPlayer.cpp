@@ -1,10 +1,14 @@
 #include "stdafx.h"
 
 std::vector<CNetworkPlayer *> CNetworkPlayer::PlayersPool;
+Hash CNetworkPlayer::hFutureModel = 0;
+int CNetworkPlayer::ignoreTasks = 0;
+
 
 CNetworkPlayer::CNetworkPlayer() :CPedestrian(0)
 {
 	PlayersPool.push_back(this);
+	m_Model = hFutureModel;
 	Spawn({ 0.f, 0.f, 0.f });
 }
 
@@ -69,9 +73,12 @@ void CNetworkPlayer::DeleteNotExists(const std::vector<RakNet::RakNetGUID>& GUID
 void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 {
 	m_Spawned = true;
-	Handle = PED::CREATE_PED(1, ENTITY::GET_ENTITY_MODEL(PLAYER::PLAYER_PED_ID()), vecPosition.fX, vecPosition.fY, vecPosition.fZ, .0f, true, false);
-	CLocalPlayer::Get()->DisableCollision(*this);
-	DisableCollision(*CLocalPlayer::Get());
+	if (STREAMING::IS_MODEL_IN_CDIMAGE(m_Model) && STREAMING::IS_MODEL_VALID(m_Model))
+		STREAMING::REQUEST_MODEL(m_Model);
+	while (!STREAMING::HAS_MODEL_LOADED(m_Model))
+		WAIT(0);
+	Handle = PED::CREATE_PED(1, m_Model, vecPosition.fX, vecPosition.fY, vecPosition.fZ, .0f, true, false);
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(m_Model);
 }
 
 void CNetworkPlayer::SetTargetPosition(const CVector3& vecPosition, unsigned long ulDelay)
@@ -153,6 +160,8 @@ void CNetworkPlayer::SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMo
 
 void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 {
+	if (data.hModel != m_Model)
+		SetModel(data.hModel);
 	m_MoveSpeed = data.fMoveSpeed;
 	m_vecMove = data.vecMoveSpeed;
 	m_Jumping = data.bJumping;
@@ -303,67 +312,56 @@ void CNetworkPlayer::Interpolate()
 	if (true)
 	{
 		SetMovementVelocity(m_vecMove);
-		if (!m_Aiming && !m_Shooting)
+		if(!m_Shooting && !m_Aiming)
 			UpdateTargetRotation();
 		UpdateTargetPosition();
-		SetDucking(m_Ducking);
-		if (lastMoveSpeed != m_MoveSpeed)
-			tasksToIgnore = 1;
-		else if (tasksToIgnore > 0)
+		if (tasksToIgnore > 0)
 		{
-			if (m_Jumping && tasksToIgnore == 5)
-			{
-				TaskJump();
-				CUI::PrintText("Jumping", 0.6, 0.84, 255, 255, 255, 255, 0.3);
-			}
 			tasksToIgnore--;
-		}
-		else if (!tasksToIgnore)
 			ClearTasks();
+		}
 
 		if (!tasksToIgnore)
 		{
-			if (m_Aiming /*&& !m_Shooting*/ && m_MoveSpeed != .0f)
+			//AI::TASK_LOOK_AT_COORD(Handle, m_vecAim.fX, m_vecAim.fY, m_vecAim.fZ, -1, 0, 0);
+			if (m_Aiming && !m_Shooting && m_MoveSpeed != .0f)
 			{
 				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
-				CUI::PrintText("Aiming and moving", 0.6, 0.8, 255, 255, 255, 255, 0.3);
 			}
 			else if (m_Aiming && !m_Shooting/*&& !m_Shooting*/ && m_MoveSpeed == .0f)
 			{
 				TaskAimAt(m_vecAim, -1);
-				tasksToIgnore = 1;
 			}
-			else if (m_Shooting /*&& !_lastShooting*/ && m_MoveSpeed != .0f)
+			else if (m_Shooting && m_MoveSpeed != .0f)
 			{
-				PED::SET_PED_SHOOT_RATE(Handle, 1000);
-				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
-				TaskShootAt(m_vecAim, -1);
-				tasksToIgnore = 1;
-				CUI::PrintText("Shooting and moving", 0.6, 0.8, 255, 255, 255, 255, 0.3);
+				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
 			}
-			else if (m_Shooting /*&& !_lastShooting*/ && m_MoveSpeed == .0f)
+			else if (m_Shooting && !m_Aiming)
 			{
-				PED::SET_PED_SHOOT_RATE(Handle, 1000);
-				tasksToIgnore = 2;
 				TaskShootAt(m_vecAim, -1);
-				CUI::PrintText("Shooting", 0.6, 0.8, 255, 255, 255, 255, 0.3);
+			}
+			else if (m_Shooting && m_MoveSpeed == .0f)
+			{
+				tasksToIgnore = ignoreTasks;
+				TaskShootAt(m_vecAim, -1);
 			}
 			else if (m_MoveSpeed != .0f)
 			{
-				SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
-				CUI::PrintText("Moving", 0.6, 0.8, 255, 255, 255, 255, 0.3);
-				if (m_Jumping)
+				if (m_MoveSpeed != lastMoveSpeed)
 				{
-					tasksToIgnore = 5;
-					CUI::PrintText("Jumping", 0.6, 0.84, 255, 255, 255, 255, 0.3);
+					ClearTasks();
+					tasksToIgnore = 2;
 				}
+				else
+					SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+			}
+			else
+			{
+				ClearTasks();
 			}
 		}
 
 		lastMoveSpeed = m_MoveSpeed;
-		_lastJumping = m_Jumping;
-		_lastShooting = m_Shooting;
-		_lastAiming = m_Aiming;
 	}
 }
 
@@ -378,7 +376,15 @@ void CNetworkPlayer::DrawTag()
 
 void CNetworkPlayer::SetModel(Hash model)
 {
-	// Recreate ped
+	CVector3 pos = GetPosition();
+	float heading = GetHeading();
+	PED::DELETE_PED(&Handle);
+	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
+		STREAMING::REQUEST_MODEL(model);
+	while (!STREAMING::HAS_MODEL_LOADED(model))
+		WAIT(0);
+	Handle = PED::CREATE_PED(1, model, pos.fX, pos.fY, pos.fZ, heading, true, false);
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 }
 
 void CNetworkPlayer::RemoveTargetPosition()

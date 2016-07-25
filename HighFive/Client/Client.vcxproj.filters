@@ -158,5 +158,11 @@
     <ClInclude Include="Utils.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="HookPools.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\LILMP2\Client\Models.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

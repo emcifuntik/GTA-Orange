@@ -27,14 +27,14 @@ int main(void)
 		CNetworkConnection::Get()->Start(maxPlayers, port);
 		for (;;)
 		{
-			RakSleep(15);
+			RakSleep(5);
 			CNetworkConnection::Get()->Tick();
 			CNetworkPlayer::Tick();
 
-			if (!(GetTickCount() % 1000))
+			if (!(GetTickCount() % 10))
 			{
 				std::stringstream ss;
-				ss << serverNode->GetText() << ". Players online: " << CNetworkPlayer::Count();
+				ss << serverNode->GetText() << ". Players online: " << CNetworkPlayer::Count() << ", shoots: " << CNetworkConnection::shoots;
 				SetConsoleTitle(ss.str().c_str());
 			}
 		}

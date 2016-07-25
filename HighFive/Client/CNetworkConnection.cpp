@@ -112,6 +112,7 @@ void CNetworkConnection::Tick()
 				RakNet::RakNetGUID playerGUID;
 				bsIn.Read(playerGUID);
 				bsIn.Read(data);
+				CNetworkPlayer::hFutureModel = data.hModel;
 				CNetworkPlayer *remotePlayer = CNetworkPlayer::GetByGUID(playerGUID);
 				remotePlayer->SetOnFootData(data, 100);
 				break;

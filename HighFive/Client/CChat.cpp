@@ -204,12 +204,12 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 				std::wstring_convert<convert_type, wchar_t> converter;
 				std::string converted_str = converter.to_bytes(Chat->wsCurrentMessage);
 
-				RakNet::BitStream sendmessage;
-				RakNet::RakString outStr(converted_str.c_str());
+				//RakNet::BitStream sendmessage;
+				//RakNet::RakString outStr(converted_str.c_str());
 
-				sendmessage.Write((MessageID)ID_CHAT_MESSAGE);
-				sendmessage.Write(converted_str);
-				CNetworkConnection::Get()->client->Send(&sendmessage, LOW_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+				//sendmessage.Write((MessageID)ID_CHAT_MESSAGE);
+				//sendmessage.Write(converted_str);
+				//CNetworkConnection::Get()->client->Send(&sendmessage, LOW_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 				Chat->wsCurrentMessage.clear();
 				Chat->Close();

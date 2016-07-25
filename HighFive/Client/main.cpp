@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-
 void InitGameScript() {
 	srand(GetTickCount());
 	RunGameScript();
@@ -8,7 +7,7 @@ void InitGameScript() {
 
 void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore, BOOL isUpNow)
 {
-	if (isUpNow)
+	if (isUpNow || wasDownBefore)
 	{
 		if (key == VK_F8 && !CNetworkConnection::Get()->IsConnected()) {
 			if (!CNetworkConnection::Get()->Connect("25.69.172.216", 7788)) {
@@ -22,6 +21,19 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 		}
 		if (key == VK_F5) {
 			CLocalPlayer::Get()->GiveWeapon(0x2BE6766B, 9999);
+		}
+		if (key == VK_NUMPAD8)
+		{
+			CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[(rand() % 30) + 100]));
+		}
+		if (key == VK_F4)
+		{
+			/*intptr_t baseAddress = (intptr_t)GetModuleHandle(NULL);
+			intptr_t worldPtr = baseAddress + 0x228FA58;*/
+			/*int(*LoadGameNow)(char);
+			char* func = Memory::Find("33 C9 E8 ? ? ? ? 8B 0D ? ? ? ? 48 8B 5C 24 ? 8D 41 FC 83 F8 01 0F 47 CF 89 0D ? ? ? ?")->get<char>(2);
+			Memory::set_call(&LoadGameNow, func);
+			LoadGameNow(0);*/
 		}
 		/*if (key == VK_F10) {
 			Vector3 playerOffsetLocation = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(LocalPlayer->playerPed, 0.0, 3.0, 0.0);
@@ -54,6 +66,9 @@ void Rendering()
 
 		CChat::Get()->Render();
 		CChat::Get()->Input();
+		std::stringstream ss;
+		ss << "Tasks to ignore: " << CNetworkPlayer::ignoreTasks;
+		CUI::PrintText(ss.str().c_str(), 0.8, 0.8);
 
 		CNetworkPlayer::Tick();
 		WAIT(0);

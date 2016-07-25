@@ -11,6 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\LILMP2\Client\Models.h" />
     <ClInclude Include="..\..\Shared\CMath.h" />
     <ClInclude Include="..\..\Shared\CommonEnums.h" />
     <ClInclude Include="..\..\Shared\CVector3.h" />
@@ -23,6 +24,7 @@
     <ClInclude Include="CLocalPlayer.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CGraphics.h" />
+    <ClInclude Include="HookPools.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="CNetworkConnection.h" />

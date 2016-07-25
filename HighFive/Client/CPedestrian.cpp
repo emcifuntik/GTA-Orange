@@ -2,10 +2,13 @@
 
 CPedestrian::CPedestrian(Hash Model, CVector3 Position, float Heading) :CEntity(-1)
 {
-	STREAMING::REQUEST_MODEL(Model);
+	if (STREAMING::IS_MODEL_IN_CDIMAGE(Model) && STREAMING::IS_MODEL_VALID(Model))
+		STREAMING::REQUEST_MODEL(Model);
 	while (!STREAMING::HAS_MODEL_LOADED(Model))
-		WAIT(1);
+		WAIT(0);
 	Handle = (Entity)PED::CREATE_PED(1, Model, Position.fX, Position.fY, Position.fZ, Heading, true, false);
+	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(Model);
+	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
 }
 
 CPedestrian::CPedestrian(Ped handle) :CEntity(handle)
@@ -38,9 +41,12 @@ void CPedestrian::TaskShootAt(CVector3 vecAim, int duration)
 	PED::SET_PED_SHOOTS_AT_COORD(Handle, vecAim.fX, vecAim.fY, vecAim.fZ, true);
 }
 
-void CPedestrian::ClearTasks()
+void CPedestrian::ClearTasks(bool rightnow)
 {
-	AI::CLEAR_PED_TASKS(Handle);
+	if (!rightnow)
+		AI::CLEAR_PED_TASKS(Handle);
+	else
+		AI::CLEAR_PED_TASKS_IMMEDIATELY(Handle);
 }
 
 void CPedestrian::SetModel(Hash model)

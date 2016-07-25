@@ -59,6 +59,7 @@ CNetworkPlayer::~CNetworkPlayer()
 
 void CNetworkPlayer::SetOnFootData(const OnFootSyncData& data)
 {
+	hModel = data.hModel;
 	bJumping = data.bJumping;
 	fMoveSpeed = data.fMoveSpeed;
 	vecPosition = data.vecPos;
@@ -77,6 +78,7 @@ void CNetworkPlayer::SetOnFootData(const OnFootSyncData& data)
 
 void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
 {
+	data.hModel = hModel;
 	data.bJumping = bJumping;
 	data.fMoveSpeed = fMoveSpeed;
 	data.vecPos = vecPosition;

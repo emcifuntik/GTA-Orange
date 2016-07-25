@@ -8,6 +8,7 @@ class CNetworkPlayer
 	// Non-static
 	unsigned int uiID;
 	RakNet::RakNetGUID rnGUID;
+	Hash hModel;
 	bool bDead = false;
 	bool bDucking = false;
 	bool bBlipVisible = true;

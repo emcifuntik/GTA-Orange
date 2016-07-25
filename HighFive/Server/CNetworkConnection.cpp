@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+int CNetworkConnection::shoots = 0;
+
 CNetworkConnection * CNetworkConnection::singleInstance = nullptr;
 
 CNetworkConnection::CNetworkConnection()
@@ -107,6 +109,8 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				OnFootSyncData data;
 				bsIn.Read(data);
+				if (data.bShooting)
+					shoots++;
 				player->SetOnFootData(data);
 				
 				/*if (OnPlayerUpdate(sLUA, player->GetID()) == 0)
@@ -116,6 +120,8 @@ void CNetworkConnection::Tick()
 				bsOut.Write(packet->guid);
 
 				player->GetOnFootData(data);
+				/*data.vecPos.fX += 1.f;
+				data.vecPos.fY += 1.f;*/
 				bsOut.Write(data);
 				server->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, /*RakNet::UNASSIGNED_SYSTEM_ADDRESS*/packet->systemAddress, true);
 				bsOut.Reset();

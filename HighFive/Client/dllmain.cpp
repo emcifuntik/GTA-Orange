@@ -15,6 +15,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 			m->nop(2);
 		delete m;
 
+		////Usage:
+		//LoadGameNow(0); //To start a new game, any other value other than 0 just seems to make the loading screen load endlessly
+
 		//m = Memory::Find("48 85 C9 0F 84 ? 00 00 00 48 8D 55 A7 E8");
 		//m += 13;
 		//m->call(Memory::Return<int, 0>);

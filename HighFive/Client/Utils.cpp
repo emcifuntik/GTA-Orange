@@ -16,10 +16,10 @@ bool Utils::WorldToScreenRel(CVector3 worldCoords, Vector2& screenCoords)
 CVector3 Utils::ScreenRelToWorld(CVector3 camPos, CVector3 camRot, Vector2 coord)
 {
 	auto camForward = RotationToDirection(camRot);
-	auto rotUp = camRot + CVector3(10, 0, 0);
-	auto rotDown = camRot + CVector3(-10, 0, 0);
-	auto rotLeft = camRot + CVector3(0, 0, -10);
-	auto rotRight = camRot + CVector3(0, 0, 10);
+	auto rotUp = camRot + CVector3(10000, 0, 0);
+	auto rotDown = camRot + CVector3(-10000, 0, 0);
+	auto rotLeft = camRot + CVector3(0, 0, -10000);
+	auto rotRight = camRot + CVector3(0, 0, 10000);
 
 	auto camRight = RotationToDirection(rotRight) - RotationToDirection(rotLeft);
 	auto camUp = RotationToDirection(rotUp) - RotationToDirection(rotDown);
@@ -29,18 +29,18 @@ CVector3 Utils::ScreenRelToWorld(CVector3 camPos, CVector3 camRot, Vector2 coord
 	auto camRightRoll = camRight * (float)std::cos(rollRad) - camUp * (float)std::sin(rollRad);
 	auto camUpRoll = camRight * (float)std::sin(rollRad) + camUp * (float)std::cos(rollRad);
 
-	auto point3D = camPos + camForward * 10.0f + camRightRoll + camUpRoll;
+	auto point3D = camPos + camForward * 10000.0f + camRightRoll + camUpRoll;
 	Vector2 point2D;
-	if (!WorldToScreenRel(point3D, point2D)) return camPos + camForward * 10.0f;
-	auto point3DZero = camPos + camForward * 10.0f;
+	if (!WorldToScreenRel(point3D, point2D)) return camPos + camForward * 10000.0f;
+	auto point3DZero = camPos + camForward * 10000.0f;
 	Vector2 point2DZero;
-	if (!WorldToScreenRel(point3DZero, point2DZero)) return camPos + camForward * 10.0f;
+	if (!WorldToScreenRel(point3DZero, point2DZero)) return camPos + camForward * 10000.0f;
 
-	const double eps = 0.001;
-	if (std::abs(point2D.fX - point2DZero.fX) < eps || std::abs(point2D.fY - point2DZero.fY) < eps) return camPos + camForward * 10.0f;
+	const double eps = 0.0000001;
+	if (std::abs(point2D.fX - point2DZero.fX) < eps || std::abs(point2D.fY - point2DZero.fY) < eps) return camPos + camForward * 10000.0f;
 	auto scaleX = (coord.fX - point2DZero.fX) / (point2D.fX - point2DZero.fX);
 	auto scaleY = (coord.fY - point2DZero.fY) / (point2D.fY - point2DZero.fY);
-	auto point3Dret = camPos + camForward * 10.0f + camRightRoll * scaleX + camUpRoll * scaleY;
+	auto point3Dret = camPos + camForward * 10000.0f + camRightRoll * scaleX + camUpRoll * scaleY;
 	return point3Dret;
 }
 

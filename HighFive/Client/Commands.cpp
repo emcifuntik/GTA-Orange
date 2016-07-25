@@ -21,9 +21,9 @@ int CommandProcessor(std::string command)
 	std::vector<std::string> params = split(command, ' ');
 	command = params[0];
 	params.erase(params.begin());
-	if (!command.compare("/test"))
+	if (!command.compare("/model"))
 	{
-		CChat::Get()->AddChatMessage("Hello, World!");
+		CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[std::atoi(params[0].c_str())]));
 		return true;
 	}
 	return false;

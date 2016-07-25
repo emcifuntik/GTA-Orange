@@ -13,6 +13,9 @@ class CNetworkConnection
 	RakNet::ConnectionAttemptResult connection;
 	bool bConnected = false;
 public:
+	//Debug
+	static int shoots;
+
 	static CNetworkConnection * Get();
 
 	bool Start(unsigned short maxPlayers, unsigned short port);

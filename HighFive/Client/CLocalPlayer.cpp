@@ -1,6 +1,9 @@
 #include "stdafx.h"
 
 CLocalPlayer* CLocalPlayer::Instance = nullptr;
+float CLocalPlayer::offsetX = 0.f;
+float CLocalPlayer::offsetY = 0.f;
+float CLocalPlayer::alpha = 0.001f;
 
 CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 {
@@ -19,6 +22,13 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 		GAMEPLAY::DELETE_STUNT_JUMP(i);
 	}
 	GAMEPLAY::SET_MISSION_FLAG(true);
+	auto addr = Memory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
+	addr->nop(20);
+	//AUDIO::REQUEST_SCRIPT_AUDIO_BANK("SNOW_FOOTSTEPS", true);
+	GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
+	GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
+	GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
+
 }
 
 
@@ -28,6 +38,7 @@ CLocalPlayer::~CLocalPlayer()
 
 void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 {
+	onfoot.hModel = GetModel();
 	onfoot.bJumping = IsJumping();
 	onfoot.fMoveSpeed = GetBlendRation();
 	onfoot.vecPos = GetPosition();
@@ -54,6 +65,11 @@ CLocalPlayer * CLocalPlayer::Get()
 
 void CLocalPlayer::Tick()
 {
+	if (newModel != 0)
+	{
+		ChangeModel(newModel);
+		newModel = 0;
+	}
 	VEHICLE::SET_GARBAGE_TRUCKS(false);
 	VEHICLE::SET_RANDOM_BOATS(false);
 	VEHICLE::SET_RANDOM_TRAINS(false);
@@ -84,15 +100,19 @@ void CLocalPlayer::Tick()
 	UI::_0x170F541E1CADD1DE(true);
 	UI::SHOW_HUD_COMPONENT_THIS_FRAME(3);
 	UI::DISPLAY_CASH(true);
+
+	std::stringstream ss;
+	ss << "X offset: " << offsetX << std::endl << "Y offset: " << offsetY << std::endl << "Alpha: " << alpha;
+	CUI::PrintText(ss.str(), 0.8f, 0.87f);
 }
 
-void CLocalPlayer::SetModel(Hash model)
+void CLocalPlayer::ChangeModel(Hash model)
 {
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 		STREAMING::REQUEST_MODEL(model);
 	while (!STREAMING::HAS_MODEL_LOADED(model))
 		WAIT(0);
-	PLAYER::SET_PLAYER_MODEL(0, model);
+	PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 }
 
@@ -135,13 +155,12 @@ void CLocalPlayer::GetAimPosition(CVector3& aimPos)
 	Vector3 _camRot = CAM::GET_GAMEPLAY_CAM_ROT(2);
 	CVector3 camRot = CVector3(_camRot.x, _camRot.y, _camRot.z);
 
-	CUI::PrintText(std::string("Cam pos: ") + camPos.ToString(), 0.6f, 0.7f, 255, 255, 255, 255, 0.3);
-	CUI::PrintText(std::string("Cam rot: ") + camRot.ToString(), 0.6f, 0.73f, 255, 255, 255, 255, 0.3);
-
 	if (aiming || shooting)
 	{
 		aimPos = Utils::ScreenRelToWorld(camPos, camRot, Vector2(0.f, 0.f));
-		CGraphics::Get()->Draw3DText("Aiming here", 0.3f, aimPos.fX, aimPos.fY, aimPos.fZ, { 100, 255, 100, 255 });
+		aimPos.fX += aimPos.fX*offsetX;
+		aimPos.fY += aimPos.fY*offsetY;
+		//CGraphics::Get()->Draw3DText("Aiming here", 0.3f, aimPos.fX, aimPos.fY, aimPos.fZ, { 100, 255, 100, 255 });
 	}
 	else
 		aimPos = { .0f, .0f, .0f };

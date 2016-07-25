@@ -38,6 +38,7 @@ private:
 	std::string			m_Name;
 	CVector3			m_vecMove;
 	CVector3			m_vecAim;
+	Hash				m_Model;
 	bool				m_Spawned = false;
 	bool				m_Ducking = false;
 	bool				m_Jumping = false;
@@ -52,14 +53,15 @@ private:
 	int					updateTick = 0;
 	int					lastTick = 0;
 	int					tasksToIgnore = 0;
+	DWORD				lastUpdate = 9999;
 	CNetworkPlayer();
 public:
+	static int ignoreTasks;
+	static Hash hFutureModel;
 	static std::vector<CNetworkPlayer*> All();
 	static void DeleteNotExists(const std::vector<RakNet::RakNetGUID>& GUIDs);
 	static CNetworkPlayer * GetByGUID(RakNet::RakNetGUID GUID);
 	static void Tick();
-
-	static void DrawTags();
 
 	void UpdateLastTickTime();
 	int GetTickTime();

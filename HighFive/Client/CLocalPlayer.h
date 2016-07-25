@@ -7,9 +7,14 @@ class CLocalPlayer: public CPedestrian
 	static CLocalPlayer* Instance;
 	CLocalPlayer();
 public:
+	Hash newModel = 0;
+
+	static float offsetX;
+	static float offsetY;
+	static float alpha;
 	static CLocalPlayer *Get();
 
-	void SetModel(Hash model);
+	void ChangeModel(Hash model);
 	void Connect();
 	void Tick();
 	void GetOnFootSync(OnFootSyncData& onfoot);

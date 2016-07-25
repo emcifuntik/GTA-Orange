@@ -4,6 +4,7 @@ class OnFootSyncData
 {
 public:
 	//CControlState controlState;		// control state
+	Hash hModel;						// player model
 	float fMoveSpeed;
 	CVector3 vecPos;					// player position
 	CVector3 vecRot;					// player rotation
@@ -18,6 +19,7 @@ public:
 	unsigned int uAmmo;					// player weapon and ammo
 	bool bAiming : 1;
 	bool bShooting : 1;
+	bool bReloading : 1;
 	CVector3 vecAim;
 
 	std::string ToString()
@@ -37,7 +39,8 @@ public:
 			"Jumping: " << (bJumping ? "true" : "false") << std::endl <<
 			"Aiming: " << (bAiming ? "true" : "false") << std::endl <<
 			"Shooting: " << (bShooting ? "true" : "false") << std::endl <<
-			"Aim pos: X = " << vecAim.fX << ", Y = " << vecAim.fY << ", Z = " << vecAim.fZ << std::endl;
+			"Aim pos: X = " << vecAim.fX << ", Y = " << vecAim.fY << ", Z = " << vecAim.fZ << std::endl <<
+			"Player model: " << hModel << std::endl;
 		return ss.str();
 	}
 };

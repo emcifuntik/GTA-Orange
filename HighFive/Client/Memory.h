@@ -26,6 +26,10 @@ public:
 	template <typename T> void put(void *address, T value);
 	template <typename T> void jump(T func);
 	template <typename T> void call(T func);
+	template <typename T> T* get(int offset);
+	template <typename T> static T get_call(T address);
+	template <typename TTarget, typename T> static void set_call(TTarget* target, T address);
+	template <typename T> static inline uintptr_t get_adjusted(T _address);
 	
 	Memory operator+(int offset)
 	{
@@ -71,4 +75,31 @@ inline void Memory::call(T func)
 {
 	put(address, (uint8_t)0xE8);
 	put((void*)((size_t*)address + 1), (intptr_t)func - (intptr_t)baseDiff - 5);
+}
+
+template<typename T>
+inline uintptr_t Memory::get_adjusted(T _address)
+{
+	return (uintptr_t)_address + baseDiff;
+}
+
+template<typename T>
+inline T* Memory::get(int offset)
+{
+	char* ptr = reinterpret_cast<char*>(address);
+	return reinterpret_cast<T*>(ptr + offset);
+}
+
+template<typename T>
+inline T Memory::get_call(T _address)
+{
+	intptr_t target = *(uintptr_t*)(get_adjusted(_address) + 1);
+	target += (get_adjusted(_address) + 5);
+	return (T)target;
+}
+
+template<typename TTarget, typename T>
+inline void Memory::set_call(TTarget* target, T _address)
+{
+	*(T*)target = get_call(_address);
 }
