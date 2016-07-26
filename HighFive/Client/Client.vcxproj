@@ -20,11 +20,11 @@
     <ClInclude Include="CChat.h" />
     <ClInclude Include="CNetworkVehicle.h" />
     <ClInclude Include="Commands.h" />
+    <ClInclude Include="CConfig.h" />
     <ClInclude Include="CPedestrian.h" />
     <ClInclude Include="CLocalPlayer.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CGraphics.h" />
-    <ClInclude Include="HookPools.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="CNetworkConnection.h" />
@@ -41,6 +41,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Commands.cpp" />
+    <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="CPedestrian.cpp" />
     <ClCompile Include="dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>

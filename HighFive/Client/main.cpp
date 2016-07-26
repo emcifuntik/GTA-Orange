@@ -21,10 +21,36 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 		}
 		if (key == VK_F5) {
 			CLocalPlayer::Get()->GiveWeapon(0x2BE6766B, 9999);
+			CLocalPlayer::Get()->GiveWeapon(0x05FC3C11, 9999);
+			
+		}
+		if (key == VK_NUMPAD5)
+		{
+			CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[(GetTickCount() % 30) + 100]));
 		}
 		if (key == VK_NUMPAD8)
 		{
-			CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[(rand() % 30) + 100]));
+			CLocalPlayer::Get()->offsetY += CLocalPlayer::Get()->alpha;
+		}
+		if (key == VK_NUMPAD2)
+		{
+			CLocalPlayer::Get()->offsetY -= CLocalPlayer::Get()->alpha;
+		}
+		if (key == VK_NUMPAD6)
+		{
+			CLocalPlayer::Get()->offsetX += CLocalPlayer::Get()->alpha;
+		}
+		if (key == VK_NUMPAD4)
+		{
+			CLocalPlayer::Get()->offsetX -= CLocalPlayer::Get()->alpha;
+		}
+		if (key == VK_NUMPAD7)
+		{
+			CLocalPlayer::Get()->alpha *= 10.f;
+		}
+		if (key == VK_NUMPAD1)
+		{
+			CLocalPlayer::Get()->alpha /= 10.f;
 		}
 		if (key == VK_F4)
 		{

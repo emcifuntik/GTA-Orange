@@ -64,6 +64,7 @@ using namespace RakNet;
 #include "../../Shared/CVector3.h"
 #include "../../Shared/NetworkTypes.h"
 #include "../../Shared/Models.h"
+#include "CConfig.h"
 
 // Utils
 #include "Utils.h"

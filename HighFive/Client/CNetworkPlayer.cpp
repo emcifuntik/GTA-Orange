@@ -79,6 +79,13 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 		WAIT(0);
 	Handle = PED::CREATE_PED(1, m_Model, vecPosition.fX, vecPosition.fY, vecPosition.fZ, .0f, true, false);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(m_Model);
+	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, false);
+	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
+	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
+	PED::SET_PED_CAN_RAGDOLL(Handle, false);
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
 }
 
 void CNetworkPlayer::SetTargetPosition(const CVector3& vecPosition, unsigned long ulDelay)
@@ -160,6 +167,15 @@ void CNetworkPlayer::SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMo
 
 void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 {
+	SetHealth(data.usHealth);
+	m_Health = data.usHealth;
+	if (m_Health <= 100.f)
+		return;
+	else if(pedJustDead)
+	{
+		Spawn(data.vecPos);
+		pedJustDead = false;
+	}
 	if (data.hModel != m_Model)
 		SetModel(data.hModel);
 	m_MoveSpeed = data.fMoveSpeed;
@@ -171,7 +187,6 @@ void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 	SetTargetPosition(data.vecPos, ulDelay);
 	if(!m_Aiming && !m_Shooting)
 		SetTargetRotation(data.vecRot, ulDelay);
-	SetHealth(data.usHealth);
 	SetArmour(data.usArmour);
 	if(GetCurrentWeapon() != data.ulWeapon)
 		SetCurrentWeapon(data.ulWeapon, true);
@@ -311,6 +326,12 @@ void CNetworkPlayer::Interpolate()
 	// Are we not getting in/out of a vehicle?
 	if (true)
 	{
+		if (GetHealth() <= 100.f && !pedJustDead)
+		{
+			pedJustDead = true;
+			ENTITY::DELETE_ENTITY(&Handle);
+			return;
+		}
 		SetMovementVelocity(m_vecMove);
 		if(!m_Shooting && !m_Aiming)
 			UpdateTargetRotation();
@@ -335,14 +356,17 @@ void CNetworkPlayer::Interpolate()
 			else if (m_Shooting && m_MoveSpeed != .0f)
 			{
 				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
+				TaskAimAt(m_vecAim, -1);
+				TaskShootAt(m_vecAim, -1);
+				tasksToIgnore = 5;
 			}
 			else if (m_Shooting && !m_Aiming)
 			{
+				TaskAimAt(m_vecAim, -1);
 				TaskShootAt(m_vecAim, -1);
 			}
 			else if (m_Shooting && m_MoveSpeed == .0f)
 			{
-				tasksToIgnore = ignoreTasks;
 				TaskShootAt(m_vecAim, -1);
 			}
 			else if (m_MoveSpeed != .0f)
@@ -367,24 +391,39 @@ void CNetworkPlayer::Interpolate()
 
 void CNetworkPlayer::DrawTag()
 {
-	CVector3 vecCurPos = GetPosition();
-	float health = (GetHealth() / 200.f);
-	CGraphics::Get()->Draw3DText("Funtik", .5f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f, { 0xff, 0xff, 0xff, 0xff });
-	CGraphics::Get()->Draw3DProgressBar({ 0, 0, 0, 100 }, { 200, 50, 50, 200 }, 0.08f, 0.018f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f, health);
+	if (ENTITY::IS_ENTITY_ON_SCREEN(Handle))
+	{
+		CVector3 vecCurPos = GetPosition();
+		float health = (((m_Health < 100.f ? 100.f : m_Health) - 100.f) / 100.f);
+		float distance = (vecCurPos - CLocalPlayer::Get()->GetPosition()).Length();
+		if (distance < 100.f)
+		{
+			CGraphics::Get()->Draw3DText(m_Name, .5f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f + (distance * 0.03f), { 0xAA, 0xAA, 0xFF, 0xFF });
+			CGraphics::Get()->Draw3DProgressBar({ 0, 0, 0, 100 }, { 200, 50, 50, 200 }, 0.08f, 0.018f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f + (distance * 0.03f), health);
+		}
+	}
 }
 
 
 void CNetworkPlayer::SetModel(Hash model)
 {
+	m_Model = model;
 	CVector3 pos = GetPosition();
 	float heading = GetHeading();
-	PED::DELETE_PED(&Handle);
+	ENTITY::DELETE_ENTITY(&Handle);
 	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 		STREAMING::REQUEST_MODEL(model);
 	while (!STREAMING::HAS_MODEL_LOADED(model))
 		WAIT(0);
 	Handle = PED::CREATE_PED(1, model, pos.fX, pos.fY, pos.fZ, heading, true, false);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, false);
+	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
+	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
+	PED::SET_PED_CAN_RAGDOLL(Handle, false);
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
 }
 
 void CNetworkPlayer::RemoveTargetPosition()

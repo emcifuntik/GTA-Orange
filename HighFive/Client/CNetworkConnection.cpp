@@ -60,11 +60,11 @@ void CNetworkConnection::Tick()
 			{
 				CLocalPlayer::Get()->FreezePosition(false);
 				CLocalPlayer::Get()->SetVisible(true);
-				RakString playerName("Funtik");
+				RakString playerName(CConfig::Get()->sNickName.c_str());
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
 				bsOut.Write(playerName);
 				CLocalPlayer::Get()->SetMoney(0);
-				CLocalPlayer::Get()->SetCoordsKeepVehicle(0.0, 0.0, 73.5);
+				CLocalPlayer::Get()->SetCoordsKeepVehicle(0.f, 0.f, 73.5f);
 				client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 				break;
 			}
@@ -110,10 +110,13 @@ void CNetworkConnection::Tick()
 				bsIn.IgnoreBytes(sizeof(unsigned char));
 				OnFootSyncData data;
 				RakNet::RakNetGUID playerGUID;
+				RakNet::RakString rsName;
 				bsIn.Read(playerGUID);
+				bsIn.Read(rsName);
 				bsIn.Read(data);
 				CNetworkPlayer::hFutureModel = data.hModel;
 				CNetworkPlayer *remotePlayer = CNetworkPlayer::GetByGUID(playerGUID);
+				remotePlayer->SetName(std::string(rsName.C_String()));
 				remotePlayer->SetOnFootData(data, 100);
 				break;
 			}

@@ -114,6 +114,7 @@ void CLocalPlayer::ChangeModel(Hash model)
 		WAIT(0);
 	PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+	Handle = PLAYER::PLAYER_PED_ID();
 }
 
 void CLocalPlayer::Connect()
@@ -154,13 +155,18 @@ void CLocalPlayer::GetAimPosition(CVector3& aimPos)
 	CVector3 camPos = CVector3(_camPos.x, _camPos.y, _camPos.z);
 	Vector3 _camRot = CAM::GET_GAMEPLAY_CAM_ROT(2);
 	CVector3 camRot = CVector3(_camRot.x, _camRot.y, _camRot.z);
+	CVector3 camDirection = Utils::RotationToDirection(camRot);
+
+	CVector3 target = camPos + camDirection * 1000.f;
+	int iRayCast = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(camPos.fX, camPos.fY, camPos.fZ, target.fX, target.fY, target.fZ, 1 | 4 | 10 | 16, 0, 7);
+	BOOL hit;
+	Vector3 hitCoords, surfaceCoords;
+	Entity hitEntity;
+	WORLDPROBE::_GET_RAYCAST_RESULT(iRayCast, &hit, &hitCoords, &surfaceCoords, &hitEntity);
 
 	if (aiming || shooting)
 	{
-		aimPos = Utils::ScreenRelToWorld(camPos, camRot, Vector2(0.f, 0.f));
-		aimPos.fX += aimPos.fX*offsetX;
-		aimPos.fY += aimPos.fY*offsetY;
-		//CGraphics::Get()->Draw3DText("Aiming here", 0.3f, aimPos.fX, aimPos.fY, aimPos.fZ, { 100, 255, 100, 255 });
+		aimPos = CVector3(hitCoords.x, hitCoords.y, hitCoords.z);
 	}
 	else
 		aimPos = { .0f, .0f, .0f };

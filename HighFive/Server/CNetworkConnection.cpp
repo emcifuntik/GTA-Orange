@@ -118,12 +118,20 @@ void CNetworkConnection::Tick()
 
 				bsOut.Write((unsigned char)ID_SEND_PLAYER_DATA);
 				bsOut.Write(packet->guid);
+				RakNet::RakString rsName(player->GetName().c_str());
+				bsOut.Write(rsName);
 
 				player->GetOnFootData(data);
-				/*data.vecPos.fX += 1.f;
-				data.vecPos.fY += 1.f;*/
+#if 0
+				data.vecPos.fX += 1.f;
+				data.vecPos.fY += 1.f;
+#endif
 				bsOut.Write(data);
-				server->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, /*RakNet::UNASSIGNED_SYSTEM_ADDRESS*/packet->systemAddress, true);
+#if 0
+				server->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+#else
+				server->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, packet->systemAddress, true);
+#endif
 				bsOut.Reset();
 				break;
 			}

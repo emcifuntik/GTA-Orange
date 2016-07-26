@@ -48,12 +48,14 @@ private:
 	bool				_lastJumping = false;
 	bool				_lastShooting = false;
 	bool				_lastAiming = false;
+	bool				pedJustDead = false;
 	float				m_MoveSpeed;
 	float				lastMoveSpeed;
 	int					updateTick = 0;
 	int					lastTick = 0;
 	int					tasksToIgnore = 0;
 	DWORD				lastUpdate = 9999;
+	unsigned short		m_Health = 100;
 	CNetworkPlayer();
 public:
 	static int ignoreTasks;

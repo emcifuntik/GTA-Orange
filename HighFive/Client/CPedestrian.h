@@ -14,7 +14,6 @@ public:
 	void ClearTasks(bool rightnow = false);
 	void SetCurrentHeading(float heading) { CEntity::SetHeading(heading); }
 	float GetCurrentHeading() { return CEntity::GetHeading(); }
-	void SetModel(Hash model);
 	bool IsDucking();
 	void SetDucking(bool ducking);
 	bool IsJumping();
