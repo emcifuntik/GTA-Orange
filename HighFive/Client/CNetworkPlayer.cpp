@@ -24,6 +24,16 @@ CNetworkPlayer* CNetworkPlayer::GetByGUID(RakNet::RakNetGUID GUID)
 	return _newPlayer;
 }
 
+CNetworkPlayer* CNetworkPlayer::GetByHandler(Entity handler)
+{
+	for each (CNetworkPlayer *_player in PlayersPool)
+	{
+		if (_player->Handle == handler)
+			return _player;
+	}
+	return nullptr;
+}
+
 void CNetworkPlayer::Tick()
 {
 	for each (CNetworkPlayer * player in PlayersPool)
@@ -79,7 +89,7 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 		WAIT(0);
 	Handle = PED::CREATE_PED(1, m_Model, vecPosition.fX, vecPosition.fY, vecPosition.fZ, .0f, true, false);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(m_Model);
-	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, false);
+	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
 	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
@@ -336,53 +346,31 @@ void CNetworkPlayer::Interpolate()
 		if(!m_Shooting && !m_Aiming)
 			UpdateTargetRotation();
 		UpdateTargetPosition();
-		if (tasksToIgnore > 0)
-		{
-			tasksToIgnore--;
-			ClearTasks();
-		}
 
 		if (!tasksToIgnore)
 		{
-			//AI::TASK_LOOK_AT_COORD(Handle, m_vecAim.fX, m_vecAim.fY, m_vecAim.fZ, -1, 0, 0);
 			if (m_Aiming && !m_Shooting && m_MoveSpeed != .0f)
-			{
 				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
-			}
-			else if (m_Aiming && !m_Shooting/*&& !m_Shooting*/ && m_MoveSpeed == .0f)
-			{
+			else if (m_Aiming && !m_Shooting && m_MoveSpeed == .0f)
 				TaskAimAt(m_vecAim, -1);
-			}
 			else if (m_Shooting && m_MoveSpeed != .0f)
-			{
 				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
-				TaskAimAt(m_vecAim, -1);
-				TaskShootAt(m_vecAim, -1);
-				tasksToIgnore = 5;
-			}
 			else if (m_Shooting && !m_Aiming)
 			{
 				TaskAimAt(m_vecAim, -1);
 				TaskShootAt(m_vecAim, -1);
 			}
 			else if (m_Shooting && m_MoveSpeed == .0f)
-			{
 				TaskShootAt(m_vecAim, -1);
-			}
 			else if (m_MoveSpeed != .0f)
 			{
 				if (m_MoveSpeed != lastMoveSpeed)
-				{
 					ClearTasks();
-					tasksToIgnore = 2;
-				}
 				else
 					SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
 			}
 			else
-			{
 				ClearTasks();
-			}
 		}
 
 		lastMoveSpeed = m_MoveSpeed;
@@ -417,7 +405,7 @@ void CNetworkPlayer::SetModel(Hash model)
 		WAIT(0);
 	Handle = PED::CREATE_PED(1, model, pos.fX, pos.fY, pos.fZ, heading, true, false);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
-	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, false);
+	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
 	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);

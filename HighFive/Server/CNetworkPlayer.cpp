@@ -95,6 +95,13 @@ void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
 	data.bShooting = bShooting;
 }
 
+void CNetworkPlayer::SetPosition(const CVector3 & position)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write(position);
+	CRPCPlugin::Get()->Signal("SetPlayerPos", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+}
+
 void CNetworkPlayer::Tick()
 {
 	for each (CNetworkPlayer *player in _players)

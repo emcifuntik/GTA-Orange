@@ -45,9 +45,6 @@ private:
 	bool				m_TagVisible = true;
 	bool				m_Aiming = false;
 	bool				m_Shooting = false;
-	bool				_lastJumping = false;
-	bool				_lastShooting = false;
-	bool				_lastAiming = false;
 	bool				pedJustDead = false;
 	float				m_MoveSpeed;
 	float				lastMoveSpeed;
@@ -55,7 +52,7 @@ private:
 	int					lastTick = 0;
 	int					tasksToIgnore = 0;
 	DWORD				lastUpdate = 9999;
-	unsigned short		m_Health = 100;
+	unsigned short		m_Health = 200;
 	CNetworkPlayer();
 public:
 	static int ignoreTasks;
@@ -63,6 +60,7 @@ public:
 	static std::vector<CNetworkPlayer*> All();
 	static void DeleteNotExists(const std::vector<RakNet::RakNetGUID>& GUIDs);
 	static CNetworkPlayer * GetByGUID(RakNet::RakNetGUID GUID);
+	static CNetworkPlayer * GetByHandler(Entity handler);
 	static void Tick();
 
 	void UpdateLastTickTime();

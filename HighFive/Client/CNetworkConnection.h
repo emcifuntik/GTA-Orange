@@ -16,7 +16,6 @@ public:
 	bool IsConnectionEstablished() { return bEstablished; }
 	void Tick();
 
-	RPC4 rpc;
 	RakNet::RakPeerInterface *client;
 	RakNet::Packet* packet;
 	RakNet::SystemAddress clientID;

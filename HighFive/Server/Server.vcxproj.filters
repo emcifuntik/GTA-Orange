@@ -19,6 +19,15 @@
     <ClInclude Include="CNetworkVehicle.h">
       <Filter>Header Files\Net</Filter>
     </ClInclude>
+    <ClInclude Include="SQ.h">
+      <Filter>Header Files\Squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="Natives.h">
+      <Filter>Header Files\Squirrel</Filter>
+    </ClInclude>
+    <ClInclude Include="CRPCPlugin.h">
+      <Filter>Header Files\Function</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -38,6 +47,15 @@
     </ClCompile>
     <ClCompile Include="CNetworkVehicle.cpp">
       <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="SQ.cpp">
+      <Filter>Source Files\Squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="Natives.cpp">
+      <Filter>Source Files\Squirrel</Filter>
+    </ClCompile>
+    <ClCompile Include="CRPCPlugin.cpp">
+      <Filter>Source Files\Function</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -67,6 +85,12 @@
     </Filter>
     <Filter Include="Source Files\Net">
       <UniqueIdentifier>{78ea3465-a93f-41d5-a7f0-466c472bb47d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Squirrel">
+      <UniqueIdentifier>{71eedf87-70d8-4893-b7ce-dd677cc7bb8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Squirrel">
+      <UniqueIdentifier>{ec9523df-c6e7-44b5-9eb0-a2310b6e3509}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

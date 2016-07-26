@@ -9,7 +9,7 @@ CNetworkConnection::CNetworkConnection()
 
 CNetworkConnection::~CNetworkConnection()
 {
-	CLocalPlayer::Get()->SetMoney(0);
+	
 }
 
 CNetworkConnection * CNetworkConnection::Get()
@@ -34,6 +34,7 @@ bool CNetworkConnection::Connect(std::string host, unsigned short port)
 		connection = client->Connect(host.c_str(), port, 0, 0);
 		RakAssert(connection == RakNet::CONNECTION_ATTEMPT_STARTED);
 		bConnected = true;
+		//CRPCPlugin::Get()->BindFunctions();
 		return true;
 	}
 	return false;

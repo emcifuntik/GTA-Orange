@@ -49,6 +49,21 @@ using namespace RakNet;
 #include "../../Shared/CVector3.h"
 #include "../../Shared/NetworkTypes.h"
 
+// RPC
+#include "CRPCPlugin.h"
+
+// Squirrel
+#include <squirrel.h>
+#include <sqstdblob.h>
+#include <sqstdsystem.h>
+#include <sqstdio.h>
+#include <sqstdmath.h>
+#include <sqstdstring.h>
+#include <sqstdaux.h>
+#include <sqstdstring.h>
+#include "SQ.h"
+#include "Natives.h"
+
 // Network objects
 #include "CNetworkPlayer.h"
 #include "CNetworkVehicle.h"

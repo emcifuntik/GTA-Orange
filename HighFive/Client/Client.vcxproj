@@ -25,6 +25,8 @@
     <ClInclude Include="CLocalPlayer.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CGraphics.h" />
+    <ClInclude Include="CRPCPlugin.h" />
+    <ClInclude Include="Functions.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="CNetworkConnection.h" />
@@ -43,6 +45,7 @@
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="CPedestrian.cpp" />
+    <ClCompile Include="CRPCPlugin.cpp" />
     <ClCompile Include="dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -50,6 +53,7 @@
     <ClCompile Include="CLocalPlayer.cpp" />
     <ClCompile Include="CNetworkPlayer.cpp" />
     <ClCompile Include="CGraphics.cpp" />
+    <ClCompile Include="Functions.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>

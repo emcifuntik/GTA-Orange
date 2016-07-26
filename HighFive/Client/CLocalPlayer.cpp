@@ -158,11 +158,20 @@ void CLocalPlayer::GetAimPosition(CVector3& aimPos)
 	CVector3 camDirection = Utils::RotationToDirection(camRot);
 
 	CVector3 target = camPos + camDirection * 1000.f;
-	int iRayCast = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(camPos.fX, camPos.fY, camPos.fZ, target.fX, target.fY, target.fZ, 1 | 4 | 10 | 16, 0, 7);
+	int iRayCast = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(camPos.fX, camPos.fY, camPos.fZ, target.fX, target.fY, target.fZ, 4 | 10, 0, 7);
 	BOOL hit;
 	Vector3 hitCoords, surfaceCoords;
 	Entity hitEntity;
 	WORLDPROBE::_GET_RAYCAST_RESULT(iRayCast, &hit, &hitCoords, &surfaceCoords, &hitEntity);
+	std::stringstream ss;
+	CNetworkPlayer* shotPlayer = CNetworkPlayer::GetByHandler(hitEntity);
+	ss << "Surface coords: " << CVector3(surfaceCoords.x, surfaceCoords.y, surfaceCoords.z).ToString() << std::endl << "Entity: 0x" << std::hex << hitEntity;
+	if (shotPlayer)
+		ss << std::endl << "Playername: " << shotPlayer->GetName();
+
+	CUI::PrintText(ss.str(), 0.8f, 0.5f, 255, 255, 255, 255, 0.3);
+
+	aimPos = CVector3(hitCoords.x, hitCoords.y, hitCoords.z);
 
 	if (aiming || shooting)
 	{

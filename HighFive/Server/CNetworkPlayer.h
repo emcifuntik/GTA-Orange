@@ -51,7 +51,7 @@ public:
 	void SetMoney(size_t money) { uMoney = money; }
 	void GiveMoney(size_t money) { uMoney += money; }
 	size_t GetMoney() { return uMoney; }
-	void SetPosition(const CVector3& position) { vecPosition = position; }
+	void SetPosition(const CVector3& position);
 	void GetPosition(CVector3& position) { position = vecPosition; }
 	void SetHeading(float heading) { fHeading = heading; }
 	float GetHeading() { return fHeading; }

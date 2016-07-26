@@ -99,6 +99,12 @@
     <ClCompile Include="CConfig.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
+    <ClCompile Include="Functions.cpp">
+      <Filter>Source Files\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="CRPCPlugin.cpp">
+      <Filter>Source Files\Function</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -166,6 +172,12 @@
     </ClInclude>
     <ClInclude Include="CConfig.h">
       <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Functions.h">
+      <Filter>Header Files\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="CRPCPlugin.h">
+      <Filter>Header Files\Function</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

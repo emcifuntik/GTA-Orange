@@ -66,6 +66,7 @@ void CNetworkConnection::Tick()
 
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
+				Squirrel::PlayerDisconnect(playerID, 1);
 				delete player;
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
@@ -85,6 +86,9 @@ void CNetworkConnection::Tick()
 				bsIn.Read(playerName);
 				CNetworkPlayer *player = new CNetworkPlayer(packet->guid);
 				player->SetName(playerName.C_String());
+
+				Squirrel::PlayerConnect(player->GetID());
+
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 				break;
@@ -113,7 +117,7 @@ void CNetworkConnection::Tick()
 					shoots++;
 				player->SetOnFootData(data);
 				
-				/*if (OnPlayerUpdate(sLUA, player->GetID()) == 0)
+				/*if (Squirrel::PlayerUpdate(player->GetID()) == SQFalse)
 					break;*/
 
 				bsOut.Write((unsigned char)ID_SEND_PLAYER_DATA);
@@ -154,6 +158,8 @@ void CNetworkConnection::Tick()
 
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
+				Squirrel::PlayerDisconnect(playerID, 2);
+
 				delete player;
 				CNetworkPlayer::Remove(playerID);
 

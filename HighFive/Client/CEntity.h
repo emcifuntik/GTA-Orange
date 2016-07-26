@@ -10,6 +10,8 @@ public:
 	void SetMovementVelocity(CVector3 velocity);
 	CVector3 GetMovementVelocity();
 	void GetMoveSpeed(CVector3 & vecMoveSpeed);
+	bool GetDamageToEntity();
+	void ClearDamage();
 	float GetSpeed();
 	void SetPosition(CVector3 position);
 	CVector3 GetPosition();

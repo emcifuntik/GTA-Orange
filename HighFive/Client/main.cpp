@@ -10,7 +10,7 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 	if (isUpNow || wasDownBefore)
 	{
 		if (key == VK_F8 && !CNetworkConnection::Get()->IsConnected()) {
-			if (!CNetworkConnection::Get()->Connect("25.69.172.216", 7788)) {
+			if (!CNetworkConnection::Get()->Connect(CConfig::Get()->sIP.c_str(), CConfig::Get()->uiPort)) {
 				CChat::Get()->AddChatMessage("Can't connect to the server", { 255, 0, 0, 255 });
 			}
 		}
@@ -93,11 +93,9 @@ void Rendering()
 		CChat::Get()->Render();
 		CChat::Get()->Input();
 		std::stringstream ss;
-		ss << "Tasks to ignore: " << CNetworkPlayer::ignoreTasks;
-		CUI::PrintText(ss.str().c_str(), 0.8, 0.8);
 
 		CNetworkPlayer::Tick();
-		WAIT(0);
+		WAIT(5);
 	}
 }
 

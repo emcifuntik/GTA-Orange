@@ -9,7 +9,7 @@ CPedestrian::CPedestrian(Hash Model, CVector3 Position, float Heading) :CEntity(
 
 	Handle = (Entity)PED::CREATE_PED(1, Model, Position.fX, Position.fY, Position.fZ, Heading, true, false);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(Model);
-	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, false);
+	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
 	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);

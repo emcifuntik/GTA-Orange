@@ -28,6 +28,15 @@ void CEntity::GetMoveSpeed(CVector3& vecMoveSpeed)
 	vecMoveSpeed = CVector3(vec.x, vec.y, vec.z);
 }
 
+bool CEntity::GetDamageToEntity()
+{
+	return ENTITY::HAS_ENTITY_BEEN_DAMAGED_BY_ANY_PED(Handle);
+}
+void CEntity::ClearDamage()
+{
+	ENTITY::CLEAR_ENTITY_LAST_DAMAGE_ENTITY(Handle);
+}
+
 float CEntity::GetSpeed()
 {
 	return ENTITY::GET_ENTITY_SPEED(Handle);

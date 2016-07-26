@@ -22,9 +22,34 @@ int main(void)
 	std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_INTENSITY) << maxPlayers << std::endl;
 	CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 
+	// Register squirrel functions
+	RegisterScriptFunctions();
+	// Loading squrrel scripts
+	tinyxml2::XMLElement * scripts = root->FirstChildElement("scripts");
+	for (tinyxml2::XMLElement* child = scripts->FirstChildElement("script"); child != NULL; child = child->NextSiblingElement())
+	{
+		Squirrel *script = new Squirrel((std::string("scripts/") + child->GetText()).c_str());
+		if (script->IsReady())
+		{
+			std::cout << "Script ";
+			std::cout << CConsole::Get()->Color(FOREGROUND_GREEN);
+			std::cout << child->GetText();
+			std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE) << " loaded" << std::endl;
+
+		}
+		else
+		{
+			std::cout << "Script ";
+			std::cout << CConsole::Get()->Color(FOREGROUND_RED);
+			std::cout << child->GetText();
+			std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE) << " not loaded" << std::endl;
+		}
+	}
+
 	auto netLoop = [=]() 
 	{
 		CNetworkConnection::Get()->Start(maxPlayers, port);
+		CRPCPlugin::Get();
 		for (;;)
 		{
 			RakSleep(5);

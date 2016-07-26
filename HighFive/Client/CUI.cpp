@@ -9,6 +9,13 @@ CUI::~CUI()
 {
 }
 
+void CUI::SendNotification(std::string text)
+{
+	UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
+	UI::_0x5F68520888E69014((char*)text.c_str());
+	UI::_DRAW_NOTIFICATION(FALSE, FALSE);
+}
+
 void CUI::PrintText(std::string text, float posx, float posy, unsigned char red, unsigned char green, unsigned char blue, unsigned char alpha, float size, bool center)
 {
 	UI::_SET_TEXT_ENTRY("STRING");

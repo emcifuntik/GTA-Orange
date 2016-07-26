@@ -6,13 +6,13 @@ class CNetworkConnection
 	CNetworkConnection();
 
 	RPC4 rpc;
-	RakNet::RakPeerInterface *server;
 	RakNet::RakNetStatistics *stat;
 	RakNet::Packet* packet;
 	RakNet::SocketDescriptor socketDescriptors[2];
 	RakNet::ConnectionAttemptResult connection;
 	bool bConnected = false;
 public:
+	RakNet::RakPeerInterface *server;
 	//Debug
 	static int shoots;
 

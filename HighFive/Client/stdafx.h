@@ -83,11 +83,13 @@ using namespace RakNet;
 #include "CNetworkPlayer.h"
 //#include "CNetworkVehicle.h"
 #include "CNetworkConnection.h"
+#include "Functions.h"
+#include "CRPCPlugin.h"
 
 // Interface
 #include "CChat.h"
 
-#if defined NDEBUG
+#if 0
 #define TRACE( format, ... )
 #define TRACEN()
 #else
