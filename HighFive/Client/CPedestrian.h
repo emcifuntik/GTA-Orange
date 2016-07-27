@@ -18,6 +18,7 @@ public:
 	void SetDucking(bool ducking);
 	bool IsJumping();
 	void TaskJump();
+	bool IsShooting();
 	void SetCoordsKeepVehicle(float x, float y, float z);
 	void SetArmour(unsigned short armour);
 	unsigned short GetArmour();

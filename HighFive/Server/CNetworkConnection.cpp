@@ -132,9 +132,9 @@ void CNetworkConnection::Tick()
 #endif
 				bsOut.Write(data);
 #if 0
-				server->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 #else
-				server->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, packet->systemAddress, true);
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, true);
 #endif
 				bsOut.Reset();
 				break;

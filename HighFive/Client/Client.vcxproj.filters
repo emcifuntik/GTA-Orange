@@ -105,6 +105,9 @@
     <ClCompile Include="CRPCPlugin.cpp">
       <Filter>Source Files\Function</Filter>
     </ClCompile>
+    <ClCompile Include="CLock.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -178,6 +181,9 @@
     </ClInclude>
     <ClInclude Include="CRPCPlugin.h">
       <Filter>Header Files\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="CLock.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

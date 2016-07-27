@@ -76,6 +76,11 @@ void CPedestrian::TaskJump()
 	AI::TASK_JUMP(Handle, false);
 }
 
+bool CPedestrian::IsShooting()
+{
+	return (PED::IS_PED_SHOOTING(Handle) ? true : false);
+}
+
 void CPedestrian::SetCoordsKeepVehicle(float x, float y, float z)
 {
 	PED::SET_PED_COORDS_KEEP_VEHICLE(Handle, x, y, z);

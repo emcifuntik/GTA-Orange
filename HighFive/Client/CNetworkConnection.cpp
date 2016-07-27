@@ -117,8 +117,11 @@ void CNetworkConnection::Tick()
 				bsIn.Read(data);
 				CNetworkPlayer::hFutureModel = data.hModel;
 				CNetworkPlayer *remotePlayer = CNetworkPlayer::GetByGUID(playerGUID);
-				remotePlayer->SetName(std::string(rsName.C_String()));
+				if(rsName.GetLength())
+					remotePlayer->SetName(std::string(rsName.C_String()));
 				remotePlayer->SetOnFootData(data, 100);
+				if (remotePlayer->m_Shooting)
+					remotePlayer->Interpolate();
 				break;
 			}
 			case ID_SEND_VEHICLE_DATA:

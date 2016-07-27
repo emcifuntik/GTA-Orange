@@ -29,7 +29,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 		//delete m;
 
 		scriptRegister(hModule, InitGameScript);
-		scriptRegisterAdditionalThread(hModule, Rendering);
+		scriptRegisterAdditionalThread(hModule, ChatRendering);
+		scriptRegisterAdditionalThread(hModule, NetworkTick);
+		scriptRegisterAdditionalThread(hModule, LocalTick);
 
 		keyboardHandlerRegister(CChat::Get()->ScriptKeyboardMessage);
 		keyboardHandlerRegister(OnKeyboardMessage);

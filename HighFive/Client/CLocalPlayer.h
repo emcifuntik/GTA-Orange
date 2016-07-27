@@ -20,7 +20,7 @@ public:
 	void GetOnFootSync(OnFootSyncData& onfoot);
 	void CLocalPlayer::SendOnFootData();
 	void ShowNotification(std::string text);
-	void GetAimPosition(CVector3 & aimPos);
+	bool GetAimPosition(CVector3 & aimPos);
 	~CLocalPlayer();
 };
 

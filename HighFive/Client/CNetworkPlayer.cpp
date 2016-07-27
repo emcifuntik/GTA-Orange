@@ -333,48 +333,56 @@ void CNetworkPlayer::SetRotation(const CVector3& vecRotation, bool bResetInterpo
 
 void CNetworkPlayer::Interpolate()
 {
-	// Are we not getting in/out of a vehicle?
-	if (true)
+	if (GetHealth() <= 100.f && !pedJustDead)
 	{
-		if (GetHealth() <= 100.f && !pedJustDead)
-		{
-			pedJustDead = true;
-			ENTITY::DELETE_ENTITY(&Handle);
-			return;
-		}
-		SetMovementVelocity(m_vecMove);
-		if(!m_Shooting && !m_Aiming)
-			UpdateTargetRotation();
-		UpdateTargetPosition();
-
-		if (!tasksToIgnore)
-		{
-			if (m_Aiming && !m_Shooting && m_MoveSpeed != .0f)
-				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
-			else if (m_Aiming && !m_Shooting && m_MoveSpeed == .0f)
-				TaskAimAt(m_vecAim, -1);
-			else if (m_Shooting && m_MoveSpeed != .0f)
-				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
-			else if (m_Shooting && !m_Aiming)
-			{
-				TaskAimAt(m_vecAim, -1);
-				TaskShootAt(m_vecAim, -1);
-			}
-			else if (m_Shooting && m_MoveSpeed == .0f)
-				TaskShootAt(m_vecAim, -1);
-			else if (m_MoveSpeed != .0f)
-			{
-				if (m_MoveSpeed != lastMoveSpeed)
-					ClearTasks();
-				else
-					SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
-			}
-			else
-				ClearTasks();
-		}
-
-		lastMoveSpeed = m_MoveSpeed;
+		pedJustDead = true;
+		ENTITY::DELETE_ENTITY(&Handle);
+		return;
 	}
+		
+	SetMovementVelocity(m_vecMove);
+	if(!m_Shooting && !m_Aiming)
+		UpdateTargetRotation();
+	UpdateTargetPosition();
+	if (IsJumping())
+		return;
+
+	if (!tasksToIgnore)
+	{
+		if (m_Jumping)
+			TaskJump();
+		else if (m_Aiming && !m_Shooting && m_MoveSpeed != .0f)
+			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
+		else if (m_Aiming && !m_Shooting && m_MoveSpeed == .0f)
+			TaskAimAt(m_vecAim, -1);
+		else if (m_Shooting && m_MoveSpeed != .0f)
+		{
+			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
+			m_Shooting = false;
+		}
+		else if (m_Shooting && !m_Aiming)
+		{
+			TaskAimAt(m_vecAim, -1);
+			TaskShootAt(m_vecAim, -1);
+			m_Shooting = false;
+		}
+		else if (m_Shooting && m_MoveSpeed == .0f)
+		{
+			CNetworkConnection::realShoots++;
+			TaskShootAt(m_vecAim, 1);
+			m_Shooting = false;
+		}
+		else if (m_MoveSpeed != .0f)
+		{
+			if (m_MoveSpeed != lastMoveSpeed)
+				ClearTasks();
+			else
+				SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+		}
+		else
+			ClearTasks();
+	}
+	lastMoveSpeed = m_MoveSpeed;
 }
 
 void CNetworkPlayer::DrawTag()
@@ -386,7 +394,7 @@ void CNetworkPlayer::DrawTag()
 		float distance = (vecCurPos - CLocalPlayer::Get()->GetPosition()).Length();
 		if (distance < 100.f)
 		{
-			CGraphics::Get()->Draw3DText(m_Name, .5f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f + (distance * 0.03f), { 0xAA, 0xAA, 0xFF, 0xFF });
+			CGraphics::Get()->Draw3DText(m_Name, .5f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f + (distance * 0.03f), { 0xFF, 0xFF, 0xFF, 0xFF });
 			CGraphics::Get()->Draw3DProgressBar({ 0, 0, 0, 100 }, { 200, 50, 50, 200 }, 0.08f, 0.018f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f + (distance * 0.03f), health);
 		}
 	}

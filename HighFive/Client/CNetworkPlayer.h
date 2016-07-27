@@ -45,6 +45,7 @@ private:
 	bool				m_TagVisible = true;
 	bool				m_Aiming = false;
 	bool				m_Shooting = false;
+
 	bool				pedJustDead = false;
 	float				m_MoveSpeed;
 	float				lastMoveSpeed;
@@ -62,7 +63,7 @@ public:
 	static CNetworkPlayer * GetByGUID(RakNet::RakNetGUID GUID);
 	static CNetworkPlayer * GetByHandler(Entity handler);
 	static void Tick();
-
+	
 	void UpdateLastTickTime();
 	int GetTickTime();
 	

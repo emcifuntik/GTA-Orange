@@ -83,19 +83,35 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 	}
 }
 
-void Rendering()
+void ChatRendering()
 {
 	CChat::Get()->RegisterCommandProcessor(CommandProcessor);
 	for (;;)
 	{
-		CLocalPlayer::Get()->Tick();
-
 		CChat::Get()->Render();
 		CChat::Get()->Input();
-		std::stringstream ss;
+		WAIT(0);
+	}
+}
 
-		CNetworkPlayer::Tick();
-		WAIT(5);
+void NetworkTick()
+{
+	/*for (;;)
+	{
+		WAIT(0);
+	}*/
+}
+
+void LocalTick()
+{
+	for (;;)
+	{
+		CLocalPlayer::Get()->Tick();
+		if (CNetworkConnection::Get()->IsConnected()) {
+			if (CNetworkConnection::Get()->IsConnectionEstablished())
+				CLocalPlayer::Get()->SendOnFootData();
+		}
+		WAIT(0);
 	}
 }
 
@@ -104,9 +120,8 @@ void RunGameScript() {
 	{
 		if (CNetworkConnection::Get()->IsConnected()) {
 			CNetworkConnection::Get()->Tick();
-			if(CNetworkConnection::Get()->IsConnectionEstablished())
-				CLocalPlayer::Get()->SendOnFootData();
+			CNetworkPlayer::Tick();
 		}
-		WAIT(15);
+		WAIT(10);
 	}
 }

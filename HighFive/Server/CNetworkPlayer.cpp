@@ -55,6 +55,7 @@ CNetworkPlayer::CNetworkPlayer(RakNet::RakNetGUID GUID):rnGUID(GUID)
 
 CNetworkPlayer::~CNetworkPlayer()
 {
+	_players[uiID] = nullptr;
 }
 
 void CNetworkPlayer::SetOnFootData(const OnFootSyncData& data)

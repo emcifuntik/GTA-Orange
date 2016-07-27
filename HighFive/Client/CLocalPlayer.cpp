@@ -28,7 +28,7 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 	GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
 	GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
 	GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
-
+	
 }
 
 
@@ -100,10 +100,9 @@ void CLocalPlayer::Tick()
 	UI::_0x170F541E1CADD1DE(true);
 	UI::SHOW_HUD_COMPONENT_THIS_FRAME(3);
 	UI::DISPLAY_CASH(true);
-
-	std::stringstream ss;
-	ss << "X offset: " << offsetX << std::endl << "Y offset: " << offsetY << std::endl << "Alpha: " << alpha;
-	CUI::PrintText(ss.str(), 0.8f, 0.87f);
+	PLAYER::SET_PLAYER_HEALTH_RECHARGE_MULTIPLIER(PLAYER::PLAYER_ID(), 0.f);
+	PLAYER::SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(PLAYER::PLAYER_ID(), false);
+	PLAYER::ENABLE_SPECIAL_ABILITY(PLAYER::PLAYER_ID(), false);
 }
 
 void CLocalPlayer::ChangeModel(Hash model)
@@ -120,7 +119,7 @@ void CLocalPlayer::ChangeModel(Hash model)
 void CLocalPlayer::Connect()
 {
 	RakNet::BitStream requestid;
-	RakString playerName("Funtik");
+	RakString playerName(CConfig::Get()->sNickName.c_str());
 	requestid.Write((MessageID)ID_CONNECT_TO_SERVER);
 	requestid.Write(playerName);
 	CNetworkConnection::Get()->client->Send(&requestid, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
@@ -136,7 +135,7 @@ void CLocalPlayer::SendOnFootData()
 	GetOnFootSync(data);
 	bsOut.Write(data);
 
-	CNetworkConnection::Get()->client->Send(&bsOut, MEDIUM_PRIORITY, UNRELIABLE, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
 void CLocalPlayer::ShowNotification(std::string text)
@@ -146,10 +145,12 @@ void CLocalPlayer::ShowNotification(std::string text)
 	UI::_DRAW_NOTIFICATION(FALSE, FALSE);
 }
 
-void CLocalPlayer::GetAimPosition(CVector3& aimPos)
+bool CLocalPlayer::GetAimPosition(CVector3& aimPos)
 {
 	bool aiming = CONTROLS::IS_DISABLED_CONTROL_PRESSED(0, 25);
 	bool shooting = PED::IS_PED_SHOOTING(Handle);
+	if (!aiming && !shooting)
+		return false;
 
 	Vector3 _camPos = CAM::GET_GAMEPLAY_CAM_COORD();
 	CVector3 camPos = CVector3(_camPos.x, _camPos.y, _camPos.z);
@@ -158,25 +159,12 @@ void CLocalPlayer::GetAimPosition(CVector3& aimPos)
 	CVector3 camDirection = Utils::RotationToDirection(camRot);
 
 	CVector3 target = camPos + camDirection * 1000.f;
-	int iRayCast = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(camPos.fX, camPos.fY, camPos.fZ, target.fX, target.fY, target.fZ, 4 | 10, 0, 7);
+	int iRayCast = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(camPos.fX, camPos.fY, camPos.fZ, target.fX, target.fY, target.fZ, 1 | 4 | 10, 0, 7);
 	BOOL hit;
 	Vector3 hitCoords, surfaceCoords;
 	Entity hitEntity;
 	WORLDPROBE::_GET_RAYCAST_RESULT(iRayCast, &hit, &hitCoords, &surfaceCoords, &hitEntity);
-	std::stringstream ss;
-	CNetworkPlayer* shotPlayer = CNetworkPlayer::GetByHandler(hitEntity);
-	ss << "Surface coords: " << CVector3(surfaceCoords.x, surfaceCoords.y, surfaceCoords.z).ToString() << std::endl << "Entity: 0x" << std::hex << hitEntity;
-	if (shotPlayer)
-		ss << std::endl << "Playername: " << shotPlayer->GetName();
-
-	CUI::PrintText(ss.str(), 0.8f, 0.5f, 255, 255, 255, 255, 0.3);
-
+	
 	aimPos = CVector3(hitCoords.x, hitCoords.y, hitCoords.z);
-
-	if (aiming || shooting)
-	{
-		aimPos = CVector3(hitCoords.x, hitCoords.y, hitCoords.z);
-	}
-	else
-		aimPos = { .0f, .0f, .0f };
+	return true;
 }
