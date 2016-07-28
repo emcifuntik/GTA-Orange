@@ -28,7 +28,6 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 	GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
 	GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
 	GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
-	
 }
 
 
@@ -136,13 +135,6 @@ void CLocalPlayer::SendOnFootData()
 	bsOut.Write(data);
 
 	CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-}
-
-void CLocalPlayer::ShowNotification(std::string text)
-{
-	UI::_SET_NOTIFICATION_TEXT_ENTRY("STRING");
-	UI::ADD_TEXT_COMPONENT_SUBSTRING_PLAYER_NAME((char*)text.c_str());
-	UI::_DRAW_NOTIFICATION(FALSE, FALSE);
 }
 
 bool CLocalPlayer::GetAimPosition(CVector3& aimPos)

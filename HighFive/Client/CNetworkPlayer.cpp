@@ -368,7 +368,6 @@ void CNetworkPlayer::Interpolate()
 		}
 		else if (m_Shooting && m_MoveSpeed == .0f)
 		{
-			CNetworkConnection::realShoots++;
 			TaskShootAt(m_vecAim, 1);
 			m_Shooting = false;
 		}

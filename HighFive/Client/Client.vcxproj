@@ -18,7 +18,6 @@
     <ClInclude Include="..\..\Shared\NetworkTypes.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CChat.h" />
-    <ClInclude Include="CLock.h" />
     <ClInclude Include="CNetworkVehicle.h" />
     <ClInclude Include="Commands.h" />
     <ClInclude Include="CConfig.h" />
@@ -43,7 +42,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="CLock.cpp" />
+    <ClCompile Include="CNetworkVehicle.cpp" />
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="CPedestrian.cpp" />

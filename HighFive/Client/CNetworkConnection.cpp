@@ -45,7 +45,7 @@ void CNetworkConnection::Disconnect()
 	bConnected = false;
 	client->Shutdown(300);
 	CChat::Get()->Clear();
-	CLocalPlayer::Get()->ShowNotification("~b~Disconnected");
+	CUI::SendNotification("~b~Disconnected");
 }
 
 void CNetworkConnection::Tick()
@@ -66,38 +66,42 @@ void CNetworkConnection::Tick()
 				bsOut.Write(playerName);
 				CLocalPlayer::Get()->SetMoney(0);
 				CLocalPlayer::Get()->SetCoordsKeepVehicle(0.f, 0.f, 73.5f);
+				WAIT(0);
+				Hash adder = Utils::Hash("Adder");
+				CNetworkVehicle *veh = new CNetworkVehicle(adder, -3.f, 6.f, 73.f, 0.f);
+
 				client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 				break;
 			}
 			case ID_CONNECTION_ATTEMPT_FAILED:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CLocalPlayer::Get()->ShowNotification("~r~Not connected");
+				CUI::SendNotification("~r~Not connected");
 				break;
 			}
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CLocalPlayer::Get()->ShowNotification("~r~Server is full!");
+				CUI::SendNotification("~r~Server is full!");
 				break;
 			}
 			case ID_DISCONNECTION_NOTIFICATION:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
 
-				CLocalPlayer::Get()->ShowNotification("~r~Connection closed!");
+				CUI::SendNotification("~r~Connection closed!");
 				break;
 			}
 			case ID_CONNECTION_LOST:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CLocalPlayer::Get()->ShowNotification("~r~Connection Lost!");
+				CUI::SendNotification("~r~Connection Lost!");
 				break;
 			}
 			case ID_CONNECTION_BANNED:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CLocalPlayer::Get()->ShowNotification("~r~You are banned!");
+				CUI::SendNotification("~r~You are banned!");
 				break;
 			}
 			case ID_CONNECT_TO_SERVER:
@@ -120,7 +124,7 @@ void CNetworkConnection::Tick()
 				if(rsName.GetLength())
 					remotePlayer->SetName(std::string(rsName.C_String()));
 				remotePlayer->SetOnFootData(data, 100);
-				if (remotePlayer->m_Shooting)
+				if (data.bShooting)
 					remotePlayer->Interpolate();
 				break;
 			}

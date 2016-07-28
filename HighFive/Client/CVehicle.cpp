@@ -3,11 +3,14 @@
 
 CVehicle::CVehicle(Hash model, float x, float y, float z, float heading):CEntity(0)
 {
-	STREAMING::REQUEST_MODEL(model);
-	while (STREAMING::HAS_MODEL_LOADED(model))
-		WAIT(1);
-	Handle = VEHICLE::CREATE_VEHICLE(model, x, y, z, heading, true, false);
-	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+	if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model) && STREAMING::IS_MODEL_A_VEHICLE(model))
+	{
+		STREAMING::REQUEST_MODEL(model);
+		while (!STREAMING::HAS_MODEL_LOADED(model))
+			WAIT(0);
+		Handle = VEHICLE::CREATE_VEHICLE(model, x, y, z, heading, true, false);
+		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+	}
 }
 
 

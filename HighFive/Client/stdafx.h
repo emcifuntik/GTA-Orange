@@ -81,7 +81,7 @@ using namespace RakNet;
 
 // Net
 #include "CNetworkPlayer.h"
-//#include "CNetworkVehicle.h"
+#include "CNetworkVehicle.h"
 #include "CNetworkConnection.h"
 #include "Functions.h"
 #include "CRPCPlugin.h"

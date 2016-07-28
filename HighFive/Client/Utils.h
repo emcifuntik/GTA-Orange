@@ -9,5 +9,6 @@ namespace Utils
 	double DegToRad(double deg);
 	double RadToDeg(double deg);
 	double BoundRotationDeg(double angleDeg);
+	unsigned int Hash(char * inpStr);
 }
 

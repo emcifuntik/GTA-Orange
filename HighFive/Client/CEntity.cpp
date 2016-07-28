@@ -30,7 +30,7 @@ void CEntity::GetMoveSpeed(CVector3& vecMoveSpeed)
 
 bool CEntity::GetDamageToEntity()
 {
-	return ENTITY::HAS_ENTITY_BEEN_DAMAGED_BY_ANY_PED(Handle);
+	return ENTITY::HAS_ENTITY_BEEN_DAMAGED_BY_ANY_PED(Handle) ? true : false;
 }
 void CEntity::ClearDamage()
 {
@@ -131,7 +131,6 @@ void CEntity::DisableCollision(const CEntity &entity)
 
 CEntity::CEntity(Entity handle) :Handle(handle)
 {
-
 }
 
 CEntity::~CEntity()
