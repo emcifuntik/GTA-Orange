@@ -1,10 +1,10 @@
 #pragma once
 #ifdef SQUNICODE 
 
-#define scvprintf vfwprintf
+#define scvprintf vswprintf
 #else 
 
-#define scvprintf vfprintf
+#define scvprintf vsprintf
 #endif 
 
 typedef struct funcDef {

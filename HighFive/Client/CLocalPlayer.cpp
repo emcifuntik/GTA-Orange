@@ -137,6 +137,17 @@ void CLocalPlayer::SendOnFootData()
 	CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
+void CLocalPlayer::SetMoney(int money)
+{
+	for (int i = 0; i < 3; i++)
+	{
+		char statNameFull[32];
+		sprintf_s(statNameFull, "SP%d_TOTAL_CASH", i);
+		Hash hash = GAMEPLAY::GET_HASH_KEY(statNameFull);
+		STATS::STAT_SET_INT(hash, money, 1);
+	}
+}
+
 bool CLocalPlayer::GetAimPosition(CVector3& aimPos)
 {
 	bool aiming = CONTROLS::IS_DISABLED_CONTROL_PRESSED(0, 25);

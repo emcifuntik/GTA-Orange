@@ -16,10 +16,17 @@
 #include <time.h>
 #include <direct.h>
 #include <thread>
+#include <iomanip>
 #pragma comment(lib, "winmm.lib")
 
 // XML
 #include <tinyxml2.h>
+
+// Config
+#include "CConfig.h"
+
+// Logging
+#include "CLog.h"
 
 // RakNet
 #include <MessageIdentifiers.h>
@@ -39,7 +46,7 @@ using namespace RakNet;
 #include <../ScriptHookV/Types.h>
 
 // Console coloring
-#include "Console.h"
+#include "CConsole.h"
 
 // Network manager
 #include "CNetworkConnection.h"

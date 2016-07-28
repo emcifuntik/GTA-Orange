@@ -15,10 +15,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Console.h" />
+    <ClInclude Include="CLog.h" />
+    <ClInclude Include="CConsole.h" />
     <ClInclude Include="CNetworkConnection.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CNetworkVehicle.h" />
+    <ClInclude Include="CConfig.h" />
     <ClInclude Include="Natives.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="CRPCPlugin.h" />
@@ -26,7 +28,7 @@
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Console.cpp" />
+    <ClCompile Include="CLog.cpp" />
     <ClCompile Include="CNetworkConnection.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
@@ -35,6 +37,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="CNetworkPlayer.cpp" />
+    <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>

@@ -8,16 +8,13 @@
       <Filter>Header Files\Common</Filter>
     </ClInclude>
     <ClInclude Include="CNetworkPlayer.h">
-      <Filter>Header Files\Function</Filter>
-    </ClInclude>
-    <ClInclude Include="Console.h">
-      <Filter>Header Files\Common</Filter>
+      <Filter>Header Files\Functions</Filter>
     </ClInclude>
     <ClInclude Include="CNetworkConnection.h">
-      <Filter>Header Files\Net</Filter>
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="CNetworkVehicle.h">
-      <Filter>Header Files\Net</Filter>
+      <Filter>Header Files\Network</Filter>
     </ClInclude>
     <ClInclude Include="SQ.h">
       <Filter>Header Files\Squirrel</Filter>
@@ -26,7 +23,16 @@
       <Filter>Header Files\Squirrel</Filter>
     </ClInclude>
     <ClInclude Include="CRPCPlugin.h">
-      <Filter>Header Files\Function</Filter>
+      <Filter>Header Files\Functions</Filter>
+    </ClInclude>
+    <ClInclude Include="CLog.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="CConfig.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="CConsole.h">
+      <Filter>Header Files\Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -34,12 +40,6 @@
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
-    <ClCompile Include="CNetworkPlayer.cpp">
-      <Filter>Source Files\Function</Filter>
-    </ClCompile>
-    <ClCompile Include="Console.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
     <ClCompile Include="CNetworkConnection.cpp">
@@ -57,6 +57,15 @@
     <ClCompile Include="CRPCPlugin.cpp">
       <Filter>Source Files\Function</Filter>
     </ClCompile>
+    <ClCompile Include="CNetworkPlayer.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="CLog.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="CConfig.cpp">
+      <Filter>Source Files\Common</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -64,12 +73,6 @@
     </Filter>
     <Filter Include="Header Files\Common">
       <UniqueIdentifier>{16bcbfce-0ccd-4c47-a8a6-1ebd50100cdd}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Function">
-      <UniqueIdentifier>{161fe4a0-0c7a-4fc5-8384-9b2265bcaf30}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Net">
-      <UniqueIdentifier>{2c21c506-a405-4d3e-84b6-eabd26d8f7f3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{edb2c51e-a59f-4551-bfaf-add5e88c4a6a}</UniqueIdentifier>
@@ -91,6 +94,12 @@
     </Filter>
     <Filter Include="Header Files\Squirrel">
       <UniqueIdentifier>{ec9523df-c6e7-44b5-9eb0-a2310b6e3509}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Functions">
+      <UniqueIdentifier>{161fe4a0-0c7a-4fc5-8384-9b2265bcaf30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Network">
+      <UniqueIdentifier>{2c21c506-a405-4d3e-84b6-eabd26d8f7f3}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

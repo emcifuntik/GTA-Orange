@@ -9,6 +9,7 @@ CRPCPlugin::CRPCPlugin()
 
 void CRPCPlugin::BindFunctions()
 {
+	#pragma region Player functions
 	rpc.RegisterSlot("SendNotification", FPlayer::SendNotification, 0);
 	rpc.RegisterSlot("SendClientMessage", FPlayer::SendClientMessage, 0);
 	rpc.RegisterSlot("GivePlayerWeapon", FPlayer::GivePlayerWeapon, 0);
@@ -22,6 +23,8 @@ void CRPCPlugin::BindFunctions()
 	rpc.RegisterSlot("SetPlayerHealth", FPlayer::SetPlayerHealth, 0);
 	rpc.RegisterSlot("SetPlayerArmour", FPlayer::SetPlayerArmour, 0);
 	rpc.RegisterSlot("SetPlayerModel", FPlayer::SetPlayerModel, 0);
+	#pragma endregion
+
 }
 
 CRPCPlugin * CRPCPlugin::Get()

@@ -6,62 +6,44 @@ int main(void)
 	/*XmlDomDocument xmlReader("config.xml");
 	tinyxml2::XMLElement* serverNameXML = xmlReader.FirstChildElement("config")->FirstChildElement("servername");*/
 
-	XMLDocument doc;
-	doc.LoadFile("config.xml");
-	tinyxml2::XMLElement * root = doc.FirstChildElement("config");
-	tinyxml2::XMLElement * serverNode = root->FirstChildElement("server");
-	unsigned short port = serverNode->IntAttribute("port");
-	unsigned short maxPlayers = serverNode->IntAttribute("maxplayers");
-
-	std::cout << CConsole::Get()->Color(FOREGROUND_GREEN | FOREGROUND_INTENSITY) << "Starting the server..." << std::endl;
-	std::cout << CConsole::Get()->Color(FOREGROUND_BLUE | FOREGROUND_INTENSITY) << "Hostname: ";
-	std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_INTENSITY) << serverNode->GetText() << std::endl;
-	std::cout << CConsole::Get()->Color(FOREGROUND_BLUE | FOREGROUND_INTENSITY) << "Port: ";
-	std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_INTENSITY) << port << std::endl;
-	std::cout << CConsole::Get()->Color(FOREGROUND_BLUE | FOREGROUND_INTENSITY) << "Maximum players: ";
-	std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_INTENSITY) << maxPlayers << std::endl;
-	CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+	log << "Starting the server..." << std::endl;
+	log << "Hostname: " << color::lred << CConfig::Get()->Hostname << std::endl;
+	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
+	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
 
 	// Register squirrel functions
 	RegisterScriptFunctions();
 	// Loading squrrel scripts
-	tinyxml2::XMLElement * scripts = root->FirstChildElement("scripts");
-	for (tinyxml2::XMLElement* child = scripts->FirstChildElement("script"); child != NULL; child = child->NextSiblingElement())
+	for each (std::string scriptName in CConfig::Get()->Scripts)
 	{
-		Squirrel *script = new Squirrel((std::string("scripts/") + child->GetText()).c_str());
+		Squirrel *script = new Squirrel((std::string("scripts/") + scriptName).c_str());
 		if (script->IsReady())
-		{
-			std::cout << "Script ";
-			std::cout << CConsole::Get()->Color(FOREGROUND_GREEN);
-			std::cout << child->GetText();
-			std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE) << " loaded" << std::endl;
-
-		}
+			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
 		else
-		{
-			std::cout << "Script ";
-			std::cout << CConsole::Get()->Color(FOREGROUND_RED);
-			std::cout << child->GetText();
-			std::cout << CConsole::Get()->Color(FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE) << " not loaded" << std::endl;
-		}
+			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;
 	}
 
 	auto netLoop = [=]() 
 	{
-		CNetworkConnection::Get()->Start(maxPlayers, port);
+		CNetworkConnection::Get()->Start(CConfig::Get()->MaxPlayers, CConfig::Get()->Port);
 		CRPCPlugin::Get();
+		DWORD lastTick = 0;
+		RakNet::RakNetStatistics stat;
 		for (;;)
 		{
 			RakSleep(5);
 			CNetworkConnection::Get()->Tick();
 			CNetworkPlayer::Tick();
-
-			if (!(GetTickCount() % 10))
+			
+			if ((GetTickCount() - lastTick) > 100)
 			{
+				CNetworkConnection::Get()->server->GetStatistics(0, &stat);
 				std::stringstream ss;
-				ss << serverNode->GetText() << ". Players online: " << CNetworkPlayer::Count() << ", shoots: " << CNetworkConnection::shoots;
+				ss << CConfig::Get()->Hostname << ". Players online: " << CNetworkPlayer::Count() << ", " 
+					<< "Packet loss: " << std::setprecision(2) << std::fixed << stat.packetlossTotal*100 << "%";
 				SetConsoleTitle(ss.str().c_str());
-			}
+				lastTick = GetTickCount();
+			}	
 		}
 	};
 	std::thread netThread(netLoop);

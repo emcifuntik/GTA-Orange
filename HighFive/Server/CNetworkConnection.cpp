@@ -1,7 +1,5 @@
 #include "stdafx.h"
 
-int CNetworkConnection::shoots = 0;
-
 CNetworkConnection * CNetworkConnection::singleInstance = nullptr;
 
 CNetworkConnection::CNetworkConnection()
@@ -37,11 +35,11 @@ bool CNetworkConnection::Start(unsigned short maxPlayers, unsigned short port)
 			result = server->Startup(maxPlayers, socketDescriptors, 1) == RakNet::RAKNET_STARTED;
 			if (!result)
 			{
-				std::cout << "Server not started" << std::endl;
+				log << "Server not started" << std::endl;
 				exit(EXIT_FAILURE);
 			}
 			else
-				std::cout << "Server started" << std::endl;
+				log << "Server started" << std::endl;
 		}
 		server->SetTimeoutTime(15000, RakNet::UNASSIGNED_SYSTEM_ADDRESS);
 		return true;
@@ -62,7 +60,7 @@ void CNetworkConnection::Tick()
 		{
 			case ID_DISCONNECTION_NOTIFICATION:
 			{
-				std::cout << "Player disconnected " << packet->systemAddress.ToString(true) << std::endl;
+				log << "Player disconnected " << packet->systemAddress.ToString(true) << std::endl;
 
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
@@ -77,7 +75,7 @@ void CNetworkConnection::Tick()
 			}
 			case ID_NEW_INCOMING_CONNECTION:
 			{
-				std::cout << "Incoming connection from " << packet->systemAddress.ToString(true) << std::endl;
+				log << "Incoming connection from " << packet->systemAddress.ToString(true) << std::endl;
 				break;
 			}
 			case ID_CONNECT_TO_SERVER:
@@ -113,8 +111,6 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				OnFootSyncData data;
 				bsIn.Read(data);
-				if (data.bShooting)
-					shoots++;
 				player->SetOnFootData(data);
 				
 				/*if (Squirrel::PlayerUpdate(player->GetID()) == SQFalse)
@@ -148,12 +144,12 @@ void CNetworkConnection::Tick()
 			case ID_CONNECTED_PING:
 			case ID_UNCONNECTED_PING:
 			{
-				std::cout << "Ping from " << packet->systemAddress.ToString(true) << std::endl;
+				log << "Ping from " << packet->systemAddress.ToString(true) << std::endl;
 				break;
 			}
 			case ID_CONNECTION_LOST:
 			{
-				std::cout << "Connection with " << packet->systemAddress.ToString(true) << " lost" << std::endl;
+				log << "Connection with " << packet->systemAddress.ToString(true) << " lost" << std::endl;
 				//OnPlayerDisconnect(sLUA, SPlayer::GetByGUID(packet->guid)->GetID());
 
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
@@ -171,7 +167,7 @@ void CNetworkConnection::Tick()
 			}
 			default:
 			{
-				std::cout << "Unknown packet identifier: " << packet->data << std::endl;
+				log << "Unknown packet identifier: " << packet->data << std::endl;
 				break;
 			}
 		}

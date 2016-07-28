@@ -19,6 +19,7 @@ public:
 	void Tick();
 	void GetOnFootSync(OnFootSyncData& onfoot);
 	void CLocalPlayer::SendOnFootData();
+	void SetMoney(int money);
 	void ShowNotification(std::string text);
 	bool GetAimPosition(CVector3 & aimPos);
 	~CLocalPlayer();

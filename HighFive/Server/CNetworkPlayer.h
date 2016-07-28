@@ -28,6 +28,7 @@ class CNetworkPlayer
 	std::string sName;
 	size_t uMoney;
 	float fTagDrawDistance = 50.f;
+	unsigned long ulLastVehUpdate = 0;
 public:
 	CNetworkPlayer(RakNet::RakNetGUID GUID);
 	~CNetworkPlayer();

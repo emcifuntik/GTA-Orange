@@ -7,7 +7,9 @@ void Squirrel::printfunc(HSQUIRRELVM v, const SQChar *s, ...)
 {
 	va_list vl;
 	va_start(vl, s);
-	scvprintf(stdout, s, vl);
+	char _str[256];
+	scvprintf(_str, s, vl);
+	log << _str;
 	va_end(vl);
 }
 
@@ -15,7 +17,9 @@ void Squirrel::errorfunc(HSQUIRRELVM v, const SQChar *s, ...)
 {
 	va_list vl;
 	va_start(vl, s);
-	scvprintf(stderr, s, vl);
+	char _str[256];
+	scvprintf(_str, s, vl);
+	log << _str;
 	va_end(vl);
 }
 

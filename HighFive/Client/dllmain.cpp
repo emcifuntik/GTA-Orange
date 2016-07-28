@@ -3,6 +3,8 @@
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 {
 	if (reason == DLL_PROCESS_ATTACH) {
+		HWND window = FindWindowA(NULL, "Grand Theft Auto V");
+		SetWindowTextA(window, "HighFive MP");
 		Memory::Init();
 		// Disable intro
 		Memory *m = Memory::Find_t("platform:/movies/rockstar_logos");
