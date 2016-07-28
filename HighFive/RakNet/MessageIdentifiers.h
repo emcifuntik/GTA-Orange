@@ -433,7 +433,9 @@ enum DefaultMessageIDTypes
 
 	ID_PLAYER_LEFT,
 	ID_CHAT_MESSAGE,
-	ID_VEHICLE_SYNC
+	ID_VEHICLE_SYNC,
+
+	ID_USER_PACKET_ENUM
 	//-------------------------------------------------------------------------------------------------------------
  
 };
