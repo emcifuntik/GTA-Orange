@@ -34,7 +34,7 @@ int main(void)
 			RakSleep(5);
 			CNetworkConnection::Get()->Tick();
 			CNetworkPlayer::Tick();
-			
+			CNetworkVehicle::Tick();
 			if ((GetTickCount() - lastTick) > 100)
 			{
 				CNetworkConnection::Get()->server->GetStatistics(0, &stat);

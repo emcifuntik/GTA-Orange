@@ -92,6 +92,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
     <TargetName>HighFive</TargetName>
+    <TargetExt>.asi</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -116,6 +117,9 @@
       <AdditionalOptions>ScriptHookV.lib RakNet_$(Configuration)_$(Platform).lib tinyxml2_$(Configuration)_$(Platform).lib %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <PostBuildEvent>
+      <Command>xcopy "D:\Games\highfive-master\bin\Release\HighFive.asi" "D:\Games\GTA V\HighFive.asi" /Y</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />

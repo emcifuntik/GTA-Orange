@@ -37,5 +37,8 @@ public:
 	void TaskMove(float x, float y, float z, float speed);
 	void SetDriver(CPedestrian * driver);
 	void RemoveDriver();
+	bool GetStartEngine();
+	void StartEngine();
+	Vehicle GetVehicle();
 };
 

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+
 std::vector<CNetworkPlayer *> CNetworkPlayer::PlayersPool;
 Hash CNetworkPlayer::hFutureModel = 0;
 int CNetworkPlayer::ignoreTasks = 0;
@@ -159,7 +160,13 @@ void CNetworkPlayer::SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float
 		float tX = (vecPos.fX + (vecMove.fX * 10));
 		float tY = (vecPos.fY + (vecMove.fY * 10));
 		float tZ = (vecPos.fZ + (vecMove.fZ * 10));
-		TaskMove(CVector3(tX, tY, tZ), iMoveSpeed);
+		if (!is_active)
+			TaskMove(CVector3(tX, tY, tZ), iMoveSpeed);
+		else
+		{
+			//VEHICLE::SET_VEHICLE_FORWARD_SPEED(CNetworkVehicle::GetByGUID(vehGUID)->GetVehicle(), m_MoveSpeed);
+			AI::TASK_VEHICLE_DRIVE_TO_COORD(Handle, CNetworkVehicle::GetByGUID(vehGUID)->GetVehicle(), tX, tY, tZ, 100, 0, CNetworkVehicle::GetByGUID(vehGUID)->GetModel(), 1074528293, 0.f, 0.f);
+		}
 	}
 }
 
@@ -194,16 +201,56 @@ void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 	m_Aiming = data.bAiming;
 	m_Shooting = data.bShooting;
 	m_vecAim = data.vecAim;
-	SetTargetPosition(data.vecPos, ulDelay);
-	if(!m_Aiming && !m_Shooting)
-		SetTargetRotation(data.vecRot, ulDelay);
-	SetArmour(data.usArmour);
-	if(GetCurrentWeapon() != data.ulWeapon)
-		SetCurrentWeapon(data.ulWeapon, true);
-	//SetAmmo(data.ulWeapon, 9999);
-	SetDucking(data.bDuckState);
-	m_Ducking = data.bDuckState;
-	SetMovementVelocity(data.vecMoveSpeed);
+	if (data.vehGuid > 0 && !isInVehicle)
+	{
+		isInVehicle = data.isInVehicle;
+		seat = data.seat;
+		vehGUID = RakNet::RakNetGUID(data.vehGuid);
+		std::ofstream stream;
+		stream.open("examples.txt");
+		for each (CNetworkPlayer *var in CNetworkPlayer::All())
+		{
+			stream << "===========" << std::endl << "isInVehicle[1]:" << isInVehicle << std::endl << "Seat[1]:" << seat << std::endl << "VehGUID[2]:" << data.vehGuid << std::endl << "VehID[2]:" << vehGUID.ToString() << std::endl << "Enter:" << PED::IS_PED_IN_ANY_VEHICLE(var->Handle, false) << std::endl;
+		}
+
+		stream.close();
+		PutInVehicle(CNetworkVehicle::GetByGUID(vehGUID)->GetVehicle(), seat);
+	}
+	if (!isInVehicle)
+	{
+		SetTargetPosition(data.vecPos, ulDelay);
+		if (!m_Aiming && !m_Shooting)
+			SetTargetRotation(data.vecRot, ulDelay);
+		SetArmour(data.usArmour);
+		if (GetCurrentWeapon() != data.ulWeapon)
+			SetCurrentWeapon(data.ulWeapon, true);
+		//SetAmmo(data.ulWeapon, 9999);
+		SetDucking(data.bDuckState);
+		m_Ducking = data.bDuckState;
+		SetMovementVelocity(data.vecMoveSpeed);
+	}
+	else
+	{
+		m_interp.pos.vecTarget = data.vecPos;
+		//VEHICLE::SET_VEHICLE_ENGINE_ON()
+		if (!CNetworkVehicle::GetByGUID(vehGUID)->GetStartEngine())
+		{
+			CNetworkVehicle::GetByGUID(vehGUID)->StartEngine();
+		}
+		//CNetworkVehicle::GetByGUID(vehGUID)->TaskMove(m_interp.pos.vecTarget.fX, m_interp.pos.vecTarget.fY, m_interp.pos.vecTarget.fZ, 10.f);
+		if (is_active)
+		{
+			CNetworkVehicle *veh = CNetworkVehicle::GetByGUID(vehGUID);
+			SetTargetPosition(data.vecPos, ulDelay);
+			veh->SetMovementVelocity(data.vecMoveSpeed);
+			SetTargetRotation(data.vecRot, ulDelay);
+			SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+			
+		}
+	}
+
+
+	
 }
 
 void CNetworkPlayer::UpdateTargetPosition()
@@ -239,7 +286,9 @@ void CNetworkPlayer::UpdateTargetPosition()
 		}
 
 		// Set our new position
+		if(!is_active)
 		SetPosition(vecNewPosition, false);
+		else CNetworkVehicle::GetByGUID(vehGUID)->SetPosition(vecNewPosition);
 	}
 }
 
@@ -276,7 +325,9 @@ void CNetworkPlayer::UpdateTargetRotation()
 		}
 
 		// Set our new position
+		if(!is_active)
 		SetRotation(vecNewRotation, false);
+		else CNetworkVehicle::GetByGUID(vehGUID)->SetRotation(vecNewRotation);
 	}
 }
 
@@ -333,53 +384,66 @@ void CNetworkPlayer::SetRotation(const CVector3& vecRotation, bool bResetInterpo
 
 void CNetworkPlayer::Interpolate()
 {
-	if (GetHealth() <= 100.f && !pedJustDead)
+	if (!isInVehicle)
 	{
-		pedJustDead = true;
-		ENTITY::DELETE_ENTITY(&Handle);
-		return;
-	}
-		
-	SetMovementVelocity(m_vecMove);
-	if(!m_Shooting && !m_Aiming)
-		UpdateTargetRotation();
-	UpdateTargetPosition();
-	if (IsJumping())
-		return;
+		if (GetHealth() <= 100.f && !pedJustDead)
+		{
+			pedJustDead = true;
+			ENTITY::DELETE_ENTITY(&Handle);
+			return;
+		}
 
-	if (!tasksToIgnore)
-	{
-		if (m_Jumping)
-			TaskJump();
-		else if (m_Aiming && !m_Shooting && m_MoveSpeed != .0f)
-			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
-		else if (m_Aiming && !m_Shooting && m_MoveSpeed == .0f)
-			TaskAimAt(m_vecAim, -1);
-		else if (m_Shooting && m_MoveSpeed != .0f)
+		SetMovementVelocity(m_vecMove);
+		if (!m_Shooting && !m_Aiming)
+			UpdateTargetRotation();
+		UpdateTargetPosition();
+		if (IsJumping())
+			return;
+
+		if (!tasksToIgnore)
 		{
-			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
-			m_Shooting = false;
-		}
-		else if (m_Shooting && !m_Aiming)
-		{
-			TaskAimAt(m_vecAim, -1);
-			TaskShootAt(m_vecAim, -1);
-			m_Shooting = false;
-		}
-		else if (m_Shooting && m_MoveSpeed == .0f)
-		{
-			TaskShootAt(m_vecAim, 1);
-			m_Shooting = false;
-		}
-		else if (m_MoveSpeed != .0f)
-		{
-			if (m_MoveSpeed != lastMoveSpeed)
-				ClearTasks();
+			if (m_Jumping)
+				TaskJump();
+			else if (m_Aiming && !m_Shooting && m_MoveSpeed != .0f)
+				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
+			else if (m_Aiming && !m_Shooting && m_MoveSpeed == .0f)
+				TaskAimAt(m_vecAim, -1);
+			else if (m_Shooting && m_MoveSpeed != .0f)
+			{
+				SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
+				m_Shooting = false;
+			}
+			else if (m_Shooting && !m_Aiming)
+			{
+				TaskAimAt(m_vecAim, -1);
+				TaskShootAt(m_vecAim, -1);
+				m_Shooting = false;
+			}
+			else if (m_Shooting && m_MoveSpeed == .0f)
+			{
+				TaskShootAt(m_vecAim, 1);
+				m_Shooting = false;
+			}
+			else if (m_MoveSpeed != .0f)
+			{
+				if (m_MoveSpeed != lastMoveSpeed)
+					ClearTasks();
+				else
+					SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+			}
 			else
-				SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+				ClearTasks();
 		}
-		else
-			ClearTasks();
+	}
+	else
+	{
+		if (!CNetworkVehicle::GetByGUID(vehGUID)->GetStartEngine())
+		{
+			CNetworkVehicle::GetByGUID(vehGUID)->StartEngine();
+		}
+		if(is_active)
+		AI::TASK_VEHICLE_DRIVE_TO_COORD(Handle, CNetworkVehicle::GetByGUID(vehGUID)->GetVehicle(), m_interp.pos.vecTarget.fX, m_interp.pos.vecTarget.fY, m_interp.pos.vecTarget.fZ, 100, 0, CNetworkVehicle::GetByGUID(vehGUID)->GetModel(), 16, 0.f, 0.f);
+			//AI::TASK_VEHICLE_DRIVE_TO_COORD_LONGRANGE(Handle,)
 	}
 	lastMoveSpeed = m_MoveSpeed;
 }

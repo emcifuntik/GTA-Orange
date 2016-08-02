@@ -34,6 +34,8 @@ bool CNetworkConnection::Connect(std::string host, unsigned short port)
 		connection = client->Connect(host.c_str(), port, 0, 0);
 		RakAssert(connection == RakNet::CONNECTION_ATTEMPT_STARTED);
 		bConnected = true;
+
+
 		//CRPCPlugin::Get()->BindFunctions();
 		return true;
 	}
@@ -66,11 +68,22 @@ void CNetworkConnection::Tick()
 				bsOut.Write(playerName);
 				CLocalPlayer::Get()->SetMoney(0);
 				CLocalPlayer::Get()->SetCoordsKeepVehicle(0.f, 0.f, 73.5f);
-				WAIT(0);
+
+				
+				client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+
+/*				WAIT(0);
 				Hash adder = Utils::Hash("Adder");
 				CNetworkVehicle *veh = new CNetworkVehicle(adder, -3.f, 6.f, 73.f, 0.f);
+				VehicleData data;
+				data.hashModel = adder;
+				data.vecRot = CVector3(0.f, 0.f, 0.f);
+				data.vecPos = CVector3(-3.f,6.f,73.f);*/
 
-				client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+				/*RakNet::BitStream bsVehicle;
+				bsVehicle.Write((unsigned char)ID_SEND_VEHICLE_DATA);
+				bsVehicle.Write(data);
+				client->Send(&bsVehicle, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);*/
 				break;
 			}
 			case ID_CONNECTION_ATTEMPT_FAILED:
@@ -111,6 +124,8 @@ void CNetworkConnection::Tick()
 			}
 			case ID_SEND_PLAYER_DATA:
 			{
+
+
 				RakNet::BitStream bsIn(packet->data, packet->length, false);
 				bsIn.IgnoreBytes(sizeof(unsigned char));
 				OnFootSyncData data;
@@ -134,8 +149,11 @@ void CNetworkConnection::Tick()
 			}
 			case ID_VEHICLE_SYNC:
 			{
-				/*int count;
+
+				int count;
+
 				bsIn.Read(count);
+				CUI::SendNotification(std::to_string(count));
 				for (int i = 0; i < count; ++i)
 				{
 					VehicleData data;
@@ -145,10 +163,12 @@ void CNetworkConnection::Tick()
 					{
 						veh = new CNetworkVehicle(data.hashModel, data.vecPos.fX, data.vecPos.fY, data.vecPos.fZ, data.vecRot.fZ);
 						veh->m_GUID = data.GUID;
+
 						CChat::Get()->AddChatMessage("Vehicle created", { 0, 255, 0, 255 });
+						veh->SetVehicleData(data);
 					}
-					veh->SetVehicleData(data, 100);
-				}*/
+					
+				}
 				break;
 			}
 			case ID_PLAYER_LEFT:

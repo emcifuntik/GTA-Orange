@@ -54,6 +54,9 @@ private:
 	int					tasksToIgnore = 0;
 	DWORD				lastUpdate = 9999;
 	unsigned short		m_Health = 200;
+	bool isInVehicle = false;
+	int seat = 0;
+	RakNetGUID vehGUID;
 	CNetworkPlayer();
 public:
 	static int ignoreTasks;
@@ -96,6 +99,6 @@ public:
 	void Interpolate();
 
 	void DrawTag();
-
+	bool is_active = false;
 	~CNetworkPlayer();
 };

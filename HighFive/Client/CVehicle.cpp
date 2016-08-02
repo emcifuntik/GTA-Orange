@@ -174,8 +174,19 @@ void CVehicle::SetDriver(CPedestrian *driver)
 {
 	this->driver = driver;
 }
-
+bool CVehicle::GetStartEngine()
+{
+	return VEHICLE::_IS_VEHICLE_ENGINE_ON(Handle);
+}
+void CVehicle::StartEngine()
+{
+	return VEHICLE::SET_VEHICLE_ENGINE_ON(Handle, true, true, true);
+}
 void CVehicle::RemoveDriver()
 {
 	SetDriver(nullptr);
+}
+Vehicle CVehicle::GetVehicle()
+{
+	return Handle;
 }

@@ -178,3 +178,19 @@ void CPedestrian::RemoveAmmo(Hash weapon, int ammo)
 {
 	WEAPON::SET_PED_AMMO(Handle, weapon, WEAPON::GET_AMMO_IN_PED_WEAPON(Handle, weapon) - ammo);
 }
+Vehicle CPedestrian::GetPlayerLastVehicle()
+{
+	return PED::GET_VEHICLE_PED_IS_IN(Handle, true);
+}
+Vehicle CPedestrian::GetPlayerVehicle()
+{
+	return PED::GET_VEHICLE_PED_IS_IN(Handle, false);
+}
+void CPedestrian::PutInVehicle(Vehicle vehid, int seat)
+{
+	std::ofstream stream;
+	stream.open("exampless.txt");
+	stream << "isVehicleStop:" << VEHICLE::IS_VEHICLE_STOPPED(vehid) << std::endl;
+	stream.close();
+	AI::TASK_ENTER_VEHICLE(Handle, vehid, 10, -1, 2.0, 3, 0);
+}

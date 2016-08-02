@@ -53,6 +53,23 @@ void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 	GetAimPosition(onfoot.vecAim);
 	onfoot.bAiming = CONTROLS::IS_DISABLED_CONTROL_PRESSED(0, 25);
 	onfoot.bShooting = PED::IS_PED_SHOOTING(Handle);
+	bool inveh = false;
+	if (PED::IS_PED_IN_ANY_VEHICLE(Handle, false)) inveh = true;
+	if (PED::IS_PED_IN_ANY_VEHICLE(Handle, true)) inveh = true;
+	onfoot.isInVehicle = inveh;
+	onfoot.seat = 1;
+	for each(CNetworkVehicle *temp in CNetworkVehicle::All())
+	{
+		if (GetPlayerVehicle() == temp->GetVehicle())
+		{
+			onfoot.vehGuid = temp->m_GUID.ToUint32(temp->m_GUID);
+			std::ofstream stream;
+			stream.open("example.txt");
+			stream << "isInVehicle[1]:" << onfoot.isInVehicle << std::endl << "Seat[1]:" << onfoot.seat << std::endl << "VehGUID[2]:" << onfoot.vehGuid << std::endl;
+			stream.close();
+			break;
+		}
+	}
 }
 
 CLocalPlayer * CLocalPlayer::Get()

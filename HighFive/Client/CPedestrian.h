@@ -38,4 +38,7 @@ public:
 	void SetAmmo(Hash weapon, int ammo);
 	void AddAmmo(Hash weapon, int ammo);
 	void RemoveAmmo(Hash weapon, int ammo);
+	void PutInVehicle(Vehicle, int seat);
+	Vehicle GetPlayerVehicle();
+	Vehicle GetPlayerLastVehicle();
 };

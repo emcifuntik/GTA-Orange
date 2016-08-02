@@ -76,6 +76,7 @@ void CNetworkConnection::Tick()
 			case ID_NEW_INCOMING_CONNECTION:
 			{
 				log << "Incoming connection from " << packet->systemAddress.ToString(true) << std::endl;
+
 				break;
 			}
 			case ID_CONNECT_TO_SERVER:
@@ -88,7 +89,22 @@ void CNetworkConnection::Tick()
 				Squirrel::PlayerConnect(player->GetID());
 
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
+
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
+
+
+				RakNet::BitStream bsveh;
+				int count = CNetworkVehicle::Count();
+				bsveh.Write((unsigned char)ID_VEHICLE_SYNC);
+				bsveh.Write(count);
+				for each (CNetworkVehicle *temp in CNetworkVehicle::All())
+				{
+					VehicleData data;
+					temp->GetVehicleData(data);
+					bsveh.Write(data);
+				}
+				log << "LOL1";
+				server->Send(&bsveh, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 				break;
 			}
 			case ID_CHAT_MESSAGE:
@@ -123,11 +139,21 @@ void CNetworkConnection::Tick()
 
 				player->GetOnFootData(data);
 #if 0
-				data.vecPos.fX += 1.f;
-				data.vecPos.fY += 1.f;
-#endif
+				data.vecPos.fX += 3.f;
+				data.vecPos.fY += 3.f;
+				if (data.vehGuid > 0)
+				{
+					for each (CNetworkVehicle *veh in CNetworkVehicle::All())
+					{
+						int temp = veh->rnGUID.ToUint32(veh->rnGUID);
+						log << temp << std::endl;
+						if (data.vehGuid != temp) { data.vehGuid = temp; break; }
+					}
+				}
+#endif		
+
 				bsOut.Write(data);
-#if 0
+#if 0 
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 #else
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, true);
@@ -135,10 +161,31 @@ void CNetworkConnection::Tick()
 				bsOut.Reset();
 				break;
 			}
+			case ID_VEHICLE_SYNC:
+			{
+
+
+				break;
+			}
 			case ID_SEND_VEHICLE_DATA:
 			{
-				//OnPlayerUpdate(sLUA, SPlayer::GetByGUID(packet->guid)->GetID());
-				server->Send(&bsIn, MEDIUM_PRIORITY, UNRELIABLE_SEQUENCED, 0, packet->systemAddress, true);
+				VehicleData data;
+				bsIn.Read(data);
+				CNetworkVehicle *veh = new CNetworkVehicle(data.hashModel, data.vecPos.fX, data.vecPos.fY, data.vecPos.fZ, data.vecRot.fZ);
+				veh->SetVehicleData(data);
+				log << "CREATE VEHICLE";
+				//server->Send(&bsIn, MEDIUM_PRIORITY, UNRELIABLE_SEQUENCED, 0, packet->systemAddress, true);
+				RakNet::BitStream bsOut;
+				int count = CNetworkVehicle::Count();
+				bsOut.Write((unsigned char)ID_VEHICLE_SYNC);
+				bsOut.Write(count);
+				for each (CNetworkVehicle *temp in CNetworkVehicle::All())
+				{
+					VehicleData data;
+					temp->GetVehicleData(data);
+					bsOut.Write(data);
+				}
+				server->Send(&bsOut, MEDIUM_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 				break;
 			}
 			case ID_CONNECTED_PING:

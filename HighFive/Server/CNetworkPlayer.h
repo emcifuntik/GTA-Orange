@@ -29,6 +29,9 @@ class CNetworkPlayer
 	size_t uMoney;
 	float fTagDrawDistance = 50.f;
 	unsigned long ulLastVehUpdate = 0;
+	bool isInVehicle = false;
+	int seat = 0;
+	RakNetGUID vehGUID;
 public:
 	CNetworkPlayer(RakNet::RakNetGUID GUID);
 	~CNetworkPlayer();

@@ -75,6 +75,9 @@ void CNetworkPlayer::SetOnFootData(const OnFootSyncData& data)
 	vecAim = data.vecAim;
 	bAiming = data.bAiming;
 	bShooting = data.bShooting;
+	isInVehicle = data.isInVehicle;
+	seat = data.seat;
+	vehGUID = RakNet::RakNetGUID(data.vehGuid);
 }
 
 void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
@@ -94,6 +97,10 @@ void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
 	data.vecAim = vecAim;
 	data.bAiming = bAiming;
 	data.bShooting = bShooting;
+	data.isInVehicle = isInVehicle;
+	data.seat = seat;
+	data.vehGuid = vehGUID.ToUint32(vehGUID);
+	//log << "GUID:" << data.vehGuid << std::endl;
 }
 
 void CNetworkPlayer::SetPosition(const CVector3 & position)

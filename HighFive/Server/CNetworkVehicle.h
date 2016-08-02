@@ -2,7 +2,7 @@
 class CNetworkVehicle
 {
 	static std::vector<CNetworkVehicle *> Vehicles;
-	RakNet::RakNetGUID rnGUID;
+	
 	CNetworkPlayer* driver;				// vehicle driver
 	Hash hashModel;						// vehicle model
 	CVector3 vecPos;					// vehicle position
@@ -15,6 +15,7 @@ class CNetworkVehicle
 public:
 	static std::vector<CNetworkVehicle *> All();
 	static int Count();
+	RakNet::RakNetGUID rnGUID;
 	CNetworkVehicle(Hash model, float x, float y, float z, float heading);
 
 	void SetPosition(CVector3 position);
@@ -25,6 +26,7 @@ public:
 	void SetVehicleData(const VehicleData& data);
 	void GetVehicleData(VehicleData& data);
 
+	static void Tick();
 	~CNetworkVehicle();
 };
 

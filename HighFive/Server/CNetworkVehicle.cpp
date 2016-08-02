@@ -16,6 +16,11 @@ int CNetworkVehicle::Count()
 CNetworkVehicle::CNetworkVehicle(Hash model, float x, float y, float z, float heading):hashModel(model),vecPos(x,y,z)
 {
 	rnGUID = RakNetGUID::RakNetGUID(rand());
+	log << rnGUID.ToString();
+	for each (CNetworkVehicle *vehicle in Vehicles)
+	{
+		if (vehicle == this) return;
+	}
 	Vehicles.push_back(this);
 }
 
@@ -41,14 +46,17 @@ void CNetworkVehicle::SetHealth(unsigned short health)
 
 void CNetworkVehicle::SetVehicleData(const VehicleData & data)
 {
-	rnGUID = data.GUID;
+	//rnGUID = data.GUID;
 	vecPos = data.vecPos;
 	vecRot = data.vecRot;
 	usHealth = data.usHealth;
 	hashModel = data.hashModel;
 	vecMoveSpeed = data.vecMoveSpeed;
 }
+void CNetworkVehicle::Tick()
+{
 
+}
 void CNetworkVehicle::GetVehicleData(VehicleData & data)
 {
 	data.GUID = rnGUID;
