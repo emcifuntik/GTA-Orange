@@ -21,7 +21,9 @@ public:
 	bool bShooting : 1;
 	bool bReloading : 1;
 	CVector3 vecAim;
-
+	bool isInVehicle = false;
+	int seat = -1;
+	int vehGuid;
 	std::string ToString()
 	{
 		std::stringstream ss;
