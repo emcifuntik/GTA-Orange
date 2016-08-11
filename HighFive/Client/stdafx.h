@@ -24,6 +24,8 @@
 #include <algorithm>
 #include <locale>
 #include <codecvt>
+#include <iomanip>
+#include <queue>
 
 #pragma comment(lib, "winmm.lib")
 
@@ -66,8 +68,18 @@ using namespace RakNet;
 #include "../../Shared/Models.h"
 #include "CConfig.h"
 
+// NTAthority memory managment
+#include "../../Shared/Hooking.h"
+
 // Utils
 #include "Utils.h"
+
+
+// Interface
+#include "CChat.h"
+
+// RAGE Stuff
+#include "CRage.h"
 
 // Modification
 #include "Commands.h"
@@ -86,8 +98,6 @@ using namespace RakNet;
 #include "Functions.h"
 #include "CRPCPlugin.h"
 
-// Interface
-#include "CChat.h"
 
 #if 0
 #define TRACE( format, ... )

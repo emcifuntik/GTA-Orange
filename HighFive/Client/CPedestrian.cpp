@@ -7,14 +7,16 @@ CPedestrian::CPedestrian(Hash Model, CVector3 Position, float Heading) :CEntity(
 	while (!STREAMING::HAS_MODEL_LOADED(Model))
 		WAIT(0);
 
+	CWorld::Get()->CPedFactoryPtr->Create = PedFactoryHook::Get()->CreateHook;
 	Handle = (Entity)PED::CREATE_PED(1, Model, Position.fX, Position.fY, Position.fZ, Heading, true, false);
+	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(Model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	/*PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);*/
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
 }
 
@@ -79,6 +81,11 @@ void CPedestrian::TaskJump()
 bool CPedestrian::IsShooting()
 {
 	return (PED::IS_PED_SHOOTING(Handle) ? true : false);
+}
+
+bool CPedestrian::IsFalling()
+{
+	return (PED::IS_PED_FALLING(Handle) ? true : false);
 }
 
 void CPedestrian::SetCoordsKeepVehicle(float x, float y, float z)

@@ -108,6 +108,9 @@
     <ClCompile Include="CNetworkVehicle.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
+    <ClCompile Include="CRage.cpp">
+      <Filter>Source Files\Hooking</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -181,6 +184,9 @@
     </ClInclude>
     <ClInclude Include="CRPCPlugin.h">
       <Filter>Header Files\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="CRage.h">
+      <Filter>Header Files\Hooking</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

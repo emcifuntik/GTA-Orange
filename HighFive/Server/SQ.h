@@ -31,6 +31,10 @@ public:
 
 	void onPlayerConnect(int playerId);
 	static void PlayerConnect(int playerId);
+	int onPlayerText(int playerId, const char * text, int length);
+	static int PlayerText(int playerId, const char * text, int length);
+	int onPlayerCommand(int playerId, const char * text, int length);
+	static int PlayerCommand(int playerId, const char * text, int length);
 	SQBool onPlayerUpdate(int playerId);
 	static SQBool PlayerUpdate(int playerId);
 	void onPlayerDisconnect(int playerId, int reason);

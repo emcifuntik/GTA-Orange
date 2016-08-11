@@ -4,7 +4,6 @@ std::vector<CNetworkPlayer *> CNetworkPlayer::PlayersPool;
 Hash CNetworkPlayer::hFutureModel = 0;
 int CNetworkPlayer::ignoreTasks = 0;
 
-
 CNetworkPlayer::CNetworkPlayer() :CPedestrian(0)
 {
 	PlayersPool.push_back(this);
@@ -57,25 +56,19 @@ int CNetworkPlayer::GetTickTime()
 	return updateTick;
 }
 
-CNetworkPlayer::~CNetworkPlayer()
-{
-	
-}
-
 std::vector<CNetworkPlayer*> CNetworkPlayer::All()
 {
 	return PlayersPool;
 }
 
-void CNetworkPlayer::DeleteNotExists(const std::vector<RakNet::RakNetGUID>& GUIDs)
+void CNetworkPlayer::DeleteByGUID(RakNet::RakNetGUID guid)
 {
 	for (int i = 0; i < PlayersPool.size(); ++i)
 	{
-		if (std::find(GUIDs.begin(), GUIDs.end(), PlayersPool[i]->m_GUID) == GUIDs.end())
+		if (PlayersPool[i]->m_GUID == guid)
 		{
-			delete[] PlayersPool[i];
-			PlayersPool.erase(PlayersPool.begin() + i);
-			--i;
+			delete PlayersPool[i];
+			PlayersPool.erase(PlayersPool.begin() + i, PlayersPool.begin() + i + 1);
 		}
 	}
 }
@@ -87,14 +80,17 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 		STREAMING::REQUEST_MODEL(m_Model);
 	while (!STREAMING::HAS_MODEL_LOADED(m_Model))
 		WAIT(0);
+	CWorld::Get()->CPedFactoryPtr->Create = PedFactoryHook::Get()->CreateHook;
 	Handle = PED::CREATE_PED(1, m_Model, vecPosition.fX, vecPosition.fY, vecPosition.fZ, .0f, true, false);
+	pedHandler = (CPed*)getScriptHandleBaseAddress(Handle);
+	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(m_Model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	/*PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);*/
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
 }
 
@@ -171,18 +167,22 @@ void CNetworkPlayer::SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMo
 		float tY = (vecPos.fY + (vecMove.fY * 10));
 		float tZ = (vecPos.fZ + (vecMove.fZ * 10));
 		AI::TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD(Handle, tX, tY,
-			tZ, aimPos.fX, aimPos.fY, aimPos.fZ, moveSpeed, (int)shooting, 0x3F000000, 0x40800000, 1, (shooting ?  0 : 512), 0, 3337513804U);
+			tZ, aimPos.fX, aimPos.fY, aimPos.fZ, 1.f, 0, 0x3F000000, 0x40800000, 1, (shooting ?  0 : 1024), 1, 3337513804U);
 	}
 }
 
 void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 {
+	if (IsFalling() || IsJumping())
+		return;
 	SetHealth(data.usHealth);
 	m_Health = data.usHealth;
 	if (m_Health <= 100.f)
 		return;
 	else if(pedJustDead)
 	{
+		if (ENTITY::IS_ENTITY_A_PED(Handle))
+			PED::DELETE_PED(&Handle);
 		Spawn(data.vecPos);
 		pedJustDead = false;
 	}
@@ -204,6 +204,7 @@ void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 	SetDucking(data.bDuckState);
 	m_Ducking = data.bDuckState;
 	SetMovementVelocity(data.vecMoveSpeed);
+	pedHandler->MoveSpeed = data.fMoveSpeed;
 }
 
 void CNetworkPlayer::UpdateTargetPosition()
@@ -333,63 +334,77 @@ void CNetworkPlayer::SetRotation(const CVector3& vecRotation, bool bResetInterpo
 
 void CNetworkPlayer::Interpolate()
 {
-	if (GetHealth() <= 100.f && !pedJustDead)
+	if (IsFalling() || IsJumping())
+		return;
+	if (PED::IS_PED_DEAD_OR_DYING(Handle, true) && !pedJustDead)
 	{
 		pedJustDead = true;
 		ENTITY::DELETE_ENTITY(&Handle);
 		return;
 	}
 		
-	SetMovementVelocity(m_vecMove);
 	if(!m_Shooting && !m_Aiming)
 		UpdateTargetRotation();
 	UpdateTargetPosition();
-	if (IsJumping())
-		return;
+	SetMovementVelocity(m_vecMove);
+	PED::SET_PED_ACCURACY(Handle, 100);
+	BuildTasksQueue();
+}
 
-	if (!tasksToIgnore)
+void CNetworkPlayer::BuildTasksQueue()
+{
+	if (tasksToIgnore > 0)
 	{
-		if (m_Jumping)
-			TaskJump();
-		else if (m_Aiming && !m_Shooting && m_MoveSpeed != .0f)
-			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed);
-		else if (m_Aiming && !m_Shooting && m_MoveSpeed == .0f)
-			TaskAimAt(m_vecAim, -1);
-		else if (m_Shooting && m_MoveSpeed != .0f)
+		tasksToIgnore--;
+		return;
+	}
+	if (m_Jumping)
+	{
+		TaskJump();
+	}
+	else if (m_Aiming && !m_Shooting)
+	{
+		if (m_MoveSpeed != .0f)
 		{
-			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
-			m_Shooting = false;
-		}
-		else if (m_Shooting && !m_Aiming)
-		{
-			TaskAimAt(m_vecAim, -1);
-			TaskShootAt(m_vecAim, -1);
-			m_Shooting = false;
-		}
-		else if (m_Shooting && m_MoveSpeed == .0f)
-		{
-			TaskShootAt(m_vecAim, 1);
-			m_Shooting = false;
-		}
-		else if (m_MoveSpeed != .0f)
-		{
-			if (m_MoveSpeed != lastMoveSpeed)
-				ClearTasks();
-			else
-				SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, 3.0f);
 		}
 		else
-			ClearTasks();
+		{
+			TaskAimAt(m_vecAim, -1);
+		}
 	}
-	lastMoveSpeed = m_MoveSpeed;
+	else if (m_Shooting && m_MoveSpeed != .0f)
+	{
+		SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
+		m_Shooting = false;
+	}
+	else if (m_Shooting && !m_Aiming)
+	{
+		TaskAimAt(m_vecAim, -1);
+		TaskShootAt(m_vecAim, -1);
+		m_Shooting = false;
+	}
+	else if (m_Shooting && m_MoveSpeed == .0f)
+	{
+		TaskShootAt(m_vecAim, 1);
+		m_Shooting = false;
+	}
+	else if (m_MoveSpeed != .0f)
+	{
+		SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+	}
+	else
+	{
+		AI::CLEAR_PED_TASKS(Handle);
+	}
 }
 
 void CNetworkPlayer::DrawTag()
 {
-	if (ENTITY::IS_ENTITY_ON_SCREEN(Handle))
+	if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(CLocalPlayer::Get()->GetHandle(), Handle, 17))
 	{
 		CVector3 vecCurPos = GetPosition();
-		float health = (((m_Health < 100.f ? 100.f : m_Health) - 100.f) / 100.f);
+		float health = (((m_Health < 100.f ? 100.f : m_Health) - 100.f) / (pedHandler->MaxHealth-100.f));
 		float distance = (vecCurPos - CLocalPlayer::Get()->GetPosition()).Length();
 		if (distance < 100.f)
 		{
@@ -410,14 +425,17 @@ void CNetworkPlayer::SetModel(Hash model)
 		STREAMING::REQUEST_MODEL(model);
 	while (!STREAMING::HAS_MODEL_LOADED(model))
 		WAIT(0);
+	CWorld::Get()->CPedFactoryPtr->Create = PedFactoryHook::Get()->CreateHook;
 	Handle = PED::CREATE_PED(1, model, pos.fX, pos.fY, pos.fZ, heading, true, false);
+	pedHandler = (CPed*)getScriptHandleBaseAddress(Handle);
+	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
-	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
-	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
-	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	//PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	//PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
+	//PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
+	//PED::SET_PED_CAN_RAGDOLL(Handle, false);
+	//PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
 }
 

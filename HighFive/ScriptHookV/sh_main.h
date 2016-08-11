@@ -144,3 +144,5 @@ enum eGameVersion : int
 };
 
 IMPORT eGameVersion getGameVersion();
+
+bool IsSteam();

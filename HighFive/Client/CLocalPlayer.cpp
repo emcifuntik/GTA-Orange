@@ -1,9 +1,6 @@
 #include "stdafx.h"
 
 CLocalPlayer* CLocalPlayer::Instance = nullptr;
-float CLocalPlayer::offsetX = 0.f;
-float CLocalPlayer::offsetY = 0.f;
-float CLocalPlayer::alpha = 0.001f;
 
 CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 {
@@ -22,12 +19,26 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 		GAMEPLAY::DELETE_STUNT_JUMP(i);
 	}
 	GAMEPLAY::SET_MISSION_FLAG(true);
-	auto addr = Memory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
-	addr->nop(20);
-	//AUDIO::REQUEST_SCRIPT_AUDIO_BANK("SNOW_FOOTSTEPS", true);
-	GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
-	GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
-	GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
+
+	aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
+
+	// Disabling weapon wheel slow motion
+	auto addr = Memory::Find("32 C0 F3 0F 11 09");
+	addr->nop(6);
+
+	//auto addr = Memory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
+	//addr->nop(20);
+	//GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
+	//GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
+	//GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
+
+	std::stringstream ss;
+	ss << "Connecting to ~b~" << CConfig::Get()->sIP.c_str() << ":" << CConfig::Get()->uiPort;
+	CChat::Get()->AddChatMessage(ss.str());
+	if (!CNetworkConnection::Get()->Connect(CConfig::Get()->sIP.c_str(), CConfig::Get()->uiPort))
+		CChat::Get()->AddChatMessage("Can't connect to the server", { 255, 0, 0, 255 });
+	else
+		CChat::Get()->AddChatMessage("Connection successfull");
 }
 
 
@@ -39,7 +50,7 @@ void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 {
 	onfoot.hModel = GetModel();
 	onfoot.bJumping = IsJumping();
-	onfoot.fMoveSpeed = GetBlendRation();
+	onfoot.fMoveSpeed = CWorld::Get()->CPedPtr->MoveSpeed;
 	onfoot.vecPos = GetPosition();
 	onfoot.vecRot = GetRotation();
 	onfoot.fHeading = GetHeading();
@@ -50,9 +61,9 @@ void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 	onfoot.usArmour = GetArmour();
 	onfoot.ulWeapon = GetCurrentWeapon();
 	onfoot.uAmmo = GetCurrentWeaponAmmo();
-	GetAimPosition(onfoot.vecAim);
-	onfoot.bAiming = CONTROLS::IS_DISABLED_CONTROL_PRESSED(0, 25);
-	onfoot.bShooting = PED::IS_PED_SHOOTING(Handle);
+	onfoot.vecAim = *aimPosition;
+	onfoot.bAiming = (CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimState == 2);
+	onfoot.bShooting = PED::IS_PED_SHOOTING(Handle) ? true : false;
 }
 
 CLocalPlayer * CLocalPlayer::Get()
@@ -122,7 +133,6 @@ void CLocalPlayer::Connect()
 	requestid.Write((MessageID)ID_CONNECT_TO_SERVER);
 	requestid.Write(playerName);
 	CNetworkConnection::Get()->client->Send(&requestid, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-
 	CChat::Get()->AddChatMessage("Connected to server", { 100, 255, 100, 200 });
 }
 
@@ -133,7 +143,6 @@ void CLocalPlayer::SendOnFootData()
 	OnFootSyncData data;
 	GetOnFootSync(data);
 	bsOut.Write(data);
-
 	CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
@@ -146,28 +155,4 @@ void CLocalPlayer::SetMoney(int money)
 		Hash hash = GAMEPLAY::GET_HASH_KEY(statNameFull);
 		STATS::STAT_SET_INT(hash, money, 1);
 	}
-}
-
-bool CLocalPlayer::GetAimPosition(CVector3& aimPos)
-{
-	bool aiming = CONTROLS::IS_DISABLED_CONTROL_PRESSED(0, 25);
-	bool shooting = PED::IS_PED_SHOOTING(Handle);
-	if (!aiming && !shooting)
-		return false;
-
-	Vector3 _camPos = CAM::GET_GAMEPLAY_CAM_COORD();
-	CVector3 camPos = CVector3(_camPos.x, _camPos.y, _camPos.z);
-	Vector3 _camRot = CAM::GET_GAMEPLAY_CAM_ROT(2);
-	CVector3 camRot = CVector3(_camRot.x, _camRot.y, _camRot.z);
-	CVector3 camDirection = Utils::RotationToDirection(camRot);
-
-	CVector3 target = camPos + camDirection * 1000.f;
-	int iRayCast = WORLDPROBE::_CAST_RAY_POINT_TO_POINT(camPos.fX, camPos.fY, camPos.fZ, target.fX, target.fY, target.fZ, 1 | 4 | 10, 0, 7);
-	BOOL hit;
-	Vector3 hitCoords, surfaceCoords;
-	Entity hitEntity;
-	WORLDPROBE::_GET_RAYCAST_RESULT(iRayCast, &hit, &hitCoords, &surfaceCoords, &hitEntity);
-	
-	aimPos = CVector3(hitCoords.x, hitCoords.y, hitCoords.z);
-	return true;
 }

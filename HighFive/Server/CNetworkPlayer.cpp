@@ -12,7 +12,7 @@ void CNetworkPlayer::Each(void(*func)(CNetworkPlayer *))
 CNetworkPlayer * CNetworkPlayer::GetByGUID(RakNet::RakNetGUID GUID)
 {
 	for each (CNetworkPlayer *player in _players)
-		if (player->rnGUID == GUID)
+		if (player && player->rnGUID == GUID)
 			return player;
 	CNetworkPlayer *player = new CNetworkPlayer(GUID);
 	return player;
@@ -135,5 +135,6 @@ UINT CNetworkPlayer::Count()
 
 void CNetworkPlayer::Remove(int playerid)
 {
+	delete _players[playerid];
 	_players[playerid] = nullptr;
 }

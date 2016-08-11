@@ -7,11 +7,9 @@ class CLocalPlayer: public CPedestrian
 	static CLocalPlayer* Instance;
 	CLocalPlayer();
 public:
+	CVector3 *aimPosition = nullptr;
 	Hash newModel = 0;
 
-	static float offsetX;
-	static float offsetY;
-	static float alpha;
 	static CLocalPlayer *Get();
 
 	void ChangeModel(Hash model);
@@ -20,8 +18,6 @@ public:
 	void GetOnFootSync(OnFootSyncData& onfoot);
 	void CLocalPlayer::SendOnFootData();
 	void SetMoney(int money);
-	void ShowNotification(std::string text);
-	bool GetAimPosition(CVector3 & aimPos);
 	~CLocalPlayer();
 };
 

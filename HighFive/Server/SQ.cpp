@@ -58,7 +58,7 @@ void Squirrel::onPlayerConnect(int playerId)
 
 		sq_pushinteger(vm, playerId);
 
-		sq_call(vm, 2, SQFalse, SQTrue); //calls the function 
+		sq_call(vm, 2, SQFalse, SQTrue); //calls the function
 	}
 	sq_settop(vm, top); //restores the original stack size
 }
@@ -67,6 +67,60 @@ void Squirrel::PlayerConnect(int playerId)
 {
 	for each (Squirrel *sq in Scripts)
 		sq->onPlayerConnect(playerId);
+}
+
+int Squirrel::onPlayerText(int playerId, const char *text, int length)
+{
+	SQInteger top = sq_gettop(vm); //saves the stack size before the call
+	sq_pushroottable(vm); //pushes the global table
+	sq_pushstring(vm, _SC("onPlayerText"), -1);
+	if (SQ_SUCCEEDED(sq_get(vm, -2))) { //gets the field 'foo' from the global table
+		sq_pushroottable(vm); //push the 'this' (in this case is the global table)
+
+		sq_pushinteger(vm, playerId);
+		sq_pushstring(vm, text, length);
+		
+		sq_call(vm, 2, SQFalse, SQTrue); //calls the function 
+	}
+	sq_settop(vm, top); //restores the original stack size
+	return 0;
+}
+
+int Squirrel::PlayerText(int playerId, const char *text, int length)
+{
+	for each (Squirrel *sq in Scripts)
+	{
+		if (sq->onPlayerText(playerId, text, length))
+			return 1;
+	}
+	return 0;
+}
+
+int Squirrel::onPlayerCommand(int playerId, const char *text, int length)
+{
+	SQInteger top = sq_gettop(vm); //saves the stack size before the call
+	sq_pushroottable(vm); //pushes the global table
+	sq_pushstring(vm, _SC("onPlayerCommand"), -1);
+	if (SQ_SUCCEEDED(sq_get(vm, -2))) { //gets the field 'foo' from the global table
+		sq_pushroottable(vm); //push the 'this' (in this case is the global table)
+
+		sq_pushinteger(vm, playerId);
+		sq_pushstring(vm, text, length);
+
+		sq_call(vm, 2, SQFalse, SQTrue); //calls the function 
+	}
+	sq_settop(vm, top); //restores the original stack size
+	return 0;
+}
+
+int Squirrel::PlayerCommand(int playerId, const char *text, int length)
+{
+	for each (Squirrel *sq in Scripts)
+	{
+		if (sq->onPlayerCommand(playerId, text, length))
+			return 1;
+	}
+	return 0;
 }
 
 SQBool Squirrel::onPlayerUpdate(int playerId)

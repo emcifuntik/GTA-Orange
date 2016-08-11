@@ -101,3 +101,22 @@ unsigned int Utils::Hash(char* inpStr)
 	if (value < 2) value += 2;
 	return value;
 }
+
+bool Utils::IsValidPtr(PVOID Ptr)
+{
+	if (!Ptr)
+		return 0;
+	MEMORY_BASIC_INFORMATION info = { 0 };
+
+	VirtualQuery(Ptr, &info, 1);
+
+	if (info.Protect | PAGE_READONLY)
+		return 1;
+
+	return 0;
+}
+
+bool Utils::IsSteam()
+{
+	return !(getGameVersion() % 2);
+}

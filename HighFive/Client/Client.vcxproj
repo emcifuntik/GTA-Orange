@@ -21,6 +21,7 @@
     <ClInclude Include="CLocalPlayer.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CGraphics.h" />
+    <ClInclude Include="CRage.h" />
     <ClInclude Include="CRPCPlugin.h" />
     <ClInclude Include="Functions.h" />
     <ClInclude Include="main.h" />
@@ -41,6 +42,7 @@
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="CConfig.cpp" />
     <ClCompile Include="CPedestrian.cpp" />
+    <ClCompile Include="CRage.cpp" />
     <ClCompile Include="CRPCPlugin.cpp" />
     <ClCompile Include="dllmain.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
@@ -100,7 +102,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_WINDOWS;_USRDLL;FIVEMP_CLIENT_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>..\tinyxml2-4.0.1;..\ScriptHookV;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <OmitFramePointers>false</OmitFramePointers>

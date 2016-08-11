@@ -65,10 +65,10 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
 				Squirrel::PlayerDisconnect(playerID, 1);
-				delete player;
+				CNetworkPlayer::Remove(playerID);
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
-				bsOut.Write(playerID);
+				bsOut.Write(packet->guid);
 
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 				break;
@@ -95,15 +95,31 @@ void CNetworkConnection::Tick()
 			{
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
-
-				/*if (OnPlayerTextMessage(sLUA, SPlayer::GetByGUID(packet->guid)->GetID(), std::string(playerText.C_String())) == 0)
+				std::cout << playerText << std::endl;
+				//if (Squirrel::PlayerText(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
 				{
 					std::stringstream ss;
-					ss << "~b~" << SPlayer::GetByGUID(packet->guid)->GetName() << ":~w~ " << playerText.C_String();
+					ss << "~b~" << CNetworkPlayer::GetByGUID(packet->guid)->GetName() << ":~w~ " << playerText.C_String();
 					playerText = ss.str().c_str();
 					bsOut.Write(playerText);
-					NetworkManager->rpc.Signal("SendMessageToPlayer", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
-				}*/
+					color_t messageColor = { 200, 200, 255, 255 };
+					bsOut.Write(messageColor);
+					CNetworkConnection::Get()->rpc.Signal("SendMessageToPlayer", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
+				}
+				break;
+			}
+			case ID_COMMAND_MESSAGE:
+			{
+				RakNet::RakString playerText;
+				bsIn.Read(playerText);
+				std::cout << playerText << std::endl;
+				if (Squirrel::PlayerCommand(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
+				{
+					bsOut.Write("Unknown command");
+					color_t messageColor = { 255, 200, 200, 255 };
+					bsOut.Write(messageColor);
+					CNetworkConnection::Get()->rpc.Signal("SendMessageToPlayer", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, packet->guid, false, false);
+				}
 				break;
 			}
 			case ID_SEND_PLAYER_DATA:
@@ -150,17 +166,13 @@ void CNetworkConnection::Tick()
 			case ID_CONNECTION_LOST:
 			{
 				log << "Connection with " << packet->systemAddress.ToString(true) << " lost" << std::endl;
-				//OnPlayerDisconnect(sLUA, SPlayer::GetByGUID(packet->guid)->GetID());
-
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
 				Squirrel::PlayerDisconnect(playerID, 2);
-
-				delete player;
 				CNetworkPlayer::Remove(playerID);
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
-				bsOut.Write(playerID);
+				bsOut.Write(packet->guid);
 
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 				break;

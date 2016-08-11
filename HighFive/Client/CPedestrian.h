@@ -19,6 +19,7 @@ public:
 	bool IsJumping();
 	void TaskJump();
 	bool IsShooting();
+	bool IsFalling();
 	void SetCoordsKeepVehicle(float x, float y, float z);
 	void SetArmour(unsigned short armour);
 	unsigned short GetArmour();

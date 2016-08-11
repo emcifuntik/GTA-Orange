@@ -10,5 +10,7 @@ namespace Utils
 	double RadToDeg(double deg);
 	double BoundRotationDeg(double angleDeg);
 	unsigned int Hash(char * inpStr);
+	bool IsValidPtr(PVOID Ptr);
+	bool IsSteam();
 }
 

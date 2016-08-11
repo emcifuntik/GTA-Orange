@@ -54,12 +54,14 @@ private:
 	int					tasksToIgnore = 0;
 	DWORD				lastUpdate = 9999;
 	unsigned short		m_Health = 200;
+	std::queue<std::function<void()>> taskQueue;
 	CNetworkPlayer();
+	CPed* pedHandler;
 public:
 	static int ignoreTasks;
 	static Hash hFutureModel;
 	static std::vector<CNetworkPlayer*> All();
-	static void DeleteNotExists(const std::vector<RakNet::RakNetGUID>& GUIDs);
+	static void DeleteByGUID(RakNet::RakNetGUID guid);
 	static CNetworkPlayer * GetByGUID(RakNet::RakNetGUID GUID);
 	static CNetworkPlayer * GetByHandler(Entity handler);
 	static void Tick();
@@ -95,7 +97,13 @@ public:
 
 	void Interpolate();
 
+	void BuildTasksQueue();
+
 	void DrawTag();
 
-	~CNetworkPlayer();
+	~CNetworkPlayer()
+	{
+		PED::DELETE_PED(&Handle);
+		
+	}
 };
