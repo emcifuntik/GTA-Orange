@@ -63,9 +63,8 @@ void CNetworkConnection::Tick()
 				bsOut.Write(playerName);
 				CLocalPlayer::Get()->SetMoney(0);
 				CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[(GetTickCount() % 30) + 100]));
-				WAIT(0);
-				/*Hash adder = Utils::Hash("Adder");
-				CNetworkVehicle *veh = new CNetworkVehicle(adder, -3.f, 6.f, 73.f, 0.f);*/
+				Hash adder = Utils::Hash("Adder");
+				CNetworkVehicle *veh = new CNetworkVehicle(adder, -3.f, 6.f, 73.f, 0.f);
 
 				client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
 				break;
@@ -73,32 +72,32 @@ void CNetworkConnection::Tick()
 			case ID_CONNECTION_ATTEMPT_FAILED:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CUI::SendNotification("~BLIP_INFO_ICON~~HUD_COLOUR_RED~~w~Not connected");
+				CUI::SendNotification("~BLIP_INFO_ICON~Not connected");
 				break;
 			}
 			case ID_NO_FREE_INCOMING_CONNECTIONS:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CUI::SendNotification("~BLIP_INFO_ICON~~HUD_COLOUR_RED~~w~Server is full!");
+				CUI::SendNotification("~BLIP_INFO_ICON~Server is full!");
 				break;
 			}
 			case ID_DISCONNECTION_NOTIFICATION:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
 
-				CUI::SendNotification("~BLIP_INFO_ICON~~HUD_COLOUR_RED~~w~Connection closed!");
+				CUI::SendNotification("~BLIP_INFO_ICON~Connection closed!");
 				break;
 			}
 			case ID_CONNECTION_LOST:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CUI::SendNotification("~BLIP_INFO_ICON~~HUD_COLOUR_RED~~w~Connection Lost!");
+				CUI::SendNotification("~BLIP_INFO_ICON~Connection Lost!");
 				break;
 			}
 			case ID_CONNECTION_BANNED:
 			{
 				CLocalPlayer::Get()->SetMoney(0);
-				CUI::SendNotification("~BLIP_INFO_ICON~~HUD_COLOUR_RED~~w~You are banned!");
+				CUI::SendNotification("~BLIP_INFO_ICON~You are banned!");
 				break;
 			}
 			case ID_CONNECT_TO_SERVER:
