@@ -64,6 +64,7 @@ public:
 	static void DeleteByGUID(RakNet::RakNetGUID guid);
 	static CNetworkPlayer * GetByGUID(RakNet::RakNetGUID GUID);
 	static CNetworkPlayer * GetByHandler(Entity handler);
+	static void Clear();
 	static void Tick();
 	
 	void UpdateLastTickTime();
@@ -104,6 +105,5 @@ public:
 	~CNetworkPlayer()
 	{
 		PED::DELETE_PED(&Handle);
-		
 	}
 };

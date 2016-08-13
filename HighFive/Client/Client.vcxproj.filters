@@ -46,6 +46,12 @@
     <Filter Include="Source Files\Common">
       <UniqueIdentifier>{1565938b-813b-4225-9282-06c50f7d5fd5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\GTA">
+      <UniqueIdentifier>{36513a0a-3183-49ec-92b8-a71458393dd0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GTA">
+      <UniqueIdentifier>{e2646e8f-db97-40b9-af88-dd3b82edc9d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -90,9 +96,6 @@
     <ClCompile Include="CNetworkConnection.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
-    <ClCompile Include="Memory.cpp">
-      <Filter>Source Files\Hooking</Filter>
-    </ClCompile>
     <ClCompile Include="Utils.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
@@ -108,8 +111,17 @@
     <ClCompile Include="CNetworkVehicle.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
-    <ClCompile Include="CRage.cpp">
+    <ClCompile Include="..\..\Shared\Console\CLog.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="CMemory.cpp">
       <Filter>Source Files\Hooking</Filter>
+    </ClCompile>
+    <ClCompile Include="CRage.cpp">
+      <Filter>Source Files\GTA</Filter>
+    </ClCompile>
+    <ClCompile Include="CReplayInterface.cpp">
+      <Filter>Source Files\GTA</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,9 +176,6 @@
     <ClInclude Include="CNetworkConnection.h">
       <Filter>Header Files\Net</Filter>
     </ClInclude>
-    <ClInclude Include="Memory.h">
-      <Filter>Header Files\Hooking</Filter>
-    </ClInclude>
     <ClInclude Include="CNetworkVehicle.h">
       <Filter>Header Files\Net</Filter>
     </ClInclude>
@@ -185,8 +194,20 @@
     <ClInclude Include="CRPCPlugin.h">
       <Filter>Header Files\Function</Filter>
     </ClInclude>
-    <ClInclude Include="CRage.h">
+    <ClInclude Include="..\..\Shared\Console\CConsole.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shared\Console\CLog.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="CMemory.h">
       <Filter>Header Files\Hooking</Filter>
+    </ClInclude>
+    <ClInclude Include="CRage.h">
+      <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="CReplayInterface.h">
+      <Filter>Header Files\GTA</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

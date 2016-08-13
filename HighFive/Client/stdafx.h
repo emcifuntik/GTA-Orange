@@ -27,6 +27,7 @@
 #include <iomanip>
 #include <queue>
 
+#pragma comment(lib, "Psapi.lib")
 #pragma comment(lib, "winmm.lib")
 
 // RakNet
@@ -43,6 +44,10 @@
 #include <GetTime.h>
 #include <RPC4Plugin.h>
 using namespace RakNet;
+
+// Console
+#include <Console\CConsole.h>
+#include <Console\CLog.h>
 
 // XML
 #include <tinyxml2.h>
@@ -80,10 +85,11 @@ using namespace RakNet;
 
 // RAGE Stuff
 #include "CRage.h"
+#include "CReplayInterface.h"
 
 // Modification
 #include "Commands.h"
-#include "Memory.h"
+#include "CMemory.h"
 
 // Pools
 #include "CEntity.h"
@@ -103,6 +109,6 @@ using namespace RakNet;
 #define TRACE( format, ... )
 #define TRACEN()
 #else
-#define TRACE( format, ... ) { char debug[256]; sprintf( debug,  "%s::%s(%d) " format "\n", __FILE__, __FUNCTION__,  __LINE__, __VA_ARGS__ ); MessageBoxA(NULL, debug, "DEBUG", MB_OK);}
-#define TRACEN() { char debug[256]; sprintf( debug,  "%s::%s(%d)\n", __FILE__, __FUNCTION__,  __LINE__ ); MessageBoxA(NULL, debug, "DEBUG", MB_OK);}
+#define TRACE( format, ... ) { char debug[256]; sprintf( debug,  "%s::%s(%d) " format "\n", __FILE__, __FUNCTION__,  __LINE__, __VA_ARGS__ ); log_debug << debug << std::endl;}
+#define TRACEN() { char debug[256]; sprintf( debug,  "%s::%s(%d)\n", __FILE__, __FUNCTION__,  __LINE__ ); log_debug << debug << std::endl;}
 #endif

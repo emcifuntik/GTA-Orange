@@ -9,6 +9,10 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 {
 	if (isUpNow || wasDownBefore)
 	{
+		if (key == VK_F8) {
+			if (CNetworkConnection::Get()->IsConnected())
+				CNetworkConnection::Get()->Disconnect();
+		}
 		if (key == VK_F9) {
 			if(CNetworkConnection::Get()->IsConnected())
 				CNetworkConnection::Get()->Disconnect();
@@ -103,8 +107,8 @@ void NetworkTick()
 	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 
 	// Hook vehicle create
-	/*VehicleFactoryHook::Get()->CreateHook = CVehicleFactory::Get()->Create;
-	CVehicleFactory::Get()->Create = &hookCreateVehicle;*/
+	VehicleFactoryHook::Get()->CreateHook = CVehicleFactory::Get()->Create;
+	CVehicleFactory::Get()->Create = &hookCreateVehicle;
 
 	//CTaskTreeFunctions::Get()->func_1 = [](int64_t a1, int32_t a2) {
 	//	std::stringstream ss;
@@ -190,6 +194,10 @@ void LocalTick()
 					CLocalPlayer::Get()->SendOnFootData();
 		}
 		WAIT(0);
+		std::stringstream ss;
+		ss << "Ped pool: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.count << " / " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.capacity << std::endl <<
+			"Vehicle pool: " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.count << " / " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.capacity;
+		CUI::PrintText(ss.str(), 0.5f, 0.9f, 0xEC, 0x40, 0x7A);
 	}
 }
 

@@ -135,6 +135,7 @@ void CChat::Toggle()
 void CChat::Open()
 {
 	PLAYER::SET_PLAYER_CONTROL(PLAYER::PLAYER_ID(), false, 0);
+	rageGlobals::AllowChangeLanguage(true);
 	bOpened = true;
 }
 
@@ -142,6 +143,7 @@ void CChat::Open()
 void CChat::Close()
 {
 	PLAYER::SET_PLAYER_CONTROL(PLAYER::PLAYER_ID(), true, 0);
+	rageGlobals::AllowChangeLanguage(false);
 	bOpened = false;
 }
 

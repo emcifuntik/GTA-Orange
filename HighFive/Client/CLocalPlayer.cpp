@@ -23,7 +23,7 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 	aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
 
 	// Disabling weapon wheel slow motion
-	auto addr = Memory::Find("32 C0 F3 0F 11 09");
+	auto addr = CMemory::Find("32 C0 F3 0F 11 09");
 	addr->nop(6);
 
 	//auto addr = Memory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");

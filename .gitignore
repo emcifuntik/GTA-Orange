@@ -260,3 +260,4 @@ paket-files/
 /lib/ScriptHook.lib
 /lib/ScriptHookV.lib
 /lib/LUA.lib
+/HighFive/temp/x64-Debug

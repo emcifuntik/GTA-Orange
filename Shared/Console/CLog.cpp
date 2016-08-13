@@ -10,7 +10,7 @@ my_ostream& _log()
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 
-	strftime(buffer, 80, CConfig::Get()->LogTimeFormat.c_str(), timeinfo);
+	strftime(buffer, 80, "[%Ex %EX]", timeinfo);
 	log_stream << color::lwhite << buffer << " " << color::white;
 	return log_stream;
 }

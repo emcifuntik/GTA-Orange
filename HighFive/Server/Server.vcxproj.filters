@@ -25,9 +25,6 @@
     <ClInclude Include="CRPCPlugin.h">
       <Filter>Header Files\Functions</Filter>
     </ClInclude>
-    <ClInclude Include="CLog.h">
-      <Filter>Header Files\Common</Filter>
-    </ClInclude>
     <ClInclude Include="CConfig.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
@@ -60,10 +57,10 @@
     <ClCompile Include="CNetworkPlayer.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
-    <ClCompile Include="CLog.cpp">
+    <ClCompile Include="CConfig.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="CConfig.cpp">
+    <ClCompile Include="..\..\Shared\Console\CLog.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>

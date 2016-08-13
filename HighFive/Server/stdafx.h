@@ -46,7 +46,7 @@ using namespace RakNet;
 #include <../ScriptHookV/Types.h>
 
 // Console coloring
-#include "CConsole.h"
+#include "Console/CConsole.h"
 
 // Network manager
 #include "CNetworkConnection.h"

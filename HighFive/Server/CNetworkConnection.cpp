@@ -138,12 +138,13 @@ void CNetworkConnection::Tick()
 				bsOut.Write(rsName);
 
 				player->GetOnFootData(data);
-#if 0
+#if _DEBUG
 				data.vecPos.fX += 1.f;
 				data.vecPos.fY += 1.f;
 #endif
 				bsOut.Write(data);
-#if 0
+#if _DEBUG
+
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 #else
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, true);

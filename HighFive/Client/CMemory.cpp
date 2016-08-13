@@ -1,17 +1,17 @@
 #include "stdafx.h"
 
-ptrdiff_t Memory::baseDiff;
+ptrdiff_t CMemory::baseDiff;
 
-Memory::Memory(UINT64 address)
+CMemory::CMemory(UINT64 address)
 {
 	this->address = (void*)address;
 }
 
-Memory::~Memory()
+CMemory::~CMemory()
 {
 }
 
-void Memory::put(const char * value)
+void CMemory::put(const char * value)
 {
 	unsigned long dwProtectOld;
 	VirtualProtect((LPVOID)address, 2, PAGE_EXECUTE_READWRITE, &dwProtectOld);
@@ -19,7 +19,7 @@ void Memory::put(const char * value)
 	VirtualProtect((LPVOID)address, 2, dwProtectOld, NULL);
 }
 
-bool Memory::memoryCompare(const BYTE *data, const BYTE *pattern, size_t length)
+bool CMemory::memoryCompare(const BYTE *data, const BYTE *pattern, size_t length)
 {
 	for (size_t i = 0; i < length; ++i, ++data, ++pattern)
 		if (*data != *pattern)
@@ -27,7 +27,7 @@ bool Memory::memoryCompare(const BYTE *data, const BYTE *pattern, size_t length)
 	return true;
 }
 
-bool Memory::memoryCompare(const BYTE *data, const BYTE *pattern, const char *mask)
+bool CMemory::memoryCompare(const BYTE *data, const BYTE *pattern, const char *mask)
 {
 	for (; *mask; ++mask, ++data, ++pattern)
 		if (*mask == '1' && *data != *pattern)
@@ -35,7 +35,7 @@ bool Memory::memoryCompare(const BYTE *data, const BYTE *pattern, const char *ma
 	return (*mask) == NULL;
 }
 
-void Memory::nop(size_t length)
+void CMemory::nop(size_t length)
 {
 	unsigned long dwProtectOld;
 
@@ -44,7 +44,7 @@ void Memory::nop(size_t length)
 	VirtualProtect((LPVOID)address, 2, dwProtectOld, NULL);
 }
 
-Memory * Memory::Find(const char * pattern)
+CMemory * CMemory::Find(const char * pattern)
 {
 	std::stringstream buff(pattern);
 	std::string search;
@@ -76,12 +76,12 @@ Memory * Memory::Find(const char * pattern)
 	size = (UINT64)info.SizeOfImage;
 
 	for (i = 0; i < size; ++i)
-		if (Memory::memoryCompare((BYTE *)(address + i), (BYTE *)search.c_str(), mask.c_str()))
-			return new Memory((UINT64)(address + i));
+		if (CMemory::memoryCompare((BYTE *)(address + i), (BYTE *)search.c_str(), mask.c_str()))
+			return new CMemory((UINT64)(address + i));
 	return nullptr;
 }
 
-Memory * Memory::Find_t(const char * text)
+CMemory * CMemory::Find_t(const char * text)
 {
 	UINT64 i;
 	UINT64 size;
@@ -93,12 +93,12 @@ Memory * Memory::Find_t(const char * text)
 	size = (UINT64)info.SizeOfImage;
 
 	for (i = 0; i < size; ++i)
-		if (Memory::memoryCompare((BYTE *)(address + i), (BYTE *)text, strlen(text)))
-			return new Memory((UINT64)(address + i));
+		if (CMemory::memoryCompare((BYTE *)(address + i), (BYTE *)text, strlen(text)))
+			return new CMemory((UINT64)(address + i));
 	return nullptr;
 }
 
-void Memory::Init()
+void CMemory::Init()
 {
 #ifdef _M_IX86
 	uintptr_t addressDiff = ((uintptr_t)GetModuleHandle(NULL) - 0x400000);

@@ -33,6 +33,13 @@ CNetworkPlayer* CNetworkPlayer::GetByHandler(Entity handler)
 	return nullptr;
 }
 
+void CNetworkPlayer::Clear()
+{
+	for (auto player : PlayersPool)
+		delete player;
+	PlayersPool.clear();
+}
+
 void CNetworkPlayer::Tick()
 {
 	for each (CNetworkPlayer * player in PlayersPool)

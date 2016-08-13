@@ -29,6 +29,16 @@ class CVehicleFactory;
 class CTaskTreeFunctions;
 class CTaskTreeMovement_;
 
+namespace GTA
+{
+	class CVehicle;
+};
+
+namespace rageGlobals
+{
+	void AllowChangeLanguage(bool toggle);
+};
+
 class baseClass
 {
 public:
@@ -330,33 +340,25 @@ inline __int64 hookCreateVehicle(__int64 a1, __int64 a2, unsigned int a3, unsign
 {
 	return (__int64)nullptr;
 }
-//
-//class CTaskTreeFunctions
-//{
-//public:
-//	int64_t(*func_1)(int64_t a1, int32_t a2); //0x0000 
-//	char pad_0x0008[0x8]; //0x0008
-//	char(*func_3)(int64_t ptr1, int64_t ptr2, int a3); //0x0010 
-//	int(*func_4)(int64_t ptr1, signed char a2, uint32_t a3); //0x0018 
-//	int64_t(*func_5)(int64_t ptr1, int64_t ptr2, float a3); //0x0020 
-//	char pad_0x0028[0x18]; //0x0028
-//	char(*func_9)(int64_t a1, int64_t a2, unsigned int a3, char a4); //0x0040 
-//	char pad_0x0048[0x8]; //0x0048
-//	static CTaskTreeFunctions* Get()
-//	{
-//		return (CTaskTreeFunctions*)((intptr_t)GetModuleHandle(NULL) + 0x1838038);
-//	}
-//}; //Size=0x0050
-//
-//class CTaskTreeMovement_
-//{
-//public:
-//	int64_t* (*func_1)(int64_t* a1, int32_t a2); //0x0000 
-//	void(*func_2)(int64_t a1); //0x0008 
-//	void(*func_3)(int64_t* a1, int64_t a2, int32_t a3); //0x0010 
-//	void* (*func_4)(int64_t a1, signed char a2, uint32_t a3); //0x0018 
-//	int64_t(*func_5)(int64_t a1, int64_t a2, float a3); //0x0020 
-//	char pad_0x0028[0x18]; //0x0028
-//	char(*func_9)(int64_t a1, int64_t a2, unsigned int a3, char a4); //0x0040 
-//
-//}; //Size=0x0048
+
+namespace GTA
+{
+	class CVehicle
+	{
+	public:
+		virtual void Function0(); //
+		virtual void Function1(); //
+		virtual void Function2(); //
+		virtual void Function3(); //
+		virtual void Function4(); //
+		virtual void Function5(); //
+		virtual void Function6(); //
+		virtual void Function7(); //
+		virtual void Function8(); //
+		virtual void Function9(); //
+
+		char pad_0x0008[0x88]; //0x0010
+		Vector3 Position; //0x0090 
+		char pad_0x009C[0x1624]; //0x009C
+	}; //Size=0x16C0
+};

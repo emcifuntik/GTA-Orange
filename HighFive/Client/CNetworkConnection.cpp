@@ -43,6 +43,7 @@ void CNetworkConnection::Disconnect()
 	client->Shutdown(300);
 	CChat::Get()->Clear();
 	CUI::SendNotification("~b~Disconnected");
+	CNetworkPlayer::Clear();
 }
 
 void CNetworkConnection::Tick()
