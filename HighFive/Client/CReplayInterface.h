@@ -13,7 +13,7 @@ class CPoolItem
 {
 public:
 	T* object;
-	int64_t objectID;
+	int16_t objectID;
 };
 
 template<typename T>
@@ -21,6 +21,23 @@ class CPool
 {
 public:
 	CPoolItem<T> *list;
+	T* operator[](std::size_t number)
+	{
+		return list[number].object;
+	}
+	int64_t GetHandle(std::size_t number)
+	{
+		return list[number].objectID;
+	}
+	int64_t Count()
+	{
+		return count;
+	}
+	int64_t Capacity()
+	{
+		return capacity;
+	}
+private:
 	int64_t capacity;
 	int64_t count;
 };
@@ -37,17 +54,24 @@ public:
 	
 	static ReplayInterfaces* Get()
 	{
-		if (Utils::IsSteam)
+		if (Utils::IsSteam())
 			return (ReplayInterfaces*)(*(ReplayInterfaces**)((intptr_t)GetModuleHandle(NULL) + 0x1E0AC88));
 		else
 			return nullptr;//SC PTR
 	}
 };
 
+class CReplayInterfacePedVTable
+{
+public:
+	int64_t(*Function1)(int64_t a1, char a2);
+};
+
 class CReplayInterfacePed
 {
 public:
-	char pad_0x0000[0x100]; //0x0000
+	CReplayInterfacePedVTable *virtualFunctions;
+	char pad_0x0008[0xF8]; //0x0000
 	CPool<CPed> pool;
 	//char pad_0x0118[0x370]; //0x0118
 
@@ -91,9 +115,7 @@ class CReplayInterfaceObject
 {
 public:
 	char pad_0x0000[0x158]; //0x0000
-	int64_t PoolContent; //0x0158 
-	int64_t PoolCapacity; //0x0160 
-	int64_t PoolSize; //0x0168 
+	CPool<GTA::CObject> pool;
 	char pad_0x0170[0x58]; //0x0170
 
 }; //Size=0x01C8

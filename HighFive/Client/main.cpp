@@ -102,6 +102,7 @@ void ChatRendering()
 
 void NetworkTick()
 {
+	TRACE("Trace test");
 	// Hook ped create
 	PedFactoryHook::Get()->CreateHook = CWorld::Get()->CPedFactoryPtr->Create;
 	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
@@ -109,6 +110,43 @@ void NetworkTick()
 	// Hook vehicle create
 	VehicleFactoryHook::Get()->CreateHook = CVehicleFactory::Get()->Create;
 	CVehicleFactory::Get()->Create = &hookCreateVehicle;
+
+	static auto _func1 = GTA::CTask::Get()->Function1;
+	GTA::CTask::Get()->Function1 = [](char arg) {
+		auto res = _func1(arg);
+		TRACE("%d, %d", (int)arg, res);
+		return res;
+	};
+
+	static auto _func2 = GTA::CTask::Get()->Function2;
+	GTA::CTask::Get()->Function2 = []() {
+		auto res = _func2();
+		TRACE("%d", (int)res);
+		return res;
+	};
+
+	static auto _func3 = GTA::CTask::Get()->MakeAbortable;
+	GTA::CTask::Get()->MakeAbortable = [](int64_t a1, unsigned int a2, int64_t a3) {
+		auto res = _func3(a1, a2, a3);
+		TRACE("%lld, %d, %lld, %d", a1, a2, a3, (int)res);
+		return res;
+	};
+
+	static auto _func6 = GTA::CTask::Get()->Function6;
+	GTA::CTask::Get()->Function6 = [](int64_t a1) {
+		auto res = _func6(a1);
+		TRACE("%lld, %d", a1, (int)res);
+		return res;
+	};
+	
+	static auto _replayFunc1 = ReplayInterfaces::Get()->ReplayInterfacePed->virtualFunctions->Function1;
+	ReplayInterfaces::Get()->ReplayInterfacePed->virtualFunctions->Function1 = [](int64_t a1, char a2)
+	{
+		auto ret = _replayFunc1(a1, a2);
+		log_debug << "ReplayFunc1, 0x" << std::hex << a1 << ", " << (int)a2 << std::endl;
+		return ret;
+	};
+
 
 	//CTaskTreeFunctions::Get()->func_1 = [](int64_t a1, int32_t a2) {
 	//	std::stringstream ss;
@@ -194,10 +232,73 @@ void LocalTick()
 					CLocalPlayer::Get()->SendOnFootData();
 		}
 		WAIT(0);
-		std::stringstream ss;
-		ss << "Ped pool: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.count << " / " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.capacity << std::endl <<
-			"Vehicle pool: " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.count << " / " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.capacity;
-		CUI::PrintText(ss.str(), 0.5f, 0.9f, 0xEC, 0x40, 0x7A);
+		#pragma region Debug stuff
+#if _DEBUG
+		if (CLocalPlayer::Get()->isDebug)
+		{
+			std::stringstream ss;
+			ss << "Peds pool: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.Capacity() << std::endl <<
+				"Vehicles pool: " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Capacity() << std::endl <<
+				"Objects pool: " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Capacity();
+			CUI::PrintText(ss.str(), 0.23f, 0.85f, 0x21, 0x96, 0xF3, 0xFF, 0.3f);
+
+			for (int i = 0, cnt = 0; i < ReplayInterfaces::Get()->ReplayInterfacePed->pool.Capacity(); ++i)
+			{
+				if (ReplayInterfaces::Get()->ReplayInterfacePed->pool.GetHandle(i) == -1)
+					continue;
+				if ((ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position - CWorld::Get()->CPedPtr->Position).Length() > 50.f)
+					continue;
+				cnt++;
+				ss = std::stringstream();
+				ss << "Handle: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.GetHandle(i) << std::endl <<
+					"Position: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.ToString() << std::endl <<
+					"Health: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Health << std::endl <<
+					"Model: 0x" << std::hex << ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->PedModelInfo->ModelHash;
+				CGraphics::Get()->Draw3DText(ss.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
+					ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
+					ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ, { 255, 255, 255, 255 });
+				if (cnt >= ReplayInterfaces::Get()->ReplayInterfacePed->pool.Count())
+					break;
+			}
+
+			for (int i = 0, cnt = 0; i < ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Capacity(); ++i)
+			{
+				if (ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.GetHandle(i) == -1)
+					continue;
+				if ((ReplayInterfaces::Get()->ReplayInterfaceVeh->pool[i]->Position - CWorld::Get()->CPedPtr->Position).Length() > 50.f)
+					continue;
+				cnt++;
+				ss = std::stringstream();
+				ss << "Handle: " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.GetHandle(i) << std::endl <<
+					"Position: " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool[i]->Position.ToString() << std::endl <<
+					"Model: 0x" << std::hex << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool[i]->VehicleModelInfo->ModelHash;
+				CGraphics::Get()->Draw3DText(ss.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfaceVeh->pool[i]->Position.fX,
+					ReplayInterfaces::Get()->ReplayInterfaceVeh->pool[i]->Position.fY,
+					ReplayInterfaces::Get()->ReplayInterfaceVeh->pool[i]->Position.fZ, { 255, 255, 255, 255 });
+				if (cnt >= ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Count())
+					break;
+			}
+
+			for (int i = 0, cnt = 0; i < ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Capacity(); ++i)
+			{
+				if (ReplayInterfaces::Get()->ReplayInterfaceObject->pool.GetHandle(i) == -1)
+					continue;
+				if ((ReplayInterfaces::Get()->ReplayInterfaceObject->pool[i]->Position - CWorld::Get()->CPedPtr->Position).Length() > 50.f)
+					continue;
+				cnt++;
+				ss = std::stringstream();
+				ss << "Handle: " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool.GetHandle(i) << std::endl <<
+					"Position: " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool[i]->Position.ToString() << std::endl <<
+					"Model: 0x" << std::hex << ReplayInterfaces::Get()->ReplayInterfaceObject->pool[i]->ModelInfo->ModelHash;
+				CGraphics::Get()->Draw3DText(ss.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfaceObject->pool[i]->Position.fX,
+					ReplayInterfaces::Get()->ReplayInterfaceObject->pool[i]->Position.fY,
+					ReplayInterfaces::Get()->ReplayInterfaceObject->pool[i]->Position.fZ, { 255, 255, 255, 255 });
+				if (cnt >= ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Count())
+					break;
+			}
+		}
+#endif
+		#pragma endregion
 	}
 }
 

@@ -38,6 +38,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="CUI.h" />
     <ClInclude Include="CVehicle.h" />
+    <ClInclude Include="sysAllocator.h" />
     <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
@@ -78,6 +79,7 @@
     <ClCompile Include="stdafx.cpp" />
     <ClCompile Include="CUI.cpp" />
     <ClCompile Include="CVehicle.cpp" />
+    <ClCompile Include="sysAllocator.cpp" />
     <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

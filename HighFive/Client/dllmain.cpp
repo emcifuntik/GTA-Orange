@@ -1,6 +1,6 @@
 #include "stdafx.h"
 #if _DEBUG
-#define DEBUG_TEXT " - Debug. " __TIME__ " " __DATE__
+#define DEBUG_TEXT " - Debug. " __TIME__ " - " __DATE__
 #else
 #define DEBUG_TEXT
 #endif
@@ -12,22 +12,15 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 {
 	if (reason == DLL_PROCESS_ATTACH) {
 #if _DEBUG
-		AllocConsole();
-		SetConsoleTitleA("HighFive Multiplayer Console" DEBUG_TEXT);
-
-		freopen("CONOUT$", "w", stdout);
-		freopen("CONOUT$", "w", stderr);
-#endif
-
+		/*Sleep(100);
 		HWND window = nullptr;
 		while (!window)
 		{
 			window = FindWindowA("grcWindow", NULL);
-			Sleep(10);
+			Sleep(1000);
 		}
-		SetWindowTextA(window, "HighFive Multiplayer" DEBUG_TEXT);
-
-		#pragma region Install WndProc Hook
+		SetWindowTextA(window, "HighFive Multiplayer" DEBUG_TEXT);*/
+		/*#pragma region Install WndProc Hook
 		oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
 		if (oWndProc == NULL) {
 
@@ -36,7 +29,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 		else {
 			log_info << "Input hook attached: WndProc 0x" << (DWORD_PTR)oWndProc << std::endl;
 		}
-		#pragma endregion
+		#pragma endregion*/
+#endif
+
+		//rage::hookFunction();
 
 		CMemory::Init();
 		// Disable intro
@@ -44,15 +40,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 		if (m != nullptr)
 			m->put("./nonexistingfilenonexistingfil");
 		delete m;
-
-		m = CMemory::Find("72 1F E8 ? ? ? ? 8B 0D");
-		m->nop(2);
-		delete m;
-		
-		m = CMemory::Find("70 6C 61 74 66 6F 72 6D 3A");
-		m->nop(1);
-		delete m;
-
 
 		////Usage:
 		//LoadGameNow(0); //To start a new game, any other value other than 0 just seems to make the loading screen load endlessly
@@ -74,30 +61,26 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 
 		keyboardHandlerRegister(CChat::Get()->ScriptKeyboardMessage);
 		keyboardHandlerRegister(OnKeyboardMessage);
+#if _DEBUG
+		AllocConsole();
+		SetConsoleTitleA("HighFive Multiplayer Console" DEBUG_TEXT);
+
+		freopen("CONOUT$", "w", stdout);
+		freopen("CONOUT$", "w", stderr);
+#endif
 	}
 	if (reason == DLL_PROCESS_DETACH) {
 		scriptUnregister(hModule);
+#if _DEBUG
+		FreeConsole();
+#endif
 	}
 	return TRUE;
 }
 
-bool ignore = false;
-
 LRESULT APIENTRY WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-	if(uMsg != 0x7f && uMsg != 0xff && uMsg != 0x200 && uMsg != 0x20 && uMsg != 0x84)
-		log_debug << std::hex << uMsg << ", " << wParam << ", " << lParam << std::endl;
-	/*if (uMsg == WM_INPUTLANGCHANGE)
-	{
-		DefWindowProc(hwnd, uMsg, wParam, lParam);
-		if (!ignore)
-		{
-			ActivateKeyboardLayout((HKL)1, KLF_RESET);
-			ignore = !ignore;
-		}
-		else
-			ignore = !ignore;
-		return 0;
-	}*/
+	/*if(uMsg != 0x7f && uMsg != 0xff && uMsg != 0x200 && uMsg != 0x20 && uMsg != 0x84)
+		log_debug << std::hex << uMsg << ", " << wParam << ", " << lParam << std::endl;*/
 	return CallWindowProc(oWndProc, hwnd, uMsg, wParam, lParam);
 }
 

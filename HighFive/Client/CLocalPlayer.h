@@ -7,6 +7,9 @@ class CLocalPlayer: public CPedestrian
 	static CLocalPlayer* Instance;
 	CLocalPlayer();
 public:
+#if _DEBUG
+	bool isDebug = false;
+#endif
 	CVector3 *aimPosition = nullptr;
 	Hash newModel = 0;
 

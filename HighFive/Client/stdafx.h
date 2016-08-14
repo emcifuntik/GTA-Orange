@@ -1,6 +1,7 @@
 #pragma once
 
 #define WIN32_LEAN_AND_MEAN
+#define TG(x) x = !x
 
 // Windows Header Files:
 #include <windows.h>
@@ -26,6 +27,7 @@
 #include <codecvt>
 #include <iomanip>
 #include <queue>
+#include <exception>
 
 #pragma comment(lib, "Psapi.lib")
 #pragma comment(lib, "winmm.lib")
@@ -79,17 +81,17 @@ using namespace RakNet;
 // Utils
 #include "Utils.h"
 
+// Modification
+#include "Commands.h"
+#include "CMemory.h"
 
 // Interface
 #include "CChat.h"
 
 // RAGE Stuff
+#include "sysAllocator.h"
 #include "CRage.h"
 #include "CReplayInterface.h"
-
-// Modification
-#include "Commands.h"
-#include "CMemory.h"
 
 // Pools
 #include "CEntity.h"
@@ -105,10 +107,10 @@ using namespace RakNet;
 #include "CRPCPlugin.h"
 
 
-#if 0
-#define TRACE( format, ... )
-#define TRACEN()
-#else
+#if _DEBUG
 #define TRACE( format, ... ) { char debug[256]; sprintf( debug,  "%s::%s(%d) " format "\n", __FILE__, __FUNCTION__,  __LINE__, __VA_ARGS__ ); log_debug << debug << std::endl;}
 #define TRACEN() { char debug[256]; sprintf( debug,  "%s::%s(%d)\n", __FILE__, __FUNCTION__,  __LINE__ ); log_debug << debug << std::endl;}
+#else
+#define TRACE( format, ... )
+#define TRACEN()
 #endif

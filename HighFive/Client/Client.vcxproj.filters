@@ -52,6 +52,12 @@
     <Filter Include="Header Files\GTA">
       <UniqueIdentifier>{e2646e8f-db97-40b9-af88-dd3b82edc9d2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Rage">
+      <UniqueIdentifier>{0895005b-ef43-4c65-91ec-caa0c04b77ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Rage">
+      <UniqueIdentifier>{dc337850-0559-4813-bf57-939d7719ba85}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -122,6 +128,9 @@
     </ClCompile>
     <ClCompile Include="CReplayInterface.cpp">
       <Filter>Source Files\GTA</Filter>
+    </ClCompile>
+    <ClCompile Include="sysAllocator.cpp">
+      <Filter>Source Files\Rage</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -208,6 +217,9 @@
     </ClInclude>
     <ClInclude Include="CReplayInterface.h">
       <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="sysAllocator.h">
+      <Filter>Header Files\Rage</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

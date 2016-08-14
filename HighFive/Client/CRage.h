@@ -1,4 +1,4 @@
-#define STEAM_VERSION 1
+#pragma once
 
 class baseClass;
 class CWorld;
@@ -13,7 +13,9 @@ class CTaskTreeMotion;
 class CEntity_;
 class CPedInventory;
 class CPedWeaponManager;
+class CModelInfo;
 class CPedModelInfo;
+class CVehicleModelInfo;
 class phInstGta;
 class CPedDrawHandler;
 class CTaskTreeMovement;
@@ -32,6 +34,7 @@ class CTaskTreeMovement_;
 namespace GTA
 {
 	class CVehicle;
+	class CTask;
 };
 
 namespace rageGlobals
@@ -71,7 +74,7 @@ class CPed
 public:
 	CPedMethods* CPedMethods_; //0x0000 
 	char pad_0x0008[0x18]; //0x0008
-	CPedModelInfo* CPedModelInfoPtr; //0x0020 
+	CPedModelInfo* PedModelInfo; //0x0020 
 	char pad_0x0028[0x8]; //0x0028
 	phInstGta* phInstGtaPtr; //0x0030 
 	char pad_0x0038[0x10]; //0x0038
@@ -192,10 +195,25 @@ public:
 
 }; //Size=0x0108
 
-class CPedModelInfo
+class CModelInfo
 {
 public:
-	char pad_0x0000[0x8]; //0x0000
+	void* vtable;
+	char pad_0x0008[0x10];
+	int64_t ModelHash;
+};
+
+class CPedModelInfo : public CModelInfo
+{
+public:
+	char pad_0x0020[0xA8]; //0x0020
+
+}; //Size=0x0008
+
+class CVehicleModelInfo : public CModelInfo
+{
+public:
+	char pad_0x0020[0xA8]; //0x0020
 
 }; //Size=0x0008
 
@@ -346,19 +364,47 @@ namespace GTA
 	class CVehicle
 	{
 	public:
-		virtual void Function0(); //
-		virtual void Function1(); //
-		virtual void Function2(); //
-		virtual void Function3(); //
-		virtual void Function4(); //
-		virtual void Function5(); //
-		virtual void Function6(); //
-		virtual void Function7(); //
-		virtual void Function8(); //
-		virtual void Function9(); //
-
-		char pad_0x0008[0x88]; //0x0010
-		Vector3 Position; //0x0090 
+		char pad_0x0000[0x20]; //0x008
+		CVehicleModelInfo *VehicleModelInfo;
+		char pad_0x0018[0x70]; //0x0018
+		CVector3 Position; //0x0090 
 		char pad_0x009C[0x1624]; //0x009C
 	}; //Size=0x16C0
+
+	class CObject
+	{
+	public:
+		char pad_0x0000[0x20];
+		CModelInfo *ModelInfo;
+		char pad_0x0028[0x68]; //0x0028
+		CVector3 Position; //0x0090 
+	};
+
+	class CTask
+	{
+	public:
+		void(*destructor)(); //
+		int (*Function1)(char arg); //
+		int64_t(*Function2)(); //
+		bool(*MakeAbortable)(int64_t a1, unsigned int a2, int64_t a3); //
+		bool(*IsFunction4)(); //
+		bool(*IsFunction5)(); //
+		int(*Function6)(int64_t a1); //
+		bool(*IsFunction7)(); //
+		bool(*Function8)(int64_t a1); //
+		bool(*Function9)(int64_t a1, float a2); //
+		bool(*IsFunction10)(); //
+		bool(*IsFunction11)(); //
+		bool(*IsFunction12)(); //
+		int(*Function13)(int64_t a1); //
+		
+
+		static CTask* Get()
+		{
+			if (Utils::IsSteam())
+				return (CTask*)((intptr_t)GetModuleHandle(NULL) + 0x184EFB8);
+			else
+				return nullptr; //SC Pointer
+		}
+	};
 };

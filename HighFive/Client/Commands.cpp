@@ -32,5 +32,12 @@ int CommandProcessor(std::string command)
 		CNetworkVehicle *veh = new CNetworkVehicle(vehHash, 0.f, 0.f, 77.f, 0.f);
 		return true;
 	}
+#if _DEBUG
+	if (!command.compare("/debug"))
+	{
+		TG(CLocalPlayer::Get()->isDebug);
+		return true;
+	}
+#endif
 	return false;
 }

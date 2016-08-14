@@ -35,9 +35,12 @@ CNetworkPlayer* CNetworkPlayer::GetByHandler(Entity handler)
 
 void CNetworkPlayer::Clear()
 {
-	for (auto player : PlayersPool)
+	for each(CNetworkPlayer* player in PlayersPool)
+	{
+		PED::DELETE_PED(&(player->Handle));
 		delete player;
-	PlayersPool.clear();
+	}
+	PlayersPool.erase(PlayersPool.begin(), PlayersPool.end());
 }
 
 void CNetworkPlayer::Tick()
@@ -74,6 +77,7 @@ void CNetworkPlayer::DeleteByGUID(RakNet::RakNetGUID guid)
 	{
 		if (PlayersPool[i]->m_GUID == guid)
 		{
+			PED::DELETE_PED(&PlayersPool[i]->Handle);
 			delete PlayersPool[i];
 			PlayersPool.erase(PlayersPool.begin() + i, PlayersPool.begin() + i + 1);
 		}

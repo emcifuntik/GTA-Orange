@@ -3,9 +3,9 @@
 #define _IOLOG_
 
 #ifdef _SERVER
-#define LOG_FILE "hs_server.log"
+#define LOG_FILE "hf_server.log"
 #else
-#define LOG_FILE "hs_client.log"
+#define LOG_FILE "hf_client.log"
 #endif
 
 #define LOG_DEBUG "[Debug] "
@@ -23,19 +23,19 @@ public:
 
 	my_ostream& info()
 	{
-		std::cout << color::lblue << LOG_INFO;
+		std::cout << color::lblue << LOG_INFO << color::white;
 		my_fstream << LOG_INFO;
 		return *this;
 	}
 	my_ostream& debug()
 	{
-		std::cout << color::lyellow << LOG_DEBUG;
+		std::cout << color::lyellow << LOG_DEBUG << color::white;
 		my_fstream << LOG_DEBUG;
 		return *this;
 	}
 	my_ostream& error()
 	{
-		std::cout << color::lred << LOG_ERROR;
+		std::cout << color::lred << LOG_ERROR << color::white;
 		my_fstream << LOG_ERROR;
 		return *this;
 	}
