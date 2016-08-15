@@ -28,7 +28,7 @@ int CommandProcessor(std::string command)
 	}
 	if (!command.compare("/vehicle"))
 	{
-		Hash vehHash = GAMEPLAY::GET_HASH_KEY("adder");
+		Hash vehHash = Utils::Hash("adder");
 		CNetworkVehicle *veh = new CNetworkVehicle(vehHash, 0.f, 0.f, 77.f, 0.f);
 		return true;
 	}
@@ -36,6 +36,14 @@ int CommandProcessor(std::string command)
 	if (!command.compare("/debug"))
 	{
 		TG(CLocalPlayer::Get()->isDebug);
+		return true;
+	}
+	if (!command.compare("/allocate"))
+	{
+		LPVOID memoryRegion = rage::sysMemAllocator::Get()->allocate(0xC0, 16);
+		int64_t ptr = (int64_t)VTasks::Get()->CTaskJumpVault_Create((int64_t)memoryRegion, 0x108);
+		log_info << "CTaskJumpVault: 0x" << std::hex << ptr << std::endl;
+		CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->AssignTask((GTA::CTask*)ptr, GTA::TASK_PRIORITY_HIGH);
 		return true;
 	}
 #endif

@@ -40,6 +40,7 @@
     <ClInclude Include="CVehicle.h" />
     <ClInclude Include="sysAllocator.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="VTasks.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Shared\Console\CLog.cpp" />
@@ -81,6 +82,7 @@
     <ClCompile Include="CVehicle.cpp" />
     <ClCompile Include="sysAllocator.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="VTasks.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{05C92719-05C7-4DED-9024-5489640AD286}</ProjectGuid>

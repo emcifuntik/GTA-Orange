@@ -132,6 +132,9 @@
     <ClCompile Include="sysAllocator.cpp">
       <Filter>Source Files\Rage</Filter>
     </ClCompile>
+    <ClCompile Include="VTasks.cpp">
+      <Filter>Source Files\GTA</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stdafx.h">
@@ -220,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="sysAllocator.h">
       <Filter>Header Files\Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="VTasks.h">
+      <Filter>Header Files\GTA</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

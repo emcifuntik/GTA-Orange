@@ -30,6 +30,7 @@ class CPedFactory;
 class CVehicleFactory;
 class CTaskTreeFunctions;
 class CTaskTreeMovement_;
+class VTasks;
 
 namespace GTA
 {
@@ -126,10 +127,10 @@ class Tasks
 public:
 	char pad_0x0000[0x358]; //0x0000
 	CPedTaskManager* CPedTaskManagerPtr; //0x0358 
-	CTaskTreePed* CTaskTreePedPtr; //0x0360 
-	CTaskTree* CTaskTreePtr; //0x0368 
-	CTaskTreeMovement* CTaskTreeMovementPtr; //0x0370 
-	CTaskTreeMotion* CTaskTreeMotionPtr; //0x0378 
+	CTaskTree* PrimaryTasks; //0x0360 
+	CTaskTree* SecondaryTasks; //0x0368 
+	CTaskTree* MovementTasks; //0x0370 
+	CTaskTree* MotionTasks; //0x0378 
 	char pad_0x0380[0x100]; //0x0380
 
 }; //Size=0x0480
@@ -160,8 +161,15 @@ public:
 class CTaskTree
 {
 public:
-	char pad_0x0000[0x8]; //0x0000
-
+	virtual ~CTaskTree();
+	virtual int unknown1();
+	virtual void AssignTask(GTA::CTask *a2, int taskPriority);
+	CPed *TaskOwner;
+	int32_t ActiveTask;
+	int32_t field_4;
+	int32_t field_5;
+	int32_t field_6;
+	GTA::CTask *TasksArray[5];
 }; //Size=0x0008
 
 class CTaskTreeMotion
@@ -383,28 +391,31 @@ namespace GTA
 	class CTask
 	{
 	public:
-		void(*destructor)(); //
-		int (*Function1)(char arg); //
-		int64_t(*Function2)(); //
-		bool(*MakeAbortable)(int64_t a1, unsigned int a2, int64_t a3); //
-		bool(*IsFunction4)(); //
-		bool(*IsFunction5)(); //
-		int(*Function6)(int64_t a1); //
-		bool(*IsFunction7)(); //
-		bool(*Function8)(int64_t a1); //
-		bool(*Function9)(int64_t a1, float a2); //
-		bool(*IsFunction10)(); //
-		bool(*IsFunction11)(); //
-		bool(*IsFunction12)(); //
-		int(*Function13)(int64_t a1); //
-		
+		virtual ~CTask();
+		virtual int64_t GetID();
+		void *somePtr;
+		CPed *targetPed;
+		CTask *Parent;
+		CTask *Child;
 
-		static CTask* Get()
+		std::string GetTree(CTask *task = nullptr, int n = 0)
 		{
-			if (Utils::IsSteam())
-				return (CTask*)((intptr_t)GetModuleHandle(NULL) + 0x184EFB8);
+			if (!n)
+			{
+				task = this;
+				return VTasks::Get()->GetTaskName(this->GetID()) + GetTree(task->Child, n + 1);
+			}
 			else
-				return nullptr; //SC Pointer
+			{
+				std::string res("\n");
+				if (!task)
+					return res;
+				for (int i = 0; i < n; ++i)
+					res += "-";
+				res += " ";
+				res += VTasks::Get()->GetTaskName(task->GetID());
+				return res + GetTree(task->Child, n + 1);
+			}
 		}
 	};
 };

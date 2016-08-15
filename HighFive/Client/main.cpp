@@ -111,34 +111,6 @@ void NetworkTick()
 	VehicleFactoryHook::Get()->CreateHook = CVehicleFactory::Get()->Create;
 	CVehicleFactory::Get()->Create = &hookCreateVehicle;
 
-	static auto _func1 = GTA::CTask::Get()->Function1;
-	GTA::CTask::Get()->Function1 = [](char arg) {
-		auto res = _func1(arg);
-		TRACE("%d, %d", (int)arg, res);
-		return res;
-	};
-
-	static auto _func2 = GTA::CTask::Get()->Function2;
-	GTA::CTask::Get()->Function2 = []() {
-		auto res = _func2();
-		TRACE("%d", (int)res);
-		return res;
-	};
-
-	static auto _func3 = GTA::CTask::Get()->MakeAbortable;
-	GTA::CTask::Get()->MakeAbortable = [](int64_t a1, unsigned int a2, int64_t a3) {
-		auto res = _func3(a1, a2, a3);
-		TRACE("%lld, %d, %lld, %d", a1, a2, a3, (int)res);
-		return res;
-	};
-
-	static auto _func6 = GTA::CTask::Get()->Function6;
-	GTA::CTask::Get()->Function6 = [](int64_t a1) {
-		auto res = _func6(a1);
-		TRACE("%lld, %d", a1, (int)res);
-		return res;
-	};
-	
 	static auto _replayFunc1 = ReplayInterfaces::Get()->ReplayInterfacePed->virtualFunctions->Function1;
 	ReplayInterfaces::Get()->ReplayInterfacePed->virtualFunctions->Function1 = [](int64_t a1, char a2)
 	{
@@ -250,18 +222,58 @@ void LocalTick()
 					continue;
 				cnt++;
 				ss = std::stringstream();
-				ss << "Handle: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.GetHandle(i) << std::endl <<
+				int primaryActive = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->PrimaryTasks->ActiveTask;
+				if (primaryActive > -1)
+				{
+					std::stringstream ss2;
+					GTA::CTask *primaryTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->PrimaryTasks->TasksArray[primaryActive];
+					ss2 << "Primary task: " << primaryTask->GetTree() << std::endl;
+					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ + 1.0f, { 255, 255, 255, 255 });
+				}
+				int secondaryActive = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->SecondaryTasks->ActiveTask;
+				if (secondaryActive > -1)
+				{
+					std::stringstream ss2;
+					GTA::CTask *secondaryTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->SecondaryTasks->TasksArray[secondaryActive];
+					ss2 << "Secondary task: " << secondaryTask->GetTree() << std::endl;
+					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ + 0.5f, { 255, 255, 255, 255 });
+				}
+				int movementActive = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->MovementTasks->ActiveTask;
+				if (movementActive > -1)
+				{
+					std::stringstream ss2;
+					GTA::CTask *movementTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->MovementTasks->TasksArray[movementActive];
+					ss2 << "Movement task: " << movementTask->GetTree() << std::endl;
+					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ, { 255, 255, 255, 255 });
+				}
+				int motionActive = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->MotionTasks->ActiveTask;
+				if (motionActive > -1)
+				{
+					std::stringstream ss2;
+					GTA::CTask *motionTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->MotionTasks->TasksArray[motionActive];
+					ss2 << "Motion task: " << motionTask->GetTree() << std::endl;
+					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
+						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ - 0.5f, { 255, 255, 255, 255 });
+				}
+				/*ss << "Handle: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.GetHandle(i) << std::endl <<
 					"Position: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.ToString() << std::endl <<
 					"Health: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Health << std::endl <<
-					"Model: 0x" << std::hex << ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->PedModelInfo->ModelHash;
-				CGraphics::Get()->Draw3DText(ss.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
-					ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
-					ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ, { 255, 255, 255, 255 });
+					"Model: 0x" << std::hex << ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->PedModelInfo->ModelHash << std::endl <<
+					ss2.str();*/
+					
+				
 				if (cnt >= ReplayInterfaces::Get()->ReplayInterfacePed->pool.Count())
 					break;
 			}
 
-			for (int i = 0, cnt = 0; i < ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Capacity(); ++i)
+			/*for (int i = 0, cnt = 0; i < ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Capacity(); ++i)
 			{
 				if (ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.GetHandle(i) == -1)
 					continue;
@@ -295,7 +307,7 @@ void LocalTick()
 					ReplayInterfaces::Get()->ReplayInterfaceObject->pool[i]->Position.fZ, { 255, 255, 255, 255 });
 				if (cnt >= ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Count())
 					break;
-			}
+			}*/
 		}
 #endif
 		#pragma endregion

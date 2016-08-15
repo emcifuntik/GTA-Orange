@@ -89,6 +89,7 @@ using namespace RakNet;
 #include "CChat.h"
 
 // RAGE Stuff
+#include "VTasks.h"
 #include "sysAllocator.h"
 #include "CRage.h"
 #include "CReplayInterface.h"
