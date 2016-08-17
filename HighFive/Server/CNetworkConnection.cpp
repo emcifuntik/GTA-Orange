@@ -152,6 +152,24 @@ void CNetworkConnection::Tick()
 				bsOut.Reset();
 				break;
 			}
+			case ID_SEND_MOVEMENT_TASK:
+			{
+				bsOut.Write((unsigned char)ID_SEND_MOVEMENT_TASK);
+				bsOut.Write(packet->guid);
+				CTaskMovePlayer *data = new CTaskMovePlayer();
+				int64_t taskID;
+				bsIn.Read(taskID);
+				bsIn.Read(*data);
+				bsOut.Write(taskID);
+				bsOut.Write(*data);
+#if _DEBUG
+
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+#else
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, true);
+#endif
+				bsOut.Reset();
+			}
 			case ID_SEND_VEHICLE_DATA:
 			{
 				//OnPlayerUpdate(sLUA, SPlayer::GetByGUID(packet->guid)->GetID());

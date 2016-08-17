@@ -26,7 +26,8 @@
 #include "CConfig.h"
 
 // Logging
-#include "CLog.h"
+#include <Console/CConsole.h>
+#include <Console/CLog.h>
 
 // RakNet
 #include <MessageIdentifiers.h>

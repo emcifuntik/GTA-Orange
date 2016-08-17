@@ -75,9 +75,6 @@ using namespace RakNet;
 #include "../../Shared/Models.h"
 #include "CConfig.h"
 
-// NTAthority memory managment
-#include "../../Shared/Hooking.h"
-
 // Utils
 #include "Utils.h"
 
@@ -89,8 +86,8 @@ using namespace RakNet;
 #include "CChat.h"
 
 // RAGE Stuff
-#include "VTasks.h"
 #include "sysAllocator.h"
+#include "VTasks.h"
 #include "CRage.h"
 #include "CReplayInterface.h"
 

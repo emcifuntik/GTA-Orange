@@ -41,6 +41,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 			m->put("./nonexistingfilenonexistingfil");
 		delete m;
 
+		m = CMemory::Find("72 1F E8 ? ? ? ? 8B 0D");
+		m->nop(2);
+		delete m;
+
+		m = CMemory::Find("70 6C 61 74 66 6F 72 6D 3A");
+		m->nop(1);
+		delete m;
 		////Usage:
 		//LoadGameNow(0); //To start a new game, any other value other than 0 just seems to make the loading screen load endlessly
 

@@ -1,9 +1,33 @@
 #pragma once
 
+#define HOOK_CTOR(x, y) (x *(*)(x*))((intptr_t)GetModuleHandle(NULL) + y);
+
 namespace GTA
 {
 	enum
 	{
+		CTaskNMSit = 414,
+		CTaskMotionInAutomobile = 170,
+		CTaskMotionInVehicle = 173,
+		CTaskInVehicleSeatShuffle = 165,
+		CTaskQuadLocomotion = 279,
+		CTaskMotionStrafing = 270,
+		CTaskMotionAimingTransition = 285,
+		CTaskNMShot = 394,
+		CTaskMotionInCover = 288,
+		CTaskThreatResponse = 351,
+		CTaskMoveFollowNavMesh = 238,
+		CTaskNMExplosion = 399,
+		CTaskNMHighFall = 395,
+		CTaskRageRagdoll = 417,
+		CTaskNMControl = 407,
+		CTaskMotionAiming = 272,
+		CTaskPlayerWeapon = 9,
+		CTaskSwapWeapon = 56,
+		CTaskMeleeActionResult = 130,
+		CTaskVehicleGun = 200,
+		CTaskInVehicleBasic = 150,
+		CTaskPlayerIdles = 10,
 		CTaskJump = 421,
 		CTaskJumpVault = 420,
 		CTaskMotionSwimming = 281,
@@ -11,9 +35,9 @@ namespace GTA
 		CTaskVehicleTransformToSubmarine = 527,
 		CTaskVault = 50,
 		CTaskWeapon = 8,
-		CTaskSmartFlee = 218,
-		CTaskSetPedOutOfVehicle = 198,
-		CTaskSetPedInVehicle = 197,
+		CTasksArraymartFlee = 218,
+		CTasksArrayetPedOutOfVehicle = 198,
+		CTasksArrayetPedInVehicle = 197,
 		CTaskReloadGun = 298,
 		CTaskPlayerOnFoot = 6,
 		CTaskPlayerDrive = 159,
@@ -162,6 +186,8 @@ namespace GTA
 };
 
 typedef void CTaskJumpVault;
+typedef void CTaskPlayerOnFoot;
+typedef void CTaskPlayerDrive;
 
 class VTasks
 {
@@ -180,7 +206,34 @@ public:
 	~VTasks();
 
 
-	CTaskJumpVault *(*CTaskJumpVault_Create)(int64_t memoryRegion, int size);//size = 258
+	void *(*_CTaskJumpVault_Create)(void* memoryRegion, int size);
+	void *CTaskJumpVault_Create()
+	{
+		void *task = rage::sysMemAllocator::Get()->allocate(0xC0, 16);
+		return (void*)VTasks::Get()->_CTaskJumpVault_Create(task, 0x102);
+	}
+
+	void *(*_CTaskPlayerOnFoot_Create)(void* memoryRegion);
+	void *CTaskPlayerOnFoot_Create()
+	{
+		void *task = rage::sysMemAllocator::Get()->allocate(0x1E0, 16);
+		return (void*)VTasks::Get()->_CTaskPlayerOnFoot_Create(task);
+	}
+
+	void *(*_CTaskPlayerDrive_Create)(void* memoryRegion);
+	void *CTaskPlayerDrive_Create()
+	{
+		void *task = rage::sysMemAllocator::Get()->allocate(0x150, 16);
+		return (void*)VTasks::Get()->_CTaskPlayerDrive_Create(task);
+	}
+
+	void *(*_CTaskMovePlayer_Create)(void* memoryRegion, int arg);
+	void *CTaskMovePlayer_Create()
+	{
+		void *task = rage::sysMemAllocator::Get()->allocate(0xD8, 16);
+		return (void*)VTasks::Get()->_CTaskMovePlayer_Create(task, 0);
+	}
+
 };
 
 

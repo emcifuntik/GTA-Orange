@@ -108,8 +108,6 @@ void CNetworkConnection::Tick()
 			}
 			case ID_SEND_PLAYER_DATA:
 			{
-				RakNet::BitStream bsIn(packet->data, packet->length, false);
-				bsIn.IgnoreBytes(sizeof(unsigned char));
 				OnFootSyncData data;
 				RakNet::RakNetGUID playerGUID;
 				RakNet::RakString rsName;
@@ -123,6 +121,14 @@ void CNetworkConnection::Tick()
 				remotePlayer->SetOnFootData(data, 100);
 				if (data.bShooting)
 					remotePlayer->Interpolate();
+				break;
+			}
+			case ID_SEND_MOVEMENT_TASK:
+			{
+				RakNet::RakNetGUID guid;
+				bsIn.Read(guid);
+				auto player = CNetworkPlayer::GetByGUID(guid);
+				player->SetMovementTask(bsIn);
 				break;
 			}
 			case ID_SEND_VEHICLE_DATA:

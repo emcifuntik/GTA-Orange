@@ -42,6 +42,7 @@ private:
 	bool				m_Spawned = false;
 	bool				m_Ducking = false;
 	bool				m_Jumping = false;
+	bool				m_JustJumping = false;
 	bool				m_TagVisible = true;
 	bool				m_Aiming = false;
 	bool				m_Shooting = false;
@@ -56,8 +57,8 @@ private:
 	unsigned short		m_Health = 200;
 	std::queue<std::function<void()>> taskQueue;
 	CNetworkPlayer();
-	CPed* pedHandler;
 public:
+	CPed* pedHandler;
 	static int ignoreTasks;
 	static Hash hFutureModel;
 	static std::vector<CNetworkPlayer*> All();
@@ -80,8 +81,6 @@ public:
 
 	void SetTargetPosition(const CVector3& vecPosition, unsigned long ulDelay);
 	void SetTargetRotation(const CVector3& vecRotation, unsigned long ulDelay);
-	void SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float iMoveSpeed);
-	void SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMove, CVector3 aimPos, float moveSpeed, bool shooting = false);
 	void SetOnFootData(OnFootSyncData data, unsigned long ulDelay);
 
 	bool HasTargetPosition() { return (m_interp.pos.ulFinishTime != 0); }
@@ -95,6 +94,8 @@ public:
 	void RemoveTargetPosition();
 	void RemoveTargetRotation();
 	void ResetInterpolation();
+
+	void SetMovementTask(RakNet::BitStream& bsIn);
 
 	void Interpolate();
 

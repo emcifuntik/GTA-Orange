@@ -104,7 +104,11 @@ public:
 	CPedWeaponManager* CPedWeaponManagerPtr; //0x1098 
 	char pad_0x10A0[0x2A0]; //0x10A0
 	CPedClothCollision* CPedClothCollisionPtr; //0x1340 
-	char pad_0x1348[0x5A0]; //0x1348
+	char pad_0x1348[0x78]; //0x1348
+	int64_t Flags; //0x13C0 
+	char pad_0x13C8[0xD0]; //0x13C8
+	GTA::CVehicle* pedVehicle; //0x1498 
+	char pad_0x14A0[0x450]; //0x14A0
 
 }; //Size=0x18E8
 
@@ -162,14 +166,24 @@ class CTaskTree
 {
 public:
 	virtual ~CTaskTree();
-	virtual int unknown1();
-	virtual void AssignTask(GTA::CTask *a2, int taskPriority);
+	virtual int Clear();
+	virtual void AssignTask(GTA::CTask *task, int taskPriority);
+	virtual int Play(bool reset, int taskPriority, float speed);
+	virtual int AddTask(GTA::CTask *task, float some = 0.f);
 	CPed *TaskOwner;
 	int32_t ActiveTask;
 	int32_t field_4;
 	int32_t field_5;
 	int32_t field_6;
 	GTA::CTask *TasksArray[5];
+
+	GTA::CTask* GetTask()
+	{
+		if (ActiveTask < 0)
+			return nullptr;
+		else
+			return TasksArray[ActiveTask];
+	}
 }; //Size=0x0008
 
 class CTaskTreeMotion
@@ -393,29 +407,57 @@ namespace GTA
 	public:
 		virtual ~CTask();
 		virtual int64_t GetID();
+		virtual CTask* Clone();
+		virtual void unknown_3();
+		virtual bool IsSimple();
+		virtual void unknown_5();
+		virtual void unknown_6();
+		virtual void unknown_7();
+		virtual void unknown_8();
+		virtual void unknown_9();
+		virtual void unknown_10();
+		virtual void unknown_11();
+		virtual void unknown_12();
+		virtual void unknown_13();
+		virtual void unknown_14();
+		virtual void unknown_15();
+		virtual void unknown_16();
+		virtual void unknown_17();
+		virtual void unknown_18();
+		virtual void unknown_19();
+		virtual void unknown_20();
+		virtual void unknown_21();
+		virtual void unknown_22();
+		virtual void unknown_23();
+		virtual void unknown_24();
+		virtual void unknown_25();
+		virtual void unknown_26();
+		virtual void unknown_27();
+		virtual void unknown_28();
+		virtual void unknown_29();
+		virtual void unknown_30();
+		virtual void unknown_31();
+		virtual void unknown_32();
+		virtual void unknown_33();
+		virtual void unknown_34();
+		virtual void unknown_35();
+		virtual void unknown_36();
+		virtual void unknown_37();
+		virtual void unknown_38();
+		virtual void unknown_39();
+		virtual void unknown_40();
+		virtual void unknown_41();
+		virtual void unknown_42();
+		virtual void unknown_43();
+		virtual void unknown_44();
+		virtual bool IsSerializable();
+		virtual void* Serialize();
+
 		void *somePtr;
 		CPed *targetPed;
 		CTask *Parent;
 		CTask *Child;
 
-		std::string GetTree(CTask *task = nullptr, int n = 0)
-		{
-			if (!n)
-			{
-				task = this;
-				return VTasks::Get()->GetTaskName(this->GetID()) + GetTree(task->Child, n + 1);
-			}
-			else
-			{
-				std::string res("\n");
-				if (!task)
-					return res;
-				for (int i = 0; i < n; ++i)
-					res += "-";
-				res += " ";
-				res += VTasks::Get()->GetTaskName(task->GetID());
-				return res + GetTree(task->Child, n + 1);
-			}
-		}
+		std::string GetTree(CTask *task = nullptr, int n = 0);
 	};
 };

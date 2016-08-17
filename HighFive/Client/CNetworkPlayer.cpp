@@ -159,33 +159,8 @@ void CNetworkPlayer::SetTargetRotation(const CVector3& vecRotation, unsigned lon
 	}
 }
 
-void CNetworkPlayer::SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float iMoveSpeed)
-{
-	if (IsSpawned())
-	{
-		float tX = (vecPos.fX + (vecMove.fX * 10));
-		float tY = (vecPos.fY + (vecMove.fY * 10));
-		float tZ = (vecPos.fZ + (vecMove.fZ * 10));
-		TaskMove(CVector3(tX, tY, tZ), iMoveSpeed);
-	}
-}
-
-void CNetworkPlayer::SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMove, CVector3 aimPos, float moveSpeed, bool shooting)
-{
-	if (IsSpawned())
-	{
-		float tX = (vecPos.fX + (vecMove.fX * 10));
-		float tY = (vecPos.fY + (vecMove.fY * 10));
-		float tZ = (vecPos.fZ + (vecMove.fZ * 10));
-		AI::TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD(Handle, tX, tY,
-			tZ, aimPos.fX, aimPos.fY, aimPos.fZ, 1.f, 0, 0x3F000000, 0x40800000, 1, (shooting ?  0 : 1024), 1, 3337513804U);
-	}
-}
-
 void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 {
-	if (IsFalling() || IsJumping())
-		return;
 	SetHealth(data.usHealth);
 	m_Health = data.usHealth;
 	if (m_Health <= 100.f)
@@ -345,8 +320,6 @@ void CNetworkPlayer::SetRotation(const CVector3& vecRotation, bool bResetInterpo
 
 void CNetworkPlayer::Interpolate()
 {
-	if (IsFalling() || IsJumping())
-		return;
 	if (PED::IS_PED_DEAD_OR_DYING(Handle, true) && !pedJustDead)
 	{
 		pedJustDead = true;
@@ -358,56 +331,63 @@ void CNetworkPlayer::Interpolate()
 		UpdateTargetRotation();
 	UpdateTargetPosition();
 	SetMovementVelocity(m_vecMove);
-	PED::SET_PED_ACCURACY(Handle, 100);
 	BuildTasksQueue();
+	m_JustJumping = m_Jumping;
 }
 
 void CNetworkPlayer::BuildTasksQueue()
 {
-	if (tasksToIgnore > 0)
+	for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->Child)
 	{
-		tasksToIgnore--;
-		return;
-	}
-	if (m_Jumping)
-	{
-		TaskJump();
-	}
-	else if (m_Aiming && !m_Shooting)
-	{
-		if (m_MoveSpeed != .0f)
+		if (task->GetID() != GTA::CTaskJump)
+			continue;
+		void* ser = task->Serialize();
+		if (ser)
 		{
-			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, 3.0f);
+			GTA::CTask* tsk = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ser)->GetTask();
+			if (pedHandler->TasksPtr->PrimaryTasks->GetTask() && pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != tsk->GetID())
+			{
+				pedHandler->TasksPtr->PrimaryTasks->AssignTask(tsk, GTA::TASK_PRIORITY_HIGHEST);
+			}
+			else
+			{
+				auto ret = ((CSerialisedFSMTaskInfo*)ser)->SetData(pedHandler->TasksPtr->PrimaryTasks->GetTask());
+			}
+			rage::sysMemAllocator::Get()->free(ser, rage::HEAP_TASK_CLONE);
+			break;
 		}
-		else
-		{
-			TaskAimAt(m_vecAim, -1);
-		}
 	}
-	else if (m_Shooting && m_MoveSpeed != .0f)
-	{
-		SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
-		m_Shooting = false;
-	}
-	else if (m_Shooting && !m_Aiming)
-	{
-		TaskAimAt(m_vecAim, -1);
-		TaskShootAt(m_vecAim, -1);
-		m_Shooting = false;
-	}
-	else if (m_Shooting && m_MoveSpeed == .0f)
-	{
-		TaskShootAt(m_vecAim, 1);
-		m_Shooting = false;
-	}
-	else if (m_MoveSpeed != .0f)
-	{
-		SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
-	}
-	else
-	{
-		AI::CLEAR_PED_TASKS(Handle);
-	}
+	//if (CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask())
+	//{
+
+	//	GTA::CTask *curTask = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask();
+	//	if (curTask->GetID() == GTA::CTaskPlayerOnFoot)
+	//	{
+	//		curTask = curTask->Child;
+	//		if (curTask && curTask->GetID() == GTA::CTaskPlayerWeapon)
+	//		{
+	//			curTask = curTask->Child;
+	//			if (curTask && curTask->GetID() == GTA::CTaskWeapon)
+	//			{
+	//				curTask = curTask->Child;
+	//				if (curTask && curTask->GetID() == GTA::CTaskGun)
+	//				{
+	//					void* ptr = curTask->Serialize();
+	//					
+
+	//					//curTask = curTask->Child;
+	//					//if (curTask && curTask->GetID() == GTA::CTaskAimGunOnFoot)
+	//					//{
+	//					//	void* ptr2 = curTask->Serialize();
+	//					//	GTA::CTask* tsk2 = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ptr2)->GetTask();
+	//					//	tsk->Child = tsk2;
+	//					//	tsk2->Parent = tsk;
+	//					//}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
 }
 
 void CNetworkPlayer::DrawTag()
@@ -448,6 +428,7 @@ void CNetworkPlayer::SetModel(Hash model)
 	//PED::SET_PED_CAN_RAGDOLL(Handle, false);
 	//PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
+	
 }
 
 void CNetworkPlayer::RemoveTargetPosition()
@@ -464,4 +445,18 @@ void CNetworkPlayer::ResetInterpolation()
 {
 	RemoveTargetPosition();
 	RemoveTargetRotation();
+}
+
+void CNetworkPlayer::SetMovementTask(RakNet::BitStream& bsIn)
+{
+	int64_t taskID;
+	bsIn.Read(taskID);
+	switch (taskID)
+	{
+		case GTA::CTaskMovePlayer:
+		{
+			
+			break;
+		}
+	}
 }

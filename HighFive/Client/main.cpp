@@ -102,7 +102,6 @@ void ChatRendering()
 
 void NetworkTick()
 {
-	TRACE("Trace test");
 	// Hook ped create
 	PedFactoryHook::Get()->CreateHook = CWorld::Get()->CPedFactoryPtr->Create;
 	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
@@ -111,85 +110,12 @@ void NetworkTick()
 	VehicleFactoryHook::Get()->CreateHook = CVehicleFactory::Get()->Create;
 	CVehicleFactory::Get()->Create = &hookCreateVehicle;
 
-	static auto _replayFunc1 = ReplayInterfaces::Get()->ReplayInterfacePed->virtualFunctions->Function1;
-	ReplayInterfaces::Get()->ReplayInterfacePed->virtualFunctions->Function1 = [](int64_t a1, char a2)
+	/*CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->_addOld = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->VTable->_add;
+	CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->VTable->_add = [](CTaskTree* taskTree, GTA::CTask* task, int priority)
 	{
-		auto ret = _replayFunc1(a1, a2);
-		log_debug << "ReplayFunc1, 0x" << std::hex << a1 << ", " << (int)a2 << std::endl;
-		return ret;
-	};
-
-
-	//CTaskTreeFunctions::Get()->func_1 = [](int64_t a1, int32_t a2) {
-	//	std::stringstream ss;
-	//	ss << "func_1(0x" << std::hex << a1 << ", " << a2 << ");";
-	//	CChat::Get()->AddChatMessage(ss.str());
-	//	return (__int64)nullptr;
-	//};
-
-	/*static auto oldFunction_3 = CTaskTreeFunctions::Get()->func_3;
-	CTaskTreeFunctions::Get()->func_3 = [](int64_t ptr1, int64_t ptr2, int a3) {
-		std::stringstream ss;
-		ss << "func_3(0x" << std::hex << ptr1 << ", " << ptr2 << ", " << a3 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunction_3(ptr1, ptr2, a3);
-	};
-
-	static auto oldFunction_5 = CTaskTreeFunctions::Get()->func_5;
-	CTaskTreeFunctions::Get()->func_5 = [](int64_t ptr1, int64_t ptr2, float a3) {
-		std::stringstream ss;
-		ss << "func_5(0x" << std::hex << ptr1 << ", " << ptr2 << ", " << std::dec << (int)a3 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunction_5(ptr1, ptr2, a3);
-	};*/
-
-	/*
-	static auto oldFunctionMove_1 = CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_1;
-	CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_1 = [](int64_t* a1, int32_t a2) {
-		std::stringstream ss;
-		ss << "func_1(0x" << std::hex << a1 << ", " << a2 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunctionMove_1(a1, a2);
-	};
-
-	static auto oldFunctionMove_2 = CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_2;
-	CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_2 = [](int64_t a1) {
-		std::stringstream ss;
-		ss << "func_2(0x" << std::hex << a1 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunctionMove_2(a1);
-	};
-
-	static auto oldFunctionMove_3 = CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_3;
-	CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_3 = [](int64_t* a1, int64_t a2, int32_t a3) {
-		std::stringstream ss;
-		ss << "func_3(0x" << std::hex << a1 << ", " << a2 << ", " << a3 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunctionMove_3(a1, a2, a3);
-	};
-
-	static auto oldFunctionMove_4 = CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_4;
-	CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_4 = [](int64_t a1, signed char a2, uint32_t a3) {
-		std::stringstream ss;
-		ss << "func_4(0x" << std::hex << a1 << ", " << std::dec << (int)a2 << ", " << std::hex << a3 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunctionMove_4(a1, a2, a3);
-	};
-
-	static auto oldFunctionMove_5 = CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_5;
-	CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_5 = [](int64_t a1, int64_t a2, float a3) {
-		std::stringstream ss;
-		ss << "func_5(0x" << std::hex << a1 << ", " << a2 << ", " << std::dec << a3 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunctionMove_5(a1, a2, a3);
-	};
-
-	static auto oldFunctionMove_9 = CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_9;
-	CWorld::Get()->CPedPtr->TasksPtr->CTaskTreeMovementPtr->CTaskTreeMovementMethods->func_9 = [](int64_t a1, int64_t a2, unsigned int a3, char a4) {
-		std::stringstream ss;
-		ss << "func_9(0x" << std::hex << a1 << ", " << a2 << ", " << std::dec << a3 << ", " << (int)a4 << ");";
-		CChat::Get()->AddChatMessage(ss.str());
-		return oldFunctionMove_9(a1, a2, a3, a4);
+		CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->_addOld(taskTree, task, priority);
+		if (taskTree == CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks)
+			log_debug << "Assigned to player: " << std::endl << task->GetTree();
 	};*/
 }
 
@@ -200,8 +126,10 @@ void LocalTick()
 		CLocalPlayer::Get()->Tick();
 		if (CNetworkConnection::Get()->IsConnected()) {
 			if (CNetworkConnection::Get()->IsConnectionEstablished())
-				if(!CLocalPlayer::Get()->IsFalling())
-					CLocalPlayer::Get()->SendOnFootData();
+			{
+				CLocalPlayer::Get()->SendOnFootData();
+				CLocalPlayer::Get()->SendTasks();
+			}
 		}
 		WAIT(0);
 		#pragma region Debug stuff
@@ -227,7 +155,7 @@ void LocalTick()
 				{
 					std::stringstream ss2;
 					GTA::CTask *primaryTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->PrimaryTasks->TasksArray[primaryActive];
-					ss2 << "Primary task: " << primaryTask->GetTree() << std::endl;
+					ss2 << "P: " << primaryTask->GetTree() << std::endl;
 					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ + 1.0f, { 255, 255, 255, 255 });
@@ -237,7 +165,7 @@ void LocalTick()
 				{
 					std::stringstream ss2;
 					GTA::CTask *secondaryTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->SecondaryTasks->TasksArray[secondaryActive];
-					ss2 << "Secondary task: " << secondaryTask->GetTree() << std::endl;
+					ss2 << "S: " << secondaryTask->GetTree() << std::endl;
 					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ + 0.5f, { 255, 255, 255, 255 });
@@ -247,7 +175,7 @@ void LocalTick()
 				{
 					std::stringstream ss2;
 					GTA::CTask *movementTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->MovementTasks->TasksArray[movementActive];
-					ss2 << "Movement task: " << movementTask->GetTree() << std::endl;
+					ss2 << "M: " << movementTask->GetTree() << std::endl;
 					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ, { 255, 255, 255, 255 });
@@ -257,7 +185,7 @@ void LocalTick()
 				{
 					std::stringstream ss2;
 					GTA::CTask *motionTask = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->MotionTasks->TasksArray[motionActive];
-					ss2 << "Motion task: " << motionTask->GetTree() << std::endl;
+					ss2 << "MN: " << motionTask->GetTree() << std::endl;
 					CGraphics::Get()->Draw3DText(ss2.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
 						ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ - 0.5f, { 255, 255, 255, 255 });

@@ -40,10 +40,9 @@ int CommandProcessor(std::string command)
 	}
 	if (!command.compare("/allocate"))
 	{
-		LPVOID memoryRegion = rage::sysMemAllocator::Get()->allocate(0xC0, 16);
-		int64_t ptr = (int64_t)VTasks::Get()->CTaskJumpVault_Create((int64_t)memoryRegion, 0x108);
+		int64_t ptr = (int64_t)VTasks::Get()->CTaskJumpVault_Create();
 		log_info << "CTaskJumpVault: 0x" << std::hex << ptr << std::endl;
-		CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->AssignTask((GTA::CTask*)ptr, GTA::TASK_PRIORITY_HIGH);
+		CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->AssignTask((GTA::CTask*)ptr, GTA::TASK_PRIORITY_HIGHEST);
 		return true;
 	}
 #endif

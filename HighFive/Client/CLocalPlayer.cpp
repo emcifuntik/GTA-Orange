@@ -146,6 +146,11 @@ void CLocalPlayer::SendOnFootData()
 	CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 
+void CLocalPlayer::SendTasks()
+{
+	
+}
+
 void CLocalPlayer::SetMoney(int money)
 {
 	for (int i = 0; i < 3; i++)

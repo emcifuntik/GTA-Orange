@@ -74,3 +74,61 @@ public:
 		return ss.str();
 	}
 };
+
+class CSyncDataLogger
+{
+public:
+	virtual ~CSyncDataLogger();
+	virtual void overload1();
+	virtual void overload2();
+	virtual void overload3();
+	virtual void overload4();
+	virtual void overload5();
+	virtual void overload6();
+	virtual void printBool(bool value, int64_t unknownValue = 0);
+};
+
+class CSerialisedFSMTaskInfo
+{
+public:
+	virtual ~CSerialisedFSMTaskInfo();
+	virtual void GetID();
+	virtual void* GetReader(char *buffer);
+	virtual void* GetWriter();
+	virtual void* GetLogger();
+	virtual int64_t Size();
+	virtual int widen();
+	virtual void sub_F65F30_2();
+	virtual void* GetTask();
+	virtual bool IsCloned();
+	virtual void sub_F5D670();
+	virtual void sub_13C5608();
+	virtual void sub_6656C4();
+	virtual int64_t anyGetter();
+	virtual void anySetter(int64_t value);
+	virtual void sub_F65F30_3();
+	virtual int64_t anyGetter_2(int64_t ptr);
+	virtual int64_t anyGetter_3(int64_t ptr);
+	virtual int64_t anyGetter_4();
+	virtual void sub_167A9B8_2();
+	virtual void sub_167A9B8_3();
+	virtual void sub_B89BE4();
+	virtual void sub_12F2410();
+	virtual void sub_C2E798();
+	virtual int SetData(void *);
+	virtual char* GetStatus();
+};
+
+class CClonedGoToPointAimingInfo:
+	public CSerialisedFSMTaskInfo
+{
+public:
+	char data[0x78];
+};
+
+class CClonedAimGunOnFootInfo :
+	public CSerialisedFSMTaskInfo
+{
+public:
+	char data[0x38];
+};

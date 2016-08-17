@@ -19,7 +19,8 @@ public:
 	void Connect();
 	void Tick();
 	void GetOnFootSync(OnFootSyncData& onfoot);
-	void CLocalPlayer::SendOnFootData();
+	void SendOnFootData();
+	void SendTasks();
 	void SetMoney(int money);
 	~CLocalPlayer();
 };
