@@ -28,7 +28,7 @@ class Python
 
 public:
 	static Python* Get();
-	PyObject * pCallFunc(char * fName);
+	PyObject * pCallFunc(char * fName, PyObject* args);
 	void Connect(const char * script_name);
 	~Python()
 	{

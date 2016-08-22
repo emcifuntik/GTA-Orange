@@ -4,6 +4,6 @@
 	<!-- http://www.cplusplus.com/reference/ctime/strftime/ -->
 	<logtime>[%Ex %EX]</logtime>
     <scripts>
-        <script>multiply</script>
+        <script>multiply.py</script>
     </scripts>
 </config>

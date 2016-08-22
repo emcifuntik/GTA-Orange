@@ -61,6 +61,7 @@ using namespace RakNet;
 
 // Python
 #include "m_Python.h"
+#include "CPyArgBuilder.h"
 
 
 // Network objects

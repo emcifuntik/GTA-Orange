@@ -21,7 +21,6 @@ void Python::Connect(const char * script_name)
 	/* Error checking of pName left out */
 	Py_InitModule("HighFive", EmbMethods);
 	pModule = PyImport_Import(pName);
-	
 }
 
 Python::Python()
@@ -32,10 +31,10 @@ Python::Python()
 	int result = PyList_Insert(sysPath, 0, path);
 }
 
-PyObject * Python::pCallFunc(char * fName)
+PyObject * Python::pCallFunc(char * fName, PyObject* args)
 {
-	PyObject *pFunc, *pArgs;
+	PyObject *pFunc;
 	pFunc = PyObject_GetAttrString(Python::Get()->pModule, fName);
-	return PyObject_CallObject(pFunc, NULL);
+	return PyObject_CallObject(pFunc, args);
 
 }

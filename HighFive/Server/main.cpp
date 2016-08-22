@@ -10,11 +10,11 @@ int main(void)
 	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
 	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
 	//	RegisterScriptFunctions();
-
 	
 	for each (std::string scriptName in CConfig::Get()->Scripts)
 	{
 		Python::Get()->Connect(scriptName.c_str());
+		//Python::Get()->pCallFunc("OnConnect", NULL);
 		/*if (script->IsReady())
 			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
 		else
@@ -45,6 +45,11 @@ int main(void)
 	};
 	std::thread netThread(netLoop);
 	netThread.detach();
+
+	/*CPyArgBuilder argList;
+	argList << 0L;
+	Python::Get()->pCallFunc("OnScriptInit", argList.Finish());*/
+
 	for (;;)
 	{
 		std::string msg;
