@@ -5,24 +5,29 @@ int main(void)
 {
 	/*XmlDomDocument xmlReader("config.xml");
 	tinyxml2::XMLElement* serverNameXML = xmlReader.FirstChildElement("config")->FirstChildElement("servername");*/
-
+	std::cout << "1";
 	log << "Starting the server..." << std::endl;
 	log << "Hostname: " << color::lred << CConfig::Get()->Hostname << std::endl;
+	std::cout << CConfig::Get()->Hostname;
 	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
+	std::cout << CConfig::Get()->Port;
 	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
-
+	std::cout << CConfig::Get()->MaxPlayers;
+	std::cout << "2";
 	// Register squirrel functions
-	RegisterScriptFunctions();
+//	RegisterScriptFunctions();
 	// Loading squrrel scripts
+
+	//Py_Initialize();
 	for each (std::string scriptName in CConfig::Get()->Scripts)
 	{
-		Squirrel *script = new Squirrel((std::string("scripts/") + scriptName).c_str());
-		if (script->IsReady())
-			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
-		else
-			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;
+		//Python *python = new Python(); python->Connect((std::string("scripts/") + scriptName).c_str());
+//		if (script->IsReady())
+//			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
+//		else
+//			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;
 	}
-
+	std::cout << "3";
 	auto netLoop = [=]() 
 	{
 		CNetworkConnection::Get()->Start(CConfig::Get()->MaxPlayers, CConfig::Get()->Port);
@@ -55,5 +60,6 @@ int main(void)
 
 		delete message;
 	}
+
 	return 0;
 }

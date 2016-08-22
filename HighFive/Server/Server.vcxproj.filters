@@ -16,12 +16,6 @@
     <ClInclude Include="CNetworkVehicle.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
-    <ClInclude Include="SQ.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
-    <ClInclude Include="Natives.h">
-      <Filter>Header Files\Squirrel</Filter>
-    </ClInclude>
     <ClInclude Include="CRPCPlugin.h">
       <Filter>Header Files\Functions</Filter>
     </ClInclude>
@@ -33,6 +27,9 @@
     </ClInclude>
     <ClInclude Include="CConsole.h">
       <Filter>Header Files\Common</Filter>
+    </ClInclude>
+    <ClInclude Include="m_Python.h">
+      <Filter>Header Files\Python</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -48,12 +45,6 @@
     <ClCompile Include="CNetworkVehicle.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
-    <ClCompile Include="SQ.cpp">
-      <Filter>Source Files\Squirrel</Filter>
-    </ClCompile>
-    <ClCompile Include="Natives.cpp">
-      <Filter>Source Files\Squirrel</Filter>
-    </ClCompile>
     <ClCompile Include="CRPCPlugin.cpp">
       <Filter>Source Files\Function</Filter>
     </ClCompile>
@@ -65,6 +56,9 @@
     </ClCompile>
     <ClCompile Include="CConfig.cpp">
       <Filter>Source Files\Common</Filter>
+    </ClCompile>
+    <ClCompile Include="m_Python.cpp">
+      <Filter>Source Files\Python</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,17 +83,17 @@
     <Filter Include="Source Files\Net">
       <UniqueIdentifier>{78ea3465-a93f-41d5-a7f0-466c472bb47d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\Squirrel">
-      <UniqueIdentifier>{71eedf87-70d8-4893-b7ce-dd677cc7bb8b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Squirrel">
-      <UniqueIdentifier>{ec9523df-c6e7-44b5-9eb0-a2310b6e3509}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Header Files\Functions">
       <UniqueIdentifier>{161fe4a0-0c7a-4fc5-8384-9b2265bcaf30}</UniqueIdentifier>
     </Filter>
     <Filter Include="Header Files\Network">
       <UniqueIdentifier>{2c21c506-a405-4d3e-84b6-eabd26d8f7f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Python">
+      <UniqueIdentifier>{6dd90324-4028-4eff-aa80-2e813cf6414b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Python">
+      <UniqueIdentifier>{c2fe0f64-7de8-4d21-b7c6-775ba1802949}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

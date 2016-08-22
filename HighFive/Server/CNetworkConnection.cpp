@@ -64,7 +64,7 @@ void CNetworkConnection::Tick()
 
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
-				Squirrel::PlayerDisconnect(playerID, 1);
+//				Squirrel::PlayerDisconnect(playerID, 1);
 				CNetworkPlayer::Remove(playerID);
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
@@ -85,7 +85,7 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = new CNetworkPlayer(packet->guid);
 				player->SetName(playerName.C_String());
 
-				Squirrel::PlayerConnect(player->GetID());
+//				Squirrel::PlayerConnect(player->GetID());
 
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
@@ -113,7 +113,7 @@ void CNetworkConnection::Tick()
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
 				std::cout << playerText << std::endl;
-				if (Squirrel::PlayerCommand(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
+	//			if (Squirrel::PlayerCommand(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
 				{
 					bsOut.Write("Unknown command");
 					color_t messageColor = { 255, 200, 200, 255 };
@@ -168,7 +168,7 @@ void CNetworkConnection::Tick()
 				log << "Connection with " << packet->systemAddress.ToString(true) << " lost" << std::endl;
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
-				Squirrel::PlayerDisconnect(playerID, 2);
+//				Squirrel::PlayerDisconnect(playerID, 2);
 				CNetworkPlayer::Remove(playerID);
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
