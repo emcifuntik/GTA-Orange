@@ -5,30 +5,22 @@ int main(void)
 {
 	/*XmlDomDocument xmlReader("config.xml");
 	tinyxml2::XMLElement* serverNameXML = xmlReader.FirstChildElement("config")->FirstChildElement("servername");*/
-	std::cout << "1";
 	log << "Starting the server..." << std::endl;
 	log << "Hostname: " << color::lred << CConfig::Get()->Hostname << std::endl;
-	std::cout << CConfig::Get()->Hostname;
 	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
-	std::cout << CConfig::Get()->Port;
 	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
-	std::cout << CConfig::Get()->MaxPlayers;
-	std::cout << "2";
-	// Register squirrel functions
-//	RegisterScriptFunctions();
-	// Loading squrrel scripts
+	//	RegisterScriptFunctions();
 
-	//Py_Initialize();
+	
 	for each (std::string scriptName in CConfig::Get()->Scripts)
 	{
-		//Python *python = new Python(); python->Connect((std::string("scripts/") + scriptName).c_str());
-//		if (script->IsReady())
-//			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
-//		else
-//			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;
+		Python::Get()->Connect(scriptName.c_str());
+		/*if (script->IsReady())
+			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
+		else
+			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;*/
 	}
-	std::cout << "3";
-	auto netLoop = [=]() 
+	auto netLoop = [=]()
 	{
 		CNetworkConnection::Get()->Start(CConfig::Get()->MaxPlayers, CConfig::Get()->Port);
 		CRPCPlugin::Get();
@@ -39,27 +31,32 @@ int main(void)
 			RakSleep(5);
 			CNetworkConnection::Get()->Tick();
 			CNetworkPlayer::Tick();
-			
+
 			if ((GetTickCount() - lastTick) > 100)
 			{
 				CNetworkConnection::Get()->server->GetStatistics(0, &stat);
 				std::stringstream ss;
-				ss << CConfig::Get()->Hostname << ". Players online: " << CNetworkPlayer::Count() << ", " 
-					<< "Packet loss: " << std::setprecision(2) << std::fixed << stat.packetlossTotal*100 << "%";
+				ss << CConfig::Get()->Hostname << ". Players online: " << CNetworkPlayer::Count() << ", "
+					<< "Packet loss: " << std::setprecision(2) << std::fixed << stat.packetlossTotal * 100 << "%";
 				SetConsoleTitle(ss.str().c_str());
 				lastTick = GetTickCount();
-			}	
+			}
 		}
 	};
 	std::thread netThread(netLoop);
 	netThread.detach();
 	for (;;)
 	{
-		char *message = new char[256];
-		std::cin.read(message, 256);
-
-		delete message;
+		std::string msg;
+		std::getline(std::cin, msg);
+		log << msg << std::endl;
+		if (!msg.compare("exit") || !msg.compare("kill"))
+		{
+			log << "Terminating server..." << std::endl;
+			break;
+		}
 	}
-
+	netThread.~thread();
+	delete Python::Get();
 	return 0;
 }

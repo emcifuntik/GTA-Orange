@@ -1,6 +1,7 @@
 #include <Python.h>
 class Python
 {
+	Python();
 	static Python* singleInstance;
 	
 	PyObject *pName, *pModule, *pDict;
@@ -11,24 +12,26 @@ class Python
 		{
 			return NULL;
 		}
-		std::cout << toPrint << std::endl;
+		log << toPrint << std::endl;
 		Py_RETURN_NONE;
 	}
 	static PyObject * PlayMusic(PyObject * self, PyObject* args)
 	{
 		if (!PyArg_ParseTuple(args, ""))
 		{
-			std::cout << "Not found param list";
+			log << "Not found param list";
 			return NULL;
 		}
 		Py_RETURN_NONE;
 	}
 	static PyMethodDef EmbMethods[];
 
-	public:
-		static Python* Get();
-		PyObject * pCallFunc(char * fName);
-		void Connect(const char * script_name);
-		Python();
-		~Python();
+public:
+	static Python* Get();
+	PyObject * pCallFunc(char * fName);
+	void Connect(const char * script_name);
+	~Python()
+	{
+		Py_Finalize();
+	}
 };

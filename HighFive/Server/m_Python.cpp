@@ -19,13 +19,19 @@ void Python::Connect(const char * script_name)
 {
 	pName = PyString_FromString(script_name);
 	/* Error checking of pName left out */
-
+	Py_InitModule("HighFive", EmbMethods);
 	pModule = PyImport_Import(pName);
+	
 }
+
 Python::Python()
 {
-	singleInstance = this;
+	Py_Initialize();
+	PyObject *sysPath = PySys_GetObject("path");
+	PyObject *path = PyString_FromString("scripts");
+	int result = PyList_Insert(sysPath, 0, path);
 }
+
 PyObject * Python::pCallFunc(char * fName)
 {
 	PyObject *pFunc, *pArgs;
