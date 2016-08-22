@@ -35,6 +35,8 @@ PyObject * Python::pCallFunc(char * fName, PyObject* args)
 {
 	PyObject *pFunc;
 	pFunc = PyObject_GetAttrString(Python::Get()->pModule, fName);
-	return PyObject_CallObject(pFunc, args);
+	PyObject * value;
+	value = PyObject_CallObject(pFunc, args);
+	return value;
 
 }

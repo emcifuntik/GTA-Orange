@@ -7,6 +7,4 @@ CPyArgBuilder::CPyArgBuilder()
 
 CPyArgBuilder::~CPyArgBuilder()
 {
-	if (argList)
-		delete argList;
 }

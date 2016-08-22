@@ -2,7 +2,7 @@
 class CPyArgBuilder
 {
 	std::vector<PyObject*> arguments;
-	PyObject* argList = nullptr;
+	
 public:
 	CPyArgBuilder& operator<<(long arg)
 	{
@@ -11,7 +11,7 @@ public:
 	}
 	CPyArgBuilder& operator<<(int arg)
 	{
-		arguments.push_back(PyLong_FromLong((long)arg));
+		arguments.push_back(PyInt_FromLong(arg));
 		return *this;
 	}
 	CPyArgBuilder& operator<<(double arg)
@@ -26,12 +26,12 @@ public:
 	}
 	PyObject* Finish()
 	{
-		argList = PyTuple_New(arguments.size());
+		PyObject* argList = PyTuple_New(arguments.size());
 		int i = 0;
 		for each (PyObject* object in arguments)
 		{
 			PyTuple_SetItem(argList, i, object); //stolen
-			++i;
+			i++;
 		}
 		return argList;
 	}

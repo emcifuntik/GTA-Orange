@@ -14,12 +14,16 @@ int main(void)
 	for each (std::string scriptName in CConfig::Get()->Scripts)
 	{
 		Python::Get()->Connect(scriptName.c_str());
-		//Python::Get()->pCallFunc("OnConnect", NULL);
+		CPyArgBuilder builder;
+		builder << 1 << 2;
+		Python::Get()->pCallFunc("OnConnect", builder.Finish());
+		builder.~CPyArgBuilder();
 		/*if (script->IsReady())
 			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
 		else
 			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;*/
 	}
+	std::cout << "Lol";
 	auto netLoop = [=]()
 	{
 		CNetworkConnection::Get()->Start(CConfig::Get()->MaxPlayers, CConfig::Get()->Port);
