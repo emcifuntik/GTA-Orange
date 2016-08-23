@@ -103,6 +103,56 @@ void CNetworkPlayer::SetPosition(const CVector3 & position)
 	CRPCPlugin::Get()->Signal("SetPlayerPos", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
 }
 
+void CNetworkPlayer::GiveWeapon(unsigned int weaponHash, unsigned int ammo)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write(weaponHash);
+	bsOut.Write(ammo);
+	CRPCPlugin::Get()->Signal("GivePlayerWeapon", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+}
+
+void CNetworkPlayer::GiveAmmo(unsigned int weaponHash, unsigned int ammo)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write(weaponHash);
+	bsOut.Write(ammo);
+	CRPCPlugin::Get()->Signal("GivePlayerAmmo", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+}
+
+void CNetworkPlayer::SetModel(unsigned int model)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write(model);
+	CRPCPlugin::Get()->Signal("SetPlayerModel", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+}
+
+void CNetworkPlayer::SetHealth(float health)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write(health);
+	CRPCPlugin::Get()->Signal("SetPlayerHealth", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+}
+
+void CNetworkPlayer::SetArmour(float armour)
+{
+	RakNet::BitStream bsOut;
+	bsOut.Write(armour);
+	CRPCPlugin::Get()->Signal("SetPlayerArmour", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+}
+
+void CNetworkPlayer::SetColor(unsigned int color)
+{
+	RakNet::BitStream bsOut;
+	color_t col;
+	col.red = ((color >> 24) & 0xFF) / 255.0;  // Extract the RR byte
+	col.green = ((color >> 16) & 0xFF) / 255.0;   // Extract the GG byte
+	col.blue = ((color >> 8) & 0xFF) / 255.0;   // Extract the GG byte
+	col.alpha = ((color) & 0xFF) / 255.0;        // Extract the BB byte
+	bsOut.Write(col);
+	colColor = col;
+	CRPCPlugin::Get()->Signal("SetPlayerColor", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+}
+
 void CNetworkPlayer::Tick()
 {
 	for each (CNetworkPlayer *player in _players)

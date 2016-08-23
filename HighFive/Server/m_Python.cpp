@@ -2,12 +2,6 @@
 
 Python* Python::singleInstance = nullptr;
 
-PyMethodDef Python::EmbMethods[] = {
-	{ "printMessage", printString, METH_VARARGS, "Return the string recieved from websocket server" },
-	{ "playMusic", PlayMusic, METH_VARARGS | METH_KEYWORDS, "Start Listen Music" },
-	{ NULL, NULL, 0, NULL }
-};
-
 Python* Python::Get()
 {
 	if (!singleInstance)
@@ -15,12 +9,23 @@ Python* Python::Get()
 	return singleInstance;
 }
 
-void Python::Connect(const char * script_name)
+bool Python::Connect(const char * script_name)
 {
-	pName = PyString_FromString(script_name);
-	/* Error checking of pName left out */
-	Py_InitModule("HighFive", EmbMethods);
-	pModule = PyImport_Import(pName);
+	PyObject* module;
+	module = PyImport_ImportModule(script_name);
+	if (!module)
+		return false;
+	else
+	{
+		pModules.push_back(module);
+	}
+	return true;
+}
+
+void Python::DefineMethods()
+{
+	Py_InitModule("World", World::Methods);
+	Py_InitModule("Player", Player::Methods);
 }
 
 Python::Python()
@@ -29,14 +34,23 @@ Python::Python()
 	PyObject *sysPath = PySys_GetObject("path");
 	PyObject *path = PyString_FromString("scripts");
 	int result = PyList_Insert(sysPath, 0, path);
+	DefineMethods();
 }
 
-PyObject * Python::pCallFunc(char * fName, PyObject* args)
+long Python::pCallFunc(char * fName, PyObject* args)
 {
-	PyObject *pFunc;
-	pFunc = PyObject_GetAttrString(Python::Get()->pModule, fName);
-	PyObject * value;
-	value = PyObject_CallObject(pFunc, args);
-	return value;
-
+	for each (PyObject* module in pModules)
+	{
+		PyObject *pFunc;
+		pFunc = PyObject_GetAttrString(module, fName);
+		if (pFunc)
+		{
+			PyObject * value = PyObject_CallObject(pFunc, args);
+			Py_DECREF(pFunc);
+			long ret = PyLong_AsLong(value);
+			if (ret != 0)
+				return ret;
+		}
+	}
+	return 0;
 }

@@ -4,34 +4,18 @@ class Python
 	Python();
 	static Python* singleInstance;
 	
-	PyObject *pName, *pModule, *pDict;
-	static PyObject *printString(PyObject * self, PyObject* args)
-	{
-		const char * toPrint;
-		if (!PyArg_ParseTuple(args, "s", &toPrint))
-		{
-			return NULL;
-		}
-		log << toPrint << std::endl;
-		Py_RETURN_NONE;
-	}
-	static PyObject * PlayMusic(PyObject * self, PyObject* args)
-	{
-		if (!PyArg_ParseTuple(args, ""))
-		{
-			log << "Not found param list";
-			return NULL;
-		}
-		Py_RETURN_NONE;
-	}
-	static PyMethodDef EmbMethods[];
-
+	std::vector<PyObject *> pModules;
 public:
 	static Python* Get();
-	PyObject * pCallFunc(char * fName, PyObject* args);
-	void Connect(const char * script_name);
+	long pCallFunc(char * fName, PyObject* args);
+	bool Connect(const char * script_name);
+	void DefineMethods();
 	~Python()
 	{
+		for each (PyObject *module in pModules)
+		{
+			Py_DECREF(module);
+		}
 		Py_Finalize();
 	}
 };

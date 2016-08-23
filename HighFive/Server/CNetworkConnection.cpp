@@ -64,7 +64,11 @@ void CNetworkConnection::Tick()
 
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
-//				Squirrel::PlayerDisconnect(playerID, 1);
+
+				CPyArgBuilder args;
+				args << playerID << 1;
+				Python::Get()->pCallFunc("OnPlayerDisconnect", args.Finish());
+
 				CNetworkPlayer::Remove(playerID);
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
@@ -85,7 +89,9 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = new CNetworkPlayer(packet->guid);
 				player->SetName(playerName.C_String());
 
-//				Squirrel::PlayerConnect(player->GetID());
+				CPyArgBuilder args;
+				args << player->GetID();
+				Python::Get()->pCallFunc("OnPlayerConnect", args.Finish());
 
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
@@ -96,7 +102,10 @@ void CNetworkConnection::Tick()
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
 				std::cout << playerText << std::endl;
-				//if (Squirrel::PlayerText(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
+
+				CPyArgBuilder args;
+				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID() << playerText.C_String();
+				if (!Python::Get()->pCallFunc("OnPlayerText", args.Finish()))
 				{
 					std::stringstream ss;
 					ss << "~b~" << CNetworkPlayer::GetByGUID(packet->guid)->GetName() << ":~w~ " << playerText.C_String();
@@ -112,8 +121,10 @@ void CNetworkConnection::Tick()
 			{
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
-				std::cout << playerText << std::endl;
-	//			if (Squirrel::PlayerCommand(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
+
+				CPyArgBuilder args;
+				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID() << playerText.C_String();
+				if (!Python::Get()->pCallFunc("OnPlayerCommand", args.Finish()))
 				{
 					bsOut.Write("Unknown command");
 					color_t messageColor = { 255, 200, 200, 255 };
@@ -129,8 +140,10 @@ void CNetworkConnection::Tick()
 				bsIn.Read(data);
 				player->SetOnFootData(data);
 				
-				/*if (Squirrel::PlayerUpdate(player->GetID()) == SQFalse)
-					break;*/
+				CPyArgBuilder args;
+				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID();
+				if (Python::Get()->pCallFunc("OnPlayerUpdate", args.Finish()))
+					continue;
 
 				bsOut.Write((unsigned char)ID_SEND_PLAYER_DATA);
 				bsOut.Write(packet->guid);

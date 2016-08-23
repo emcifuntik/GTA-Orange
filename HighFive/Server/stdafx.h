@@ -61,6 +61,8 @@ using namespace RakNet;
 
 // Python
 #include "m_Python.h"
+#include "World.h"
+#include "Player.h"
 #include "CPyArgBuilder.h"
 
 

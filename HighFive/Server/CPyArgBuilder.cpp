@@ -7,4 +7,6 @@ CPyArgBuilder::CPyArgBuilder()
 
 CPyArgBuilder::~CPyArgBuilder()
 {
+	if (argList)
+		Py_DECREF(argList);
 }

@@ -27,9 +27,11 @@
     <ClInclude Include="CConfig.h" />
     <ClInclude Include="CPyArgBuilder.h" />
     <ClInclude Include="m_Python.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="CRPCPlugin.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CLog.cpp" />
@@ -54,6 +56,7 @@
     <ClCompile Include="CNetworkVehicle.cpp" />
     <ClCompile Include="CRPCPlugin.cpp" />
     <ClCompile Include="m_Python.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -68,6 +71,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />

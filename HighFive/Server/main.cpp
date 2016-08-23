@@ -13,17 +13,14 @@ int main(void)
 	
 	for each (std::string scriptName in CConfig::Get()->Scripts)
 	{
-		Python::Get()->Connect(scriptName.c_str());
-		CPyArgBuilder builder;
-		builder << 1 << 2;
-		Python::Get()->pCallFunc("OnConnect", builder.Finish());
-		builder.~CPyArgBuilder();
-		/*if (script->IsReady())
+		if (Python::Get()->Connect(scriptName.c_str()))
+		{
 			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
+			Python::Get()->pCallFunc("OnScriptInit", NULL);
+		}
 		else
-			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;*/
+			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;
 	}
-	std::cout << "Lol";
 	auto netLoop = [=]()
 	{
 		CNetworkConnection::Get()->Start(CConfig::Get()->MaxPlayers, CConfig::Get()->Port);
@@ -50,19 +47,20 @@ int main(void)
 	std::thread netThread(netLoop);
 	netThread.detach();
 
-	/*CPyArgBuilder argList;
-	argList << 0L;
-	Python::Get()->pCallFunc("OnScriptInit", argList.Finish());*/
-
 	for (;;)
 	{
 		std::string msg;
 		std::getline(std::cin, msg);
-		log << msg << std::endl;
 		if (!msg.compare("exit") || !msg.compare("kill"))
 		{
 			log << "Terminating server..." << std::endl;
 			break;
+		}
+		else
+		{
+			CPyArgBuilder args;
+			args << msg;
+			Python::Get()->pCallFunc("OnServerCommand", args());
 		}
 	}
 	netThread.~thread();

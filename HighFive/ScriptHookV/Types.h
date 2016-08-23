@@ -13,7 +13,7 @@ typedef DWORD Any;
 typedef DWORD uint;
 typedef DWORD Hash;
 typedef int Entity;
-typedef int Player;
+typedef int _Player;
 typedef int FireId;
 typedef int Ped;
 typedef int Vehicle;
