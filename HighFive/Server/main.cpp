@@ -3,13 +3,10 @@ using namespace tinyxml2;
 
 int main(void)
 {
-	/*XmlDomDocument xmlReader("config.xml");
-	tinyxml2::XMLElement* serverNameXML = xmlReader.FirstChildElement("config")->FirstChildElement("servername");*/
 	log << "Starting the server..." << std::endl;
 	log << "Hostname: " << color::lred << CConfig::Get()->Hostname << std::endl;
 	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
 	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
-	//	RegisterScriptFunctions();
 	
 	for each (std::string scriptName in CConfig::Get()->Scripts)
 	{

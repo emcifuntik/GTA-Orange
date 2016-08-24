@@ -111,9 +111,6 @@
     <ClCompile Include="CNetworkVehicle.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Shared\Console\CLog.cpp">
-      <Filter>Shared</Filter>
-    </ClCompile>
     <ClCompile Include="CMemory.cpp">
       <Filter>Source Files\Hooking</Filter>
     </ClCompile>
@@ -128,6 +125,9 @@
     </ClCompile>
     <ClCompile Include="VTasks.cpp">
       <Filter>Source Files\Rage</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\EugenePogrebnyak\Source\Repos\highfive\HighFive\Client\CLog.cpp">
+      <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

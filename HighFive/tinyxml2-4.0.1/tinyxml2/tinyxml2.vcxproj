@@ -91,7 +91,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\..\lib</OutDir>
-    <IntDir>$(SolutionDir)temp\$(Platform)-$(Configuration)\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)_$(Platform)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,7 +100,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\..\lib</OutDir>
-    <IntDir>$(SolutionDir)temp\$(Platform)-$(Configuration)\</IntDir>
+    <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
     <TargetName>$(ProjectName)_$(Configuration)_$(Platform)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

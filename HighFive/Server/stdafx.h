@@ -46,9 +46,6 @@ using namespace RakNet;
 // Scripthook types
 #include <../ScriptHookV/Types.h>
 
-// Console coloring
-#include "Console/CConsole.h"
-
 // Network manager
 #include "CNetworkConnection.h"
 
