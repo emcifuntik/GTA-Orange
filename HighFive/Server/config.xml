@@ -4,6 +4,6 @@
 	<!-- http://www.cplusplus.com/reference/ctime/strftime/ -->
 	<logtime>[%Ex %EX]</logtime>
     <scripts>
-        <script>lsrp.nut</script>
+        <script>multiply</script>
     </scripts>
 </config>

@@ -2,6 +2,22 @@
 
 CNetworkConnection * CNetworkConnection::singleInstance = nullptr;
 
+std::vector<std::string> &split(const std::string &s, char delim, std::vector<std::string> &elems) {
+	std::stringstream ss(s);
+	std::string item;
+	while (getline(ss, item, delim)) {
+		elems.push_back(item);
+	}
+	return elems;
+}
+
+
+std::vector<std::string> split(const std::string &s, char delim) {
+	std::vector<std::string> elems;
+	split(s, delim, elems);
+	return elems;
+}
+
 CNetworkConnection::CNetworkConnection()
 {
 	server = RakNet::RakPeerInterface::GetInstance();
@@ -64,7 +80,11 @@ void CNetworkConnection::Tick()
 
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
-				Squirrel::PlayerDisconnect(playerID, 1);
+
+				CPyArgBuilder args;
+				args << playerID << 1;
+				Python::Get()->pCallFunc("onPlayerDisconnect", args());
+
 				CNetworkPlayer::Remove(playerID);
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
@@ -85,7 +105,9 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = new CNetworkPlayer(packet->guid);
 				player->SetName(playerName.C_String());
 
-				Squirrel::PlayerConnect(player->GetID());
+				CPyArgBuilder args;
+				args << player->GetID();
+				Python::Get()->pCallFunc("onPlayerConnect", args());
 
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
@@ -95,16 +117,19 @@ void CNetworkConnection::Tick()
 			{
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
-				std::cout << playerText << std::endl;
-				//if (Squirrel::PlayerText(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
+
+				CPyArgBuilder args;
+				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID() << playerText.C_String();
+				if (!Python::Get()->pCallFunc("onPlayerText", args()))
 				{
+					log << "Entered" << std::endl;
 					std::stringstream ss;
 					ss << "~b~" << CNetworkPlayer::GetByGUID(packet->guid)->GetName() << ":~w~ " << playerText.C_String();
-					playerText = ss.str().c_str();
-					bsOut.Write(playerText);
+					RakNet::RakString toSend(ss.str().c_str());
+					bsOut.Write(toSend);
 					color_t messageColor = { 200, 200, 255, 255 };
 					bsOut.Write(messageColor);
-					CNetworkConnection::Get()->rpc.Signal("SendMessageToPlayer", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
+					CRPCPlugin::Get()->Signal("SendClientMessage", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
 				}
 				break;
 			}
@@ -112,13 +137,29 @@ void CNetworkConnection::Tick()
 			{
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
-				std::cout << playerText << std::endl;
-				if (Squirrel::PlayerCommand(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String(), playerText.GetLength()) == 0)
+				log << "COMMAND" << std::endl;
+
+					std::vector<std::string> cmdArgs = split(playerText.C_String(), ' ');
+				std::string cmd = cmdArgs[0].substr(1);
+				cmdArgs.erase(cmdArgs.begin(), cmdArgs.begin() + 1);
+				CPyArgBuilder args;
+				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID();
+				if (cmdArgs.size() > 0)
+					args << cmdArgs;
+				std::stringstream cmdFuncName;
+				cmdFuncName << "_cmd_" << cmd;
+				if (Python::Get()->pCallFunc((char*)cmdFuncName.str().c_str(), args()))
+					break;
+
+				~args;
+				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID() << playerText.C_String();
+				if (!Python::Get()->pCallFunc("onPlayerCommand", args()))
 				{
-					bsOut.Write("Unknown command");
+					RakNet::RakString toSend("Unknown command");
+					bsOut.Write(toSend);
 					color_t messageColor = { 255, 200, 200, 255 };
 					bsOut.Write(messageColor);
-					CNetworkConnection::Get()->rpc.Signal("SendMessageToPlayer", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, packet->guid, false, false);
+					CRPCPlugin::Get()->Signal("SendClientMessage", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, packet->guid, false, false);
 				}
 				break;
 			}
@@ -129,8 +170,10 @@ void CNetworkConnection::Tick()
 				bsIn.Read(data);
 				player->SetOnFootData(data);
 				
-				/*if (Squirrel::PlayerUpdate(player->GetID()) == SQFalse)
-					break;*/
+				CPyArgBuilder args;
+				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID();
+				if (Python::Get()->pCallFunc("onPlayerUpdate", args.Finish()))
+					continue;
 
 				bsOut.Write((unsigned char)ID_SEND_PLAYER_DATA);
 				bsOut.Write(packet->guid);
@@ -181,7 +224,11 @@ void CNetworkConnection::Tick()
 				log << "Connection with " << packet->systemAddress.ToString(true) << " lost" << std::endl;
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
-				Squirrel::PlayerDisconnect(playerID, 2);
+
+				CPyArgBuilder args;
+				args << playerID << 2;
+				Python::Get()->pCallFunc("onPlayerDisconnect", args());
+
 				CNetworkPlayer::Remove(playerID);
 
 				bsOut.Write((unsigned char)ID_PLAYER_LEFT);
