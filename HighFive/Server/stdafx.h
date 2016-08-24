@@ -60,17 +60,12 @@ using namespace RakNet;
 // RPC
 #include "CRPCPlugin.h"
 
-// Squirrel
-#include <squirrel.h>
-#include <sqstdblob.h>
-#include <sqstdsystem.h>
-#include <sqstdio.h>
-#include <sqstdmath.h>
-#include <sqstdstring.h>
-#include <sqstdaux.h>
-#include <sqstdstring.h>
-#include "SQ.h"
-#include "Natives.h"
+// Python
+#include "m_Python.h"
+#include "World.h"
+#include "Player.h"
+#include "CPyArgBuilder.h"
+
 
 // Network objects
 #include "CNetworkPlayer.h"

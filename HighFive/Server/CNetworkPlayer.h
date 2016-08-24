@@ -29,6 +29,7 @@ class CNetworkPlayer
 	size_t uMoney;
 	float fTagDrawDistance = 50.f;
 	unsigned long ulLastVehUpdate = 0;
+	color_t colColor;
 public:
 	CNetworkPlayer(RakNet::RakNetGUID GUID);
 	~CNetworkPlayer();
@@ -55,6 +56,17 @@ public:
 	void SetPosition(const CVector3& position);
 	void GetPosition(CVector3& position) { position = vecPosition; }
 	void SetHeading(float heading) { fHeading = heading; }
+	void GiveWeapon(unsigned int weaponHash, unsigned int ammo);
+	void GiveAmmo(unsigned int weaponHash, unsigned int ammo);
+	void SetModel(unsigned int model);
+	void SetHealth(float health);
+	void SetArmour(float armour);
+	void SetColor(unsigned int color);
+	color_t GetColor() { return colColor; }
+	float GetHealth() { return (float)usHealth; }
+	float GetArmour() { return (float)usArmour; }
+	unsigned int GetModel() { return hModel; }
 	float GetHeading() { return fHeading; }
 	float GetTagDrawDistance() { return fTagDrawDistance; }
 };
+
