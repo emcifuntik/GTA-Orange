@@ -16,7 +16,7 @@ int main(void)
 		if (Python::Get()->Connect(scriptName.c_str()))
 		{
 			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
-			Python::Get()->pCallFunc("OnScriptInit", NULL);
+			Python::Get()->pCallFunc("onScriptInit", NULL);
 		}
 		else
 			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;

@@ -1,26 +1,27 @@
 import World
 import Player
 
-def OnScriptInit():
+def onScriptInit():
 	World.printMessage("Gamemode loaded")
 	print World.hash("adder")
 	
-def OnServerCommand( command ):
+def onServerCommand( command ):
 	World.printMessage("Server command")
 	
-def OnPlayerConnect( playerid ):
+def onPlayerConnect( playerid ):
 	print "Player [ ID:", playerid, "] connected"
-	Player.setPos(playerid, 0.0, 0.0, 0.0);
+	Player.setPos(playerid, 0.0, 0.0, 75.0);
+	Player.giveWeapon(playerid, World.hash("WEAPON_ADVANCEDRIFLE"), 30);
 	
-def OnPlayerDisconnect( playerid, reason ):
+def onPlayerDisconnect( playerid, reason ):
 	print "Player [ ID:", playerid, "] disconnected"
 	
-def OnPlayerText( playerid, text ):
+def onPlayerText( playerid, text ):
 	print "Player [ ID:", playerid, "] text:", text
-
-def OnPlayerCommand( playerid, command ):
-	print "Player [ ID:", playerid, "] command:", command
+	return 0
 	
-def OnPlayerUpdate( playerid ):
-	print "Player [ ID:", playerid, "] updated"
+def onPlayerUpdate( playerid ):
+	return 0
 	
+def _cmd_makeadmin( playerid, args ):
+	World.printMessage("makeadmin");

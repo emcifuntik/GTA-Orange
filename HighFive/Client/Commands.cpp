@@ -26,11 +26,5 @@ int CommandProcessor(std::string command)
 		CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[std::atoi(params[0].c_str())]));
 		return true;
 	}
-	if (!command.compare("/vehicle"))
-	{
-		Hash vehHash = GAMEPLAY::GET_HASH_KEY("adder");
-		CNetworkVehicle *veh = new CNetworkVehicle(vehHash, 0.f, 0.f, 77.f, 0.f);
-		return true;
-	}
 	return false;
 }

@@ -4,12 +4,21 @@ namespace Player
 {
 	PyObject *setPos(PyObject * self, PyObject* args)
 	{
-		unsigned int playerID;
+		long playerID;
 		float x, y, z;
-		if (!PyArg_ParseTuple(args, "Ifff", &playerID, &x, &y, &z))
+		if (PyTuple_Check(args) && PyTuple_Size(args) == 4)
 		{
+			playerID = PyLong_AsLong(PyTuple_GetItem(args, 0));
+			x = (float)PyFloat_AsDouble(PyTuple_GetItem(args, 1));
+			y = (float)PyFloat_AsDouble(PyTuple_GetItem(args, 2));
+			z = (float)PyFloat_AsDouble(PyTuple_GetItem(args, 3));
+		}
+		else
+		{
+			log << "setPos args count not equal 4" << std::endl;
 			return NULL;
 		}
+		log << playerID << " " << x << " " << y << " " << z << std::endl;
 		auto player = CNetworkPlayer::GetByID(playerID);
 		if (!player)
 			return PyBool_FromLong(0L);
@@ -21,6 +30,7 @@ namespace Player
 		unsigned int playerID;
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -36,6 +46,7 @@ namespace Player
 		float x, y, z, range;
 		if (!PyArg_ParseTuple(args, "Iffff", &playerID, &x, &y, &z, &range))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -53,6 +64,7 @@ namespace Player
 		float a;
 		if (!PyArg_ParseTuple(args, "If", &playerID, &a))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -67,6 +79,7 @@ namespace Player
 		
 		if (!PyArg_ParseTuple(args, "III", &playerID, &weapon, &ammo))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -81,6 +94,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "III", &playerID, &weapon, &ammo))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -95,6 +109,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "Ii", &playerID, &money))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -109,6 +124,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "Ii", &playerID, &money))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -123,6 +139,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -137,13 +154,14 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
 		if (!player)
 			return PyInt_FromLong(0L);
-		int money = player->GetMoney();
-		return PyInt_FromLong(money);
+		size_t money = player->GetMoney();
+		return PyInt_FromSize_t(money);
 	}
 	PyObject * setModel(PyObject * self, PyObject * args)
 	{
@@ -151,6 +169,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "II", &playerID, &model))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -165,6 +184,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -179,6 +199,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "Is", &playerID, name))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -193,6 +214,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -207,6 +229,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "If", &playerID, &health))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -221,6 +244,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -235,6 +259,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "If", &playerID, &armour))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -249,6 +274,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -262,6 +288,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "II", &playerID, &color))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -276,6 +303,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
@@ -290,6 +318,7 @@ namespace Player
 
 		if (!PyArg_ParseTuple(args, "I", &playerID))
 		{
+			PyErr_Print();
 			return NULL;
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);

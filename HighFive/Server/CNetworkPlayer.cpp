@@ -144,10 +144,10 @@ void CNetworkPlayer::SetColor(unsigned int color)
 {
 	RakNet::BitStream bsOut;
 	color_t col;
-	col.red = ((color >> 24) & 0xFF) / 255.0;  // Extract the RR byte
-	col.green = ((color >> 16) & 0xFF) / 255.0;   // Extract the GG byte
-	col.blue = ((color >> 8) & 0xFF) / 255.0;   // Extract the GG byte
-	col.alpha = ((color) & 0xFF) / 255.0;        // Extract the BB byte
+	col.red = (BYTE)(((color >> 24) & 0xFF) / 255.0);  // Extract the RR byte
+	col.green = (BYTE)(((color >> 16) & 0xFF) / 255.0);   // Extract the GG byte
+	col.blue = (BYTE)(((color >> 8) & 0xFF) / 255.0);   // Extract the GG byte
+	col.alpha = (BYTE)(((color) & 0xFF) / 255.0);        // Extract the BB byte
 	bsOut.Write(col);
 	colColor = col;
 	CRPCPlugin::Get()->Signal("SetPlayerColor", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);

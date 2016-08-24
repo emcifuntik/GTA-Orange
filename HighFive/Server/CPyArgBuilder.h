@@ -4,9 +4,69 @@ class CPyArgBuilder
 	std::vector<PyObject*> arguments;
 	PyObject* argList = nullptr;
 public:
+	CPyArgBuilder& operator<<(std::vector<unsigned int> arg)
+	{
+		size_t listSize = arg.size();
+		PyObject *l = PyList_New(listSize);
+		for (size_t i = 0; i != listSize; ++i) {
+			PyList_SET_ITEM(l, i, PyInt_FromLong((long)arg[i]));
+		}
+		arguments.push_back(l);
+		return *this;
+	}
+	CPyArgBuilder& operator<<(std::vector<double> arg)
+	{
+		size_t listSize = arg.size();
+		PyObject *l = PyList_New(listSize);
+		for (size_t i = 0; i != listSize; ++i) {
+			PyList_SET_ITEM(l, i, PyFloat_FromDouble(arg[i]));
+		}
+		arguments.push_back(l);
+		return *this;
+	}
+	CPyArgBuilder& operator<<(std::vector<float> arg)
+	{
+		size_t listSize = arg.size();
+		PyObject *l = PyList_New(listSize);
+		for (size_t i = 0; i != listSize; ++i) {
+			PyList_SET_ITEM(l, i, PyFloat_FromDouble((double)arg[i]));
+		}
+		arguments.push_back(l);
+		return *this;
+	}
+	CPyArgBuilder& operator<<(std::vector<int> arg)
+	{
+		size_t listSize = arg.size();
+		PyObject *l = PyList_New(listSize);
+		for (size_t i = 0; i != listSize; ++i) {
+			PyList_SET_ITEM(l, i, PyLong_FromLong((long)arg[i]));
+		}
+		arguments.push_back(l);
+		return *this;
+	}
+	CPyArgBuilder& operator<<(std::vector<long> arg)
+	{
+		size_t listSize = arg.size();
+		PyObject *l = PyList_New(listSize);
+		for (size_t i = 0; i != listSize; ++i) {
+			PyList_SET_ITEM(l, i, PyLong_FromLong(arg[i]));
+		}
+		arguments.push_back(l);
+		return *this;
+	}
+	CPyArgBuilder& operator<<(std::vector<std::string> arg)
+	{
+		size_t listSize = arg.size();
+		PyObject *l = PyList_New(listSize);
+		for (size_t i = 0; i != listSize; ++i) {
+			PyList_SET_ITEM(l, i, PyString_FromString(arg[i].c_str()));
+		}
+		arguments.push_back(l);
+		return *this;
+	}
 	CPyArgBuilder& operator<<(unsigned int arg)
 	{
-		arguments.push_back(PyLong_FromLong((long)arg));
+		arguments.push_back(PyInt_FromLong((long)arg));
 		return *this;
 	}
 	CPyArgBuilder& operator<<(long arg)
@@ -48,6 +108,15 @@ public:
 	PyObject* operator()()
 	{
 		return Finish();
+	}
+
+	CPyArgBuilder& operator~()
+	{
+		arguments.clear();
+		if(argList)
+			Py_DECREF(argList);
+		argList = nullptr;
+		return *this;
 	}
 
 	CPyArgBuilder();

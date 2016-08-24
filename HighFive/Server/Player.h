@@ -26,7 +26,6 @@ namespace Player
 
 	static PyMethodDef Methods[] = {
 		{ "setPos", setPos, METH_VARARGS, "Sets player\'s position" },
-		{ "setCoords", setPos, METH_VARARGS, "Sets player\'s position" },
 		{ "getPos", getPos, METH_VARARGS, "Returns player position" },
 		{ "isInRangeOfPoint", isInRange, METH_VARARGS, "Returns bool if player in range of point" },
 		{ "setHeading", setHeading, METH_VARARGS, "Sets player heading angle" },
