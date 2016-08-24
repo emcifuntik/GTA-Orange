@@ -436,10 +436,7 @@ enum DefaultMessageIDTypes
 	ID_VEHICLE_SYNC,
 	ID_COMMAND_MESSAGE,
 
-	ID_SEND_PRIMARY_TASK,
-	ID_SEND_SECONDARY_TASK,
-	ID_SEND_MOVEMENT_TASK,
-	ID_SEND_MOTION_TASK,
+	ID_SEND_TASKS,
 
 	ID_USER_PACKET_ENUM
 	//-------------------------------------------------------------------------------------------------------------

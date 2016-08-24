@@ -26,6 +26,8 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 	auto addr = CMemory::Find("32 C0 F3 0F 11 09");
 	addr->nop(6);
 
+	rageGlobals::SetPlayerColor(0x33, 0xFF, 0x33, 0xFF);
+
 	//auto addr = Memory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
 	//addr->nop(20);
 	//GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
@@ -49,7 +51,6 @@ CLocalPlayer::~CLocalPlayer()
 void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 {
 	onfoot.hModel = GetModel();
-	onfoot.bJumping = IsJumping();
 	onfoot.fMoveSpeed = CWorld::Get()->CPedPtr->MoveSpeed;
 	onfoot.vecPos = GetPosition();
 	onfoot.vecRot = GetRotation();
@@ -148,7 +149,23 @@ void CLocalPlayer::SendOnFootData()
 
 void CLocalPlayer::SendTasks()
 {
-	
+	/*RakNet::BitStream bsOut;
+	bsOut.Write((unsigned char)ID_SEND_TASKS);
+	bool foundPrimary = false;
+
+	for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->Child)
+	{
+		if (!task->IsSerializable())
+			continue;
+		void* dataPtr = nullptr;
+		int size = 0;
+		dataPtr = TaskTable::Get()->GetData(task, size);
+		log_debug << "Data ptr: 0x" << std::hex << dataPtr << ", Size: " << std::dec << size << std::endl;
+	}
+	if (foundPrimary)
+	{
+		CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	}*/
 }
 
 void CLocalPlayer::SetMoney(int money)

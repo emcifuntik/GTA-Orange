@@ -12,24 +12,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 {
 	if (reason == DLL_PROCESS_ATTACH) {
 #if _DEBUG
-		/*Sleep(100);
 		HWND window = nullptr;
-		while (!window)
-		{
-			window = FindWindowA("grcWindow", NULL);
-			Sleep(1000);
-		}
-		SetWindowTextA(window, "HighFive Multiplayer" DEBUG_TEXT);*/
-		/*#pragma region Install WndProc Hook
-		oWndProc = (WNDPROC)SetWindowLongPtr(window, GWLP_WNDPROC, (LONG_PTR)WndProc);
-		if (oWndProc == NULL) {
-
-			log_error << "Failed to attach input hook" << std::endl;
-		}
-		else {
-			log_info << "Input hook attached: WndProc 0x" << (DWORD_PTR)oWndProc << std::endl;
-		}
-		#pragma endregion*/
+		window = FindWindowA("grcWindow", NULL);
+		SetWindowTextA(window, "HighFive Multiplayer" DEBUG_TEXT);
 #endif
 
 		//rage::hookFunction();

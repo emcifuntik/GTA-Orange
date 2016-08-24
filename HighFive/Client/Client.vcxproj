@@ -18,6 +18,7 @@
     <ClInclude Include="..\..\Shared\Console\CLog.h" />
     <ClInclude Include="..\..\Shared\CVector3.h" />
     <ClInclude Include="..\..\Shared\NetworkTypes.h" />
+    <ClInclude Include="Hook.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CChat.h" />
     <ClInclude Include="CNetworkVehicle.h" />

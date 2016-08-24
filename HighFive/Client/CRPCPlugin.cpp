@@ -36,5 +36,5 @@ CRPCPlugin * CRPCPlugin::Get()
 
 CRPCPlugin::~CRPCPlugin()
 {
-	CNetworkConnection::Get()->client->AttachPlugin(&rpc);
+	CNetworkConnection::Get()->client->DetachPlugin(&rpc);
 }

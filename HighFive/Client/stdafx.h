@@ -3,6 +3,14 @@
 #define WIN32_LEAN_AND_MEAN
 #define TG(x) x = !x
 
+#if _DEBUG
+#define TRACE( format, ... ) { char debug[256]; sprintf( debug,  "%s::%s(%d) " format "\n", __FILE__, __FUNCTION__,  __LINE__, __VA_ARGS__ ); log_debug << debug << std::endl;}
+#define TRACEN() { char debug[256]; sprintf( debug,  "%s::%s(%d)\n", __FILE__, __FUNCTION__,  __LINE__ ); log_debug << debug << std::endl;}
+#else
+#define TRACE( format, ... )
+#define TRACEN()
+#endif
+
 // Windows Header Files:
 #include <windows.h>
 #include <cstdio>
@@ -46,6 +54,9 @@
 #include <GetTime.h>
 #include <RPC4Plugin.h>
 using namespace RakNet;
+
+// Call hook
+#include <Hook.h>
 
 // Console
 #include <Console\CConsole.h>
@@ -103,12 +114,3 @@ using namespace RakNet;
 #include "CNetworkConnection.h"
 #include "Functions.h"
 #include "CRPCPlugin.h"
-
-
-#if _DEBUG
-#define TRACE( format, ... ) { char debug[256]; sprintf( debug,  "%s::%s(%d) " format "\n", __FILE__, __FUNCTION__,  __LINE__, __VA_ARGS__ ); log_debug << debug << std::endl;}
-#define TRACEN() { char debug[256]; sprintf( debug,  "%s::%s(%d)\n", __FILE__, __FUNCTION__,  __LINE__ ); log_debug << debug << std::endl;}
-#else
-#define TRACE( format, ... )
-#define TRACEN()
-#endif

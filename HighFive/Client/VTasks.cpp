@@ -48,7 +48,6 @@ VTasks::VTasks()
 	TasksArray[10] = new std::string("CTaskPlayerIdles");
 	TasksArray[421] = new std::string("CTaskJump");
 	TasksArray[420] = new std::string("CTaskJumpVault");
-	_CTaskJumpVault_Create = (void *(*)(void*, int))((intptr_t)GetModuleHandle(NULL) + 0xA8BE3C);
 	TasksArray[281] = new std::string("CTaskMotionSwimming");
 	TasksArray[76] = new std::string("CTaskWitness");
 	TasksArray[527] = new std::string("CTaskVehicleTransformToSubmarine");
@@ -59,9 +58,7 @@ VTasks::VTasks()
 	TasksArray[197] = new std::string("CTasksArrayetPedInVehicle");
 	TasksArray[298] = new std::string("CTaskReloadGun");
 	TasksArray[6] = new std::string("CTaskPlayerOnFoot");
-	_CTaskPlayerOnFoot_Create = HOOK_CTOR(CTaskPlayerOnFoot, 0xA3F80C);
 	TasksArray[159] = new std::string("CTaskPlayerDrive");
-	_CTaskPlayerDrive_Create = HOOK_CTOR(CTaskPlayerDrive, 0x7BCA04);
 	TasksArray[334] = new std::string("CTaskParachute");
 	TasksArray[162] = new std::string("CTaskOpenVehicleDoorFromOutside");
 	TasksArray[54] = new std::string("CTaskOpenDoor");
@@ -70,7 +67,6 @@ VTasks::VTasks()
 	TasksArray[34] = new std::string("CTaskMoveStandStill");
 	TasksArray[252] = new std::string("CTaskMoveSlideToCoord");
 	TasksArray[5] = new std::string("CTaskMovePlayer");
-	_CTaskMovePlayer_Create = (void *(*)(void*, int))((intptr_t)GetModuleHandle(NULL) + 0xA3F3F8);
 	TasksArray[129] = new std::string("CTaskMoveMeleeMovement");
 	TasksArray[39] = new std::string("CTaskMoveInAir");
 	TasksArray[196] = new std::string("CTaskMoveGoToVehicleDoor");

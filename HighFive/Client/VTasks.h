@@ -181,7 +181,8 @@ namespace GTA
 		TASK_PRIORITY_LOW,
 		TASK_PRIORITY_NORMAL,
 		TASK_PRIORITY_HIGH,
-		TASK_PRIORITY_HIGHEST
+		TASK_PRIORITY_HIGHEST,
+		TASK_PRIORITY_REAL_TIME
 	};
 };
 
@@ -204,36 +205,7 @@ public:
 
 	std::string GetTaskName(int64_t id);
 	~VTasks();
-
-
-	void *(*_CTaskJumpVault_Create)(void* memoryRegion, int size);
-	void *CTaskJumpVault_Create()
-	{
-		void *task = rage::sysMemAllocator::Get()->allocate(0xC0, 16);
-		return (void*)VTasks::Get()->_CTaskJumpVault_Create(task, 0x102);
-	}
-
-	void *(*_CTaskPlayerOnFoot_Create)(void* memoryRegion);
-	void *CTaskPlayerOnFoot_Create()
-	{
-		void *task = rage::sysMemAllocator::Get()->allocate(0x1E0, 16);
-		return (void*)VTasks::Get()->_CTaskPlayerOnFoot_Create(task);
-	}
-
-	void *(*_CTaskPlayerDrive_Create)(void* memoryRegion);
-	void *CTaskPlayerDrive_Create()
-	{
-		void *task = rage::sysMemAllocator::Get()->allocate(0x150, 16);
-		return (void*)VTasks::Get()->_CTaskPlayerDrive_Create(task);
-	}
-
-	void *(*_CTaskMovePlayer_Create)(void* memoryRegion, int arg);
-	void *CTaskMovePlayer_Create()
-	{
-		void *task = rage::sysMemAllocator::Get()->allocate(0xD8, 16);
-		return (void*)VTasks::Get()->_CTaskMovePlayer_Create(task, 0);
-	}
-
+	void *GetTaskFromID(unsigned int taskID) { hook::call<0x64E60C, void*, unsigned int>(taskID); }
 };
 
 

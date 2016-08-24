@@ -42,18 +42,13 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 			pos.fZ += 10.f;
 			CLocalPlayer::Get()->SetPosition(pos);
 		}
-		/*if (key == VK_NUMPAD1)
+		if (key == VK_NUMPAD1)
 		{
-			CWorld::Get()->CPedPtr->CPedWeaponManagerPtr->CWeaponPtr->CWeaponMethods->func_1 = [](__int64 a1, char a2)
-			{
-				std::stringstream ss;
-				ss << "Called func_1(" << a1 << ", " << a2 << ");";
-				CChat::Get()->AddChatMessage(ss.str())
-				__int64 result = 0;
-				return result;
-			};
+			SyncTree::Init();
+			auto ptr = SyncTree::GetPedSyncTree();
+			log_debug << "CPedSyncTree: 0x" << std::hex << ptr << std::endl;
 		}
-		if (key == VK_NUMPAD2)
+		/*if (key == VK_NUMPAD2)
 		{
 			CWorld::Get()->CPedPtr->CPedWeaponManagerPtr->CWeaponPtr->CWeaponMethods->func_2 = [](__int64 a1, char *a2, __int64 a3)
 			{

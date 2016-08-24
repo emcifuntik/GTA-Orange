@@ -208,12 +208,13 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 							RakNet::RakString outStr(converted_str.c_str());
 
 							sendmessage.Write((MessageID)ID_COMMAND_MESSAGE);
-							sendmessage.Write(converted_str);
+							sendmessage.Write(outStr);
 							CNetworkConnection::Get()->client->Send(&sendmessage,HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 							Chat->wsCurrentMessage.clear();
 							Chat->Close();
 							Chat->uiCarretPos = 0;
+							break;
 						}
 					}
 				}
@@ -225,7 +226,7 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 				RakNet::RakString outStr(converted_str.c_str());
 
 				sendmessage.Write((MessageID)ID_CHAT_MESSAGE);
-				sendmessage.Write(converted_str);
+				sendmessage.Write(outStr);
 				CNetworkConnection::Get()->client->Send(&sendmessage, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 
 				Chat->wsCurrentMessage.clear();

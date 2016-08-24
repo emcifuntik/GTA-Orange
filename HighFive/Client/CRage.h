@@ -41,6 +41,7 @@ namespace GTA
 namespace rageGlobals
 {
 	void AllowChangeLanguage(bool toggle);
+	void SetPlayerColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a);
 };
 
 class baseClass
@@ -63,17 +64,29 @@ public:
 
 	static CWorld *Get()
 	{
-		if(Utils::IsSteam())
-			return *(CWorld **)((intptr_t)GetModuleHandle(NULL) + 0x228FA58);
+		if (Utils::IsSteam())
+			return hook::value<CWorld*>(0x228FA58, true);
 		else
-			return *(CWorld **)((intptr_t)GetModuleHandle(NULL) + 0x228C910);
+			return hook::value<CWorld*>(0x228C910, true);
 	}
 }; //Size=0x0010
 
 class CPed
 {
 public:
-	CPedMethods* CPedMethods_; //0x0000 
+	virtual ~CPed();
+	virtual void unknown_1();
+	virtual void unknown_2();
+	virtual void unknown_3();
+	virtual void unknown_4();
+	virtual void unknown_5();
+	virtual void unknown_6();
+	virtual void unknown_7();
+	virtual void unknown_8();
+	virtual void unknown_9();
+	virtual void unknown_10();
+	virtual void unknown_11();
+	virtual void GetMovePed();
 	char pad_0x0008[0x18]; //0x0008
 	CPedModelInfo* PedModelInfo; //0x0020 
 	char pad_0x0028[0x8]; //0x0028
@@ -93,7 +106,14 @@ public:
 	char pad_0x016C[0x114]; //0x016C
 	float Health; //0x0280 
 	float MaxHealth; //0x0284 
-	char pad_0x0288[0x2F0]; //0x0288
+	char pad_0x0288[0xE0]; //0x0288
+	float float_1; //0x0368 
+	float float_2; //0x036C 
+	float float_3; //0x0370 
+	float float_4; //0x0374 
+	char pad_0x0378[0x1DC]; //0x0378
+	float float_5; //0x0554 
+	char pad_0x0558[0x20]; //0x0558
 	float MoveSpeed; //0x0578 
 	char pad_0x057C[0x624]; //0x057C
 	CBuilding* CBuildingPtr; //0x0BA0 
@@ -184,6 +204,9 @@ public:
 		else
 			return TasksArray[ActiveTask];
 	}
+
+	GTA::CTask *FindTask(int64_t taskID);
+
 }; //Size=0x0008
 
 class CTaskTreeMotion
@@ -357,11 +380,12 @@ public:
 	static CVehicleFactory* Get()
 	{
 		if (Utils::IsSteam())
-			return (CVehicleFactory*)((intptr_t)GetModuleHandle(NULL) + 0x18DFD70);
+			return hook::value<CVehicleFactory*>(0x18DFD70);// (CVehicleFactory*)((intptr_t)GetModuleHandle(NULL) + 0x18DFD70);
 		else
-			return (CVehicleFactory*)((intptr_t)GetModuleHandle(NULL) + 0x18DCD80);
+			return hook::value<CVehicleFactory*>(0x18DCD80); //(CVehicleFactory*)((intptr_t)GetModuleHandle(NULL) + 0x18DCD80);
 	}
 }; //Size=0x0088
+
 class VehicleFactoryHook
 {
 	static VehicleFactoryHook* singleInstance;
@@ -379,6 +403,23 @@ public:
 inline __int64 hookCreateVehicle(__int64 a1, __int64 a2, unsigned int a3, unsigned int a4, float a5, signed int *a6, char a7, char a8)
 {
 	return (__int64)nullptr;
+}
+
+namespace rage
+{
+	class aiTask
+	{
+		virtual ~aiTask();
+		int64_t var1;
+		int64_t var2;
+		int64_t var3;
+		int64_t var4;
+		int64_t var5;
+		int32_t var6;
+		int32_t var7;
+		int16_t var8;
+		int64_t var9;
+	};
 }
 
 namespace GTA
@@ -408,7 +449,7 @@ namespace GTA
 		virtual ~CTask();
 		virtual int64_t GetID();
 		virtual CTask* Clone();
-		virtual void unknown_3();
+		virtual bool SetSubTask(int someInt, GTA::CTask* childTask);
 		virtual bool IsSimple();
 		virtual void unknown_5();
 		virtual void unknown_6();
@@ -451,13 +492,135 @@ namespace GTA
 		virtual void unknown_43();
 		virtual void unknown_44();
 		virtual bool IsSerializable();
-		virtual void* Serialize();
+		virtual CSerialisedFSMTaskInfo* Serialize();
+		virtual void unknown_47();
+		virtual void unknown_48();
+		virtual void unknown_49();
+		virtual void unknown_50();
+		virtual bool returnZero64_1();
+		virtual bool returnZero64_2();
+		virtual bool returnTrue_1();
+		virtual bool returnZero64_3();
+		virtual bool returnMinusOne_1();
+		virtual bool returnFalse_1();
+		virtual void unknown_57();
+		virtual void unknown_58();
+		virtual void unknown_59();
+		virtual void unknown_60();
+		virtual void unknown_61();
+		virtual bool returnFalse_2();
+		virtual bool returnFalse_3();
+		virtual bool returnFalse_4();
+		virtual bool returnFalse_5();
+		virtual bool returnFalse_6();
+		virtual bool returnTrue_2();
+		virtual bool returnFalse_7();
+		virtual bool returnTrue_3();
+		virtual int Deserialize(void* clonedTask);
 
 		void *somePtr;
 		CPed *targetPed;
 		CTask *Parent;
 		CTask *Child;
+		int64_t field_1;
+		int32_t field_2;
+		int32_t field_3;
+		float timeFromBegin;
+		float totalTime;
 
 		std::string GetTree(CTask *task = nullptr, int n = 0);
 	};
 };
+
+
+typedef void CAutomobileSyncTree; 
+typedef void CBikeSyncTree;
+typedef void CBoatSyncTree;
+typedef void CSubmarineSyncTree;
+typedef void CHeliSyncTree;
+typedef void CObjectSyncTree;
+typedef void CPedSyncTree;
+typedef void CPickupSyncTree;
+typedef void CPickupPlacementSyncTree;
+typedef void CPlayerSyncTree;
+typedef void CTrainSyncTree;
+typedef void CPlaneSyncTree;
+typedef void CDoorSyncTree;
+
+class SyncTree
+{
+private:
+	static bool initialized;
+public:
+	static CAutomobileSyncTree* GetAutomobileSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A4378, true);
+	}
+	static CBikeSyncTree* GetBikeSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A43A0, true);
+	}
+	static CBoatSyncTree* GetBoatSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A44A8, true);
+	}
+
+	static CSubmarineSyncTree* GetSubmarineSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A3FE8, true);
+	}
+	static CObjectSyncTree* GetObjectSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A3F30, true);
+	}
+	static CPedSyncTree* GetPedSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A4370, true);
+	}
+	static CPickupSyncTree* GetPickupSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A4368, true);
+	}
+	static CPickupPlacementSyncTree* GetPickupPlacementSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A4358, true);
+	}
+	static CPlayerSyncTree* GetPlayerSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A40D0, true);
+	}
+	static CTrainSyncTree* GetTrainSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A3F28, true);
+	}
+	static CPlaneSyncTree* GetPlaneSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A35A8, true);
+	}
+	static CDoorSyncTree* GetDoorSyncTree()
+	{
+		Init();
+		return hook::value<CAutomobileSyncTree*>(0x26A4110, true);
+	}
+
+	static void Init()
+	{
+		if (!initialized)
+		{
+			hook::call<0x1005C68>();
+			initialized = true;
+		}
+	}
+};
+

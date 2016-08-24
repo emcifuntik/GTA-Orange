@@ -97,11 +97,11 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(m_Model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	/*PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);*/
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
 }
 
@@ -337,26 +337,138 @@ void CNetworkPlayer::Interpolate()
 
 void CNetworkPlayer::BuildTasksQueue()
 {
+	/*RakNet::BitStream bsOut;
+	bsOut.Write((unsigned char)ID_SEND_TASKS);
+	bool foundPrimary = false;*/
+	std::vector<CSerialisedFSMTaskInfo*> taskClones;
+
 	for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->Child)
 	{
-		if (task->GetID() != GTA::CTaskJump)
+		if (!task->IsSerializable())
 			continue;
-		void* ser = task->Serialize();
-		if (ser)
+		auto ptr = task->Serialize();
+		float time = task->timeFromBegin;
+		float f1, f2, f3, f4, f5;
+		f1 = CWorld::Get()->CPedPtr->float_1;
+		f2 = CWorld::Get()->CPedPtr->float_2;
+		f3 = CWorld::Get()->CPedPtr->float_3;
+		f4 = CWorld::Get()->CPedPtr->float_4;
+		f5 = CWorld::Get()->CPedPtr->float_5;
+		int size = 0;
+		if (ptr)
 		{
-			GTA::CTask* tsk = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ser)->GetTask();
-			if (pedHandler->TasksPtr->PrimaryTasks->GetTask() && pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != tsk->GetID())
+			//log_debug << "Size: " << ptr->Size() << std::endl;
+			auto nextTask = (GTA::CTask*) ptr->GetTask();
+			GTA::CTask *curTask = pedHandler->TasksPtr->PrimaryTasks->GetTask();
+			if (!curTask)
 			{
-				pedHandler->TasksPtr->PrimaryTasks->AssignTask(tsk, GTA::TASK_PRIORITY_HIGHEST);
+				pedHandler->TasksPtr->PrimaryTasks->AssignTask(nextTask, GTA::TASK_PRIORITY_HIGHEST);
+			}
+			else if (curTask->GetID() != nextTask->GetID())
+			{
+				//rage::sysMemAllocator::Get()->free(curTask);
+				pedHandler->TasksPtr->PrimaryTasks->AssignTask(nextTask, GTA::TASK_PRIORITY_HIGHEST);
 			}
 			else
 			{
-				auto ret = ((CSerialisedFSMTaskInfo*)ser)->SetData(pedHandler->TasksPtr->PrimaryTasks->GetTask());
+				rage::sysMemAllocator::Get()->free(nextTask);
+				nextTask = curTask;
 			}
-			rage::sysMemAllocator::Get()->free(ser, rage::HEAP_TASK_CLONE);
-			break;
+			nextTask->Deserialize(ptr);
+			nextTask->timeFromBegin = time;
+			pedHandler->float_1 = f1;
+			pedHandler->float_2 = f2;
+			pedHandler->float_3 = f3;
+			pedHandler->float_4 = f4;
+			pedHandler->float_5 = f5;
+			rage::sysMemAllocator::Get()->free(ptr, rage::HEAP_TASK_CLONE);
 		}
+		break;
 	}
+	/*if (taskClones.size())
+	{
+		GTA::CTask* parentTask = nullptr;
+		GTA::CTask* cursorTask = nullptr;
+		for each (auto serTask in taskClones)
+		{
+			if (!parentTask)
+			{
+				parentTask = (GTA::CTask*)serTask->GetTask();
+				parentTask->Deserialize(serTask);
+				cursorTask = parentTask;
+			}
+			else
+			{
+				GTA::CTask *tempTask = (GTA::CTask*)serTask->GetTask();
+				tempTask->Deserialize(serTask);
+				TRACEN();
+				cursorTask->SetSubTask(0, tempTask);
+				cursorTask = tempTask;
+				TRACEN();
+			}
+		}
+		pedHandler->TasksPtr->PrimaryTasks->AssignTask(parentTask, GTA::TASK_PRIORITY_HIGHEST);
+	}
+	*/
+	/*auto curPedTask = pedHandler->TasksPtr->PrimaryTasks->GetTask();
+	auto nextTask = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ptr)->GetTask();
+	if (nextTask->GetID() == curPedTask->GetID())
+	{
+		curPedTask->Deserialize(ptr);
+		rage::sysMemAllocator::Get()->free(ptr, rage::HEAP_TASK_CLONE);
+		rage::sysMemAllocator::Get()->free(nextTask, rage::HEAP_TASK);
+	}
+	else
+		pedHandler->TasksPtr->PrimaryTasks->AssignTask(nextTask, GTA::TASK_PRIORITY_HIGHEST);*/
+	/*if (foundPrimary)
+	{
+		CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+	}*/
+
+	//for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->MovementTasks->GetTask(); task; task = task->Child)
+	//{
+	//	if (!task->IsSerializable())
+	//		continue;
+	//	void* ser = task->Serialize();
+	//	if (ser)
+	//	{
+	//		GTA::CTask* tsk = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ser)->GetTask();
+	//		log_debug << "Task: 0x" << std::hex << tsk << std::endl;
+	//		//if (pedHandler->TasksPtr->PrimaryTasks->GetTask() && pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != tsk->GetID())
+	//		{
+	//			pedHandler->TasksPtr->MovementTasks->AssignTask(tsk, GTA::TASK_PRIORITY_HIGHEST);
+	//		}
+	//		/*else
+	//		{
+	//		rage::sysMemAllocator::Get()->free(tsk);
+	//		auto ret = ((CSerialisedFSMTaskInfo*)ser)->SetData(pedHandler->TasksPtr->PrimaryTasks->GetTask());
+	//		}*/
+	//		rage::sysMemAllocator::Get()->free(ser, rage::HEAP_TASK_CLONE);
+	//		break;
+	//	}
+	//}
+	//for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->MotionTasks->GetTask(); task; task = task->Child)
+	//{
+	//	if (!task->IsSerializable())
+	//		continue;
+	//	void* ser = task->Serialize();
+	//	if (ser)
+	//	{
+	//		GTA::CTask* tsk = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ser)->GetTask();
+	//		log_debug << "Task: 0x" << std::hex << tsk << std::endl;
+	//		//if (pedHandler->TasksPtr->PrimaryTasks->GetTask() && pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != tsk->GetID())
+	//		{
+	//			pedHandler->TasksPtr->MotionTasks->AssignTask(tsk, GTA::TASK_PRIORITY_HIGHEST);
+	//		}
+	//		/*else
+	//		{
+	//		rage::sysMemAllocator::Get()->free(tsk);
+	//		auto ret = ((CSerialisedFSMTaskInfo*)ser)->SetData(pedHandler->TasksPtr->PrimaryTasks->GetTask());
+	//		}*/
+	//		rage::sysMemAllocator::Get()->free(ser, rage::HEAP_TASK_CLONE);
+	//		break;
+	//	}
+	//}
 	//if (CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask())
 	//{
 
@@ -422,11 +534,11 @@ void CNetworkPlayer::SetModel(Hash model)
 	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	//PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
-	//PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
-	//PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
-	//PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	//PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
+	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
+	PED::SET_PED_CAN_RAGDOLL(Handle, false);
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
 	
 }
@@ -445,18 +557,4 @@ void CNetworkPlayer::ResetInterpolation()
 {
 	RemoveTargetPosition();
 	RemoveTargetRotation();
-}
-
-void CNetworkPlayer::SetMovementTask(RakNet::BitStream& bsIn)
-{
-	int64_t taskID;
-	bsIn.Read(taskID);
-	switch (taskID)
-	{
-		case GTA::CTaskMovePlayer:
-		{
-			
-			break;
-		}
-	}
 }

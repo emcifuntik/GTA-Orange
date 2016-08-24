@@ -1,5 +1,13 @@
 #pragma once
 
+enum
+{
+	TASK_TYPE_PRIMARY = 0,
+	TASK_TYPE_SECONDARY,
+	TASK_TYPE_MOVEMENT,
+	TASK_TYPE_MOTION
+};
+
 class OnFootSyncData
 {
 public:
@@ -92,8 +100,8 @@ class CSerialisedFSMTaskInfo
 {
 public:
 	virtual ~CSerialisedFSMTaskInfo();
-	virtual void GetID();
-	virtual void* GetReader(char *buffer);
+	virtual int64_t GetID();
+	virtual void* GetReader(void* task);
 	virtual void* GetWriter();
 	virtual void* GetLogger();
 	virtual int64_t Size();

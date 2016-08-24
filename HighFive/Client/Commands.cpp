@@ -38,13 +38,6 @@ int CommandProcessor(std::string command)
 		TG(CLocalPlayer::Get()->isDebug);
 		return true;
 	}
-	if (!command.compare("/allocate"))
-	{
-		int64_t ptr = (int64_t)VTasks::Get()->CTaskJumpVault_Create();
-		log_info << "CTaskJumpVault: 0x" << std::hex << ptr << std::endl;
-		CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->AssignTask((GTA::CTask*)ptr, GTA::TASK_PRIORITY_HIGHEST);
-		return true;
-	}
 #endif
 	return false;
 }
