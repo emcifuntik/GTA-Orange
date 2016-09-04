@@ -158,7 +158,12 @@ void CLocalPlayer::SendTasks()
 		auto ser = task->Serialize();
 		if (ser)
 		{
-
+			foundPrimary = true;
+			unsigned short taskID = ser->GetID();
+			bsOut.Write(taskID);
+			unsigned int size = ser->Size();
+			bsOut.Write(size);
+			bsOut.Write((char*)ser + 8, size);
 		}
 	}
 	if (foundPrimary)
