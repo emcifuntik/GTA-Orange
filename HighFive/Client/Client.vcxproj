@@ -18,6 +18,13 @@
     <ClInclude Include="..\..\Shared\Console\CLog.h" />
     <ClInclude Include="..\..\Shared\CVector3.h" />
     <ClInclude Include="..\..\Shared\NetworkTypes.h" />
+    <ClInclude Include="GTA\CAddress.h" />
+    <ClInclude Include="GTA\CDynamicEntity.h" />
+    <ClInclude Include="GTA\CEntity.h" />
+    <ClInclude Include="GTA\CHandlingData.h" />
+    <ClInclude Include="GTA\CPed.h" />
+    <ClInclude Include="GTA\CPhysical.h" />
+    <ClInclude Include="GTA\CWeaponInfo.h" />
     <ClInclude Include="Hook.h" />
     <ClInclude Include="CEntity.h" />
     <ClInclude Include="CChat.h" />
@@ -44,12 +51,12 @@
     <ClInclude Include="VTasks.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\EugenePogrebnyak\Source\Repos\highfive\HighFive\Client\CLog.cpp" />
     <ClCompile Include="CEntity.cpp" />
     <ClCompile Include="CChat.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="CLog.cpp" />
     <ClCompile Include="CNetworkVehicle.cpp" />
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="CConfig.cpp" />
@@ -65,6 +72,8 @@
     <ClCompile Include="CNetworkPlayer.cpp" />
     <ClCompile Include="CGraphics.cpp" />
     <ClCompile Include="Functions.cpp" />
+    <ClCompile Include="GTA\CAddress.cpp" />
+    <ClCompile Include="Hook.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -124,12 +133,14 @@
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
     <TargetName>HighFive</TargetName>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
     <TargetName>HighFive</TargetName>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
+    <TargetExt>.dll</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -168,7 +179,7 @@
       <OmitFramePointers>false</OmitFramePointers>
       <StringPooling>true</StringPooling>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalOptions>-Zm113 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>%(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

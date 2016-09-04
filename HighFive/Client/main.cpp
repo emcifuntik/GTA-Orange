@@ -41,12 +41,8 @@ void OnKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, 
 			CVector3 pos = CLocalPlayer::Get()->GetPosition();
 			pos.fZ += 10.f;
 			CLocalPlayer::Get()->SetPosition(pos);
-		}
-		if (key == VK_NUMPAD1)
-		{
-			SyncTree::Init();
-			auto ptr = SyncTree::GetPedSyncTree();
-			log_debug << "CPedSyncTree: 0x" << std::hex << ptr << std::endl;
+			CWorld::Get()->CPedPtr->MaxHealth = 9999999999.f;
+			CWorld::Get()->CPedPtr->Health = 9999999999.f;
 		}
 		/*if (key == VK_NUMPAD2)
 		{
@@ -97,21 +93,7 @@ void ChatRendering()
 
 void NetworkTick()
 {
-	// Hook ped create
-	PedFactoryHook::Get()->CreateHook = CWorld::Get()->CPedFactoryPtr->Create;
-	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
-
-	// Hook vehicle create
-	VehicleFactoryHook::Get()->CreateHook = CVehicleFactory::Get()->Create;
-	CVehicleFactory::Get()->Create = &hookCreateVehicle;
-
-	/*CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->_addOld = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->VTable->_add;
-	CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->VTable->_add = [](CTaskTree* taskTree, GTA::CTask* task, int priority)
-	{
-		CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->_addOld(taskTree, task, priority);
-		if (taskTree == CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks)
-			log_debug << "Assigned to player: " << std::endl << task->GetTree();
-	};*/
+	MemoryHook::call((*GTA::CAddress::Get())[INIT_ONLINE_COMPONENTS]);
 }
 
 void LocalTick()
@@ -119,6 +101,7 @@ void LocalTick()
 	for (;;)
 	{
 		CLocalPlayer::Get()->Tick();
+		TRACEN();
 		if (CNetworkConnection::Get()->IsConnected()) {
 			if (CNetworkConnection::Get()->IsConnectionEstablished())
 			{
@@ -145,6 +128,10 @@ void LocalTick()
 					continue;
 				cnt++;
 				ss = std::stringstream();
+				ss << "Handle: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.GetHandle(i) << std::endl;
+				CGraphics::Get()->Draw3DText(ss.str(), 0.3f, ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fX,
+					ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fY,
+					ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->Position.fZ + 1.2f, { 255, 255, 255, 255 });
 				int primaryActive = ReplayInterfaces::Get()->ReplayInterfacePed->pool[i]->TasksPtr->PrimaryTasks->ActiveTask;
 				if (primaryActive > -1)
 				{

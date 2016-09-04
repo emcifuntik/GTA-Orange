@@ -122,7 +122,6 @@ void CNetworkConnection::Tick()
 				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID() << playerText.C_String();
 				if (!Python::Get()->pCallFunc("onPlayerText", args()))
 				{
-					log << "Entered" << std::endl;
 					std::stringstream ss;
 					ss << "~b~" << CNetworkPlayer::GetByGUID(packet->guid)->GetName() << ":~w~ " << playerText.C_String();
 					RakNet::RakString toSend(ss.str().c_str());
@@ -137,17 +136,15 @@ void CNetworkConnection::Tick()
 			{
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
-				log << "COMMAND" << std::endl;
 
-					std::vector<std::string> cmdArgs = split(playerText.C_String(), ' ');
+				std::vector<std::string> cmdArgs = split(playerText.C_String(), ' ');
 				std::string cmd = cmdArgs[0].substr(1);
 				cmdArgs.erase(cmdArgs.begin(), cmdArgs.begin() + 1);
 				CPyArgBuilder args;
 				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID();
-				if (cmdArgs.size() > 0)
-					args << cmdArgs;
+				args << cmdArgs;
 				std::stringstream cmdFuncName;
-				cmdFuncName << "_cmd_" << cmd;
+				cmdFuncName << "cmd_" << cmd;
 				if (Python::Get()->pCallFunc((char*)cmdFuncName.str().c_str(), args()))
 					break;
 
@@ -181,12 +178,12 @@ void CNetworkConnection::Tick()
 				bsOut.Write(rsName);
 
 				player->GetOnFootData(data);
-#if _DEBUG
+#if 1
 				data.vecPos.fX += 1.f;
 				data.vecPos.fY += 1.f;
 #endif
 				bsOut.Write(data);
-#if _DEBUG
+#if 1
 
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 #else
@@ -197,7 +194,6 @@ void CNetworkConnection::Tick()
 			}
 			case ID_SEND_VEHICLE_DATA:
 			{
-				//OnPlayerUpdate(sLUA, SPlayer::GetByGUID(packet->guid)->GetID());
 				server->Send(&bsIn, MEDIUM_PRIORITY, UNRELIABLE_SEQUENCED, 0, packet->systemAddress, true);
 				break;
 			}

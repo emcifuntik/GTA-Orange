@@ -99,6 +99,10 @@ public:
 
 	void Interpolate();
 
+	void SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float iMoveSpeed);
+
+	void SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMove, CVector3 aimPos, float moveSpeed, bool shooting);
+
 	void BuildTasksQueue();
 
 	void DrawTag();

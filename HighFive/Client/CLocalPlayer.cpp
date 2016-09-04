@@ -33,14 +33,13 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 	//GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
 	//GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
 	//GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
+	MemoryHook::call<int, bool>((*GTA::CAddress::Get())[ABILITY_BAR_VISIBLITY], false);
 
 	std::stringstream ss;
 	ss << "Connecting to ~b~" << CConfig::Get()->sIP.c_str() << ":" << CConfig::Get()->uiPort;
 	CChat::Get()->AddChatMessage(ss.str());
 	if (!CNetworkConnection::Get()->Connect(CConfig::Get()->sIP.c_str(), CConfig::Get()->uiPort))
 		CChat::Get()->AddChatMessage("Can't connect to the server", { 255, 0, 0, 255 });
-	else
-		CChat::Get()->AddChatMessage("Connection successfull");
 }
 
 
@@ -51,6 +50,7 @@ CLocalPlayer::~CLocalPlayer()
 void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 {
 	onfoot.hModel = GetModel();
+	onfoot.bJumping = IsJumping();
 	onfoot.fMoveSpeed = CWorld::Get()->CPedPtr->MoveSpeed;
 	onfoot.vecPos = GetPosition();
 	onfoot.vecRot = GetRotation();
@@ -81,7 +81,7 @@ void CLocalPlayer::Tick()
 		ChangeModel(newModel);
 		newModel = 0;
 	}
-	VEHICLE::SET_GARBAGE_TRUCKS(false);
+	/*VEHICLE::SET_GARBAGE_TRUCKS(false);
 	VEHICLE::SET_RANDOM_BOATS(false);
 	VEHICLE::SET_RANDOM_TRAINS(false);
 	VEHICLE::SET_FAR_DRAW_VEHICLES(false);
@@ -104,13 +104,10 @@ void CLocalPlayer::Tick()
 	MOBILE::DESTROY_MOBILE_PHONE();
 
 	STREAMING::SET_VEHICLE_POPULATION_BUDGET(0);
-	STREAMING::SET_PED_POPULATION_BUDGET(0);
+	STREAMING::SET_PED_POPULATION_BUDGET(0);*/
 
 	CONTROLS::DISABLE_CONTROL_ACTION(2, 19, true);
 
-	UI::_0x170F541E1CADD1DE(true);
-	UI::SHOW_HUD_COMPONENT_THIS_FRAME(3);
-	UI::DISPLAY_CASH(true);
 	PLAYER::SET_PLAYER_HEALTH_RECHARGE_MULTIPLIER(PLAYER::PLAYER_ID(), 0.f);
 	PLAYER::SET_AUTO_GIVE_PARACHUTE_WHEN_ENTER_PLANE(PLAYER::PLAYER_ID(), false);
 	PLAYER::ENABLE_SPECIAL_ABILITY(PLAYER::PLAYER_ID(), false);
@@ -125,6 +122,8 @@ void CLocalPlayer::ChangeModel(Hash model)
 	PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	Handle = PLAYER::PLAYER_PED_ID();
+	MemoryHook::call<int, bool>((*GTA::CAddress::Get())[ABILITY_BAR_VISIBLITY], false);
+
 }
 
 void CLocalPlayer::Connect()
@@ -134,7 +133,6 @@ void CLocalPlayer::Connect()
 	requestid.Write((MessageID)ID_CONNECT_TO_SERVER);
 	requestid.Write(playerName);
 	CNetworkConnection::Get()->client->Send(&requestid, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	CChat::Get()->AddChatMessage("Connected to server", { 100, 255, 100, 200 });
 }
 
 void CLocalPlayer::SendOnFootData()
@@ -149,7 +147,7 @@ void CLocalPlayer::SendOnFootData()
 
 void CLocalPlayer::SendTasks()
 {
-	/*RakNet::BitStream bsOut;
+	RakNet::BitStream bsOut;
 	bsOut.Write((unsigned char)ID_SEND_TASKS);
 	bool foundPrimary = false;
 
@@ -157,15 +155,16 @@ void CLocalPlayer::SendTasks()
 	{
 		if (!task->IsSerializable())
 			continue;
-		void* dataPtr = nullptr;
-		int size = 0;
-		dataPtr = TaskTable::Get()->GetData(task, size);
-		log_debug << "Data ptr: 0x" << std::hex << dataPtr << ", Size: " << std::dec << size << std::endl;
+		auto ser = task->Serialize();
+		if (ser)
+		{
+
+		}
 	}
 	if (foundPrimary)
 	{
 		CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	}*/
+	}
 }
 
 void CLocalPlayer::SetMoney(int money)

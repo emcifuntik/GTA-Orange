@@ -8,9 +8,7 @@ CVehicle::CVehicle(Hash model, float x, float y, float z, float heading):CEntity
 		STREAMING::REQUEST_MODEL(model);
 		while (!STREAMING::HAS_MODEL_LOADED(model))
 			WAIT(0);
-		CVehicleFactory::Get()->Create = VehicleFactoryHook::Get()->CreateHook;
 		Handle = VEHICLE::CREATE_VEHICLE(model, x, y, z, heading, true, false);
-		CVehicleFactory::Get()->Create = &hookCreateVehicle;
 		STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	}
 }

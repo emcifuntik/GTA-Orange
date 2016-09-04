@@ -18,7 +18,6 @@ namespace Player
 			log << "setPos args count not equal 4" << std::endl;
 			return NULL;
 		}
-		log << playerID << " " << x << " " << y << " " << z << std::endl;
 		auto player = CNetworkPlayer::GetByID(playerID);
 		if (!player)
 			return PyBool_FromLong(0L);
@@ -35,7 +34,7 @@ namespace Player
 		}
 		auto player = CNetworkPlayer::GetByID(playerID);
 		if (!player)
-			return Py_BuildValue("{s:f,s:f,s:f}", "x", 0.0, "y", 0.0, "z", 0.0);
+			return PyBool_FromLong(0L);
 		CVector3 vecPos;
 		player->GetPosition(vecPos);
 		return Py_BuildValue("{s:f,s:f,s:f}", "x", vecPos.fX, "y", vecPos.fY, "z", vecPos.fZ);
@@ -326,5 +325,44 @@ namespace Player
 			return PyString_FromString("0.0.0.0");
 		//color_t playerColor = player->GetIP();
 		return PyString_FromString("0.0.0.0");
+	}
+	PyObject * sendClientMessage(PyObject * self, PyObject * args)
+	{
+		unsigned int playerID;
+		char* message;
+		unsigned int color;
+
+		if (!PyArg_ParseTuple(args, "IsI", &playerID, &message, &color))
+		{
+			PyErr_Print();
+			return NULL;
+		}
+		auto player = CNetworkPlayer::GetByID(playerID);
+		if (!player)
+			return PyBool_FromLong(0L);
+//		player->SendTextMessage(message, color);
+		return PyBool_FromLong(1L);
+	}
+	PyObject * broadcastClientMessage(PyObject * self, PyObject * args)
+	{
+		char* message;
+		unsigned int color;
+
+		if (!PyArg_ParseTuple(args, "sI", &message, &color))
+		{
+			PyErr_Print();
+			return NULL;
+		}
+		RakNet::BitStream bsOut;
+		RakNet::RakString msg(message);
+		bsOut.Write(msg);
+		color_t col;
+		col.red = (BYTE)((color >> 24) & 0xFF);  // Extract the RR byte
+		col.green = (BYTE)((color >> 16) & 0xFF);   // Extract the GG byte
+		col.blue = (BYTE)((color >> 8) & 0xFF);   // Extract the GG byte
+		col.alpha = (BYTE)((color) & 0xFF);        // Extract the BB byte
+		bsOut.Write(col);
+		CRPCPlugin::Get()->Signal("SendClientMessage", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
+		return PyBool_FromLong(1L);
 	}
 };

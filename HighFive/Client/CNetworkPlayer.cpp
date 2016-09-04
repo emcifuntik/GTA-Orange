@@ -91,18 +91,18 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 		STREAMING::REQUEST_MODEL(m_Model);
 	while (!STREAMING::HAS_MODEL_LOADED(m_Model))
 		WAIT(0);
-	CWorld::Get()->CPedFactoryPtr->Create = PedFactoryHook::Get()->CreateHook;
 	Handle = PED::CREATE_PED(1, m_Model, vecPosition.fX, vecPosition.fY, vecPosition.fZ, .0f, true, false);
 	pedHandler = (CPed*)getScriptHandleBaseAddress(Handle);
-	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(m_Model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	/*PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
-	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);*/
+	//pedHandler->Flags |= 1 << 30;
+	pedHandler->Flags |= 1 << 6;
+	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, true, true);
 }
 
 void CNetworkPlayer::SetTargetPosition(const CVector3& vecPosition, unsigned long ulDelay)
@@ -331,60 +331,100 @@ void CNetworkPlayer::Interpolate()
 		UpdateTargetRotation();
 	UpdateTargetPosition();
 	SetMovementVelocity(m_vecMove);
+	PED::SET_PED_ACCURACY(Handle, 100);
 	BuildTasksQueue();
-	m_JustJumping = m_Jumping;
+}
+
+void CNetworkPlayer::SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float iMoveSpeed)
+{
+	if (IsSpawned())
+	{
+		float tX = (vecPos.fX + (vecMove.fX * 10));
+		float tY = (vecPos.fY + (vecMove.fY * 10));
+		float tZ = (vecPos.fZ + (vecMove.fZ * 10));
+		TaskMove(CVector3(tX, tY, tZ), iMoveSpeed);
+	}
+}
+
+void CNetworkPlayer::SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMove, CVector3 aimPos, float moveSpeed, bool shooting)
+{
+	if (IsSpawned())
+	{
+		float tX = (vecPos.fX + (vecMove.fX * 10));
+		float tY = (vecPos.fY + (vecMove.fY * 10));
+		float tZ = (vecPos.fZ + (vecMove.fZ * 10));
+		//MemoryHook::call<void, Ped, float, float, float, float, float, float, float, BOOL, float, float, BOOL, Any, BOOL, Hash>((*GTA::CAddress::Get())[PED_TASK_AIM_AT_COORD_AND_STAND_STILL], Handle, tX, tY,
+		//	tZ, aimPos.fX, aimPos.fY, aimPos.fZ, 1.f, 0, 0x3F000000, 0x40800000, 1, (shooting ? 0 : 1024), 1, 3337513804U);
+		AI::TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD(Handle, tX, tY,
+			tZ, aimPos.fX, aimPos.fY, aimPos.fZ, 1.f, 0, 0x3F000000, 0x40800000, 1, (shooting ? 0 : 1024), 1, 3337513804U);
+	}
 }
 
 void CNetworkPlayer::BuildTasksQueue()
 {
+	if (tasksToIgnore > 0)
+	{
+		tasksToIgnore--;
+		return;
+	}
+	if (m_Jumping)
+	{
+		TaskJump();
+	}
+	else if (m_Aiming && !m_Shooting)
+	{
+		if (m_MoveSpeed != .0f)
+		{
+			SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, 3.0f, false);
+		}
+		else
+		{
+			TaskAimAt(m_vecAim, -1);
+		}
+	}
+	else if (m_Shooting && m_MoveSpeed != .0f)
+	{
+		SetMoveToDirectionAndAiming(m_interp.pos.vecTarget, m_vecMove, m_vecAim, m_MoveSpeed, true);
+		m_Shooting = false;
+	}
+	else if (m_Shooting && !m_Aiming)
+	{
+		TaskAimAt(m_vecAim, -1);
+		TaskShootAt(m_vecAim, -1);
+		m_Shooting = false;
+	}
+	else if (m_Shooting && m_MoveSpeed == .0f)
+	{
+		TaskShootAt(m_vecAim, 1);
+		m_Shooting = false;
+	}
+	else if (m_MoveSpeed != .0f)
+	{
+		SetMoveToDirection(m_interp.pos.vecTarget, m_vecMove, m_MoveSpeed);
+	}
+	else
+	{
+		AI::CLEAR_PED_TASKS(Handle);
+	}
 	/*RakNet::BitStream bsOut;
 	bsOut.Write((unsigned char)ID_SEND_TASKS);
 	bool foundPrimary = false;*/
-	std::vector<CSerialisedFSMTaskInfo*> taskClones;
+	/*std::vector<CSerialisedFSMTaskInfo*> taskClones;
+	pedHandler->WalkSpeed = CWorld::Get()->CPedPtr->WalkSpeed;
+	pedHandler->MoveSpeed = CWorld::Get()->CPedPtr->MoveSpeed;
+	pedHandler->MoveSpeed2 = CWorld::Get()->CPedPtr->MoveSpeed2;
+	pedHandler->MoveSpeed3 = CWorld::Get()->CPedPtr->MoveSpeed3;
+	pedHandler->MoveSpeed4 = CWorld::Get()->CPedPtr->MoveSpeed4;*/
 
-	for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->Child)
+	/*if (CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask()->GetID() == GTA::CTaskPlayerOnFoot)
 	{
-		if (!task->IsSerializable())
-			continue;
-		auto ptr = task->Serialize();
-		float time = task->timeFromBegin;
-		float f1, f2, f3, f4, f5;
-		f1 = CWorld::Get()->CPedPtr->float_1;
-		f2 = CWorld::Get()->CPedPtr->float_2;
-		f3 = CWorld::Get()->CPedPtr->float_3;
-		f4 = CWorld::Get()->CPedPtr->float_4;
-		f5 = CWorld::Get()->CPedPtr->float_5;
-		int size = 0;
-		if (ptr)
+		if (pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != GTA::CTaskPlayerOnFoot)
 		{
-			//log_debug << "Size: " << ptr->Size() << std::endl;
-			auto nextTask = (GTA::CTask*) ptr->GetTask();
-			GTA::CTask *curTask = pedHandler->TasksPtr->PrimaryTasks->GetTask();
-			if (!curTask)
-			{
-				pedHandler->TasksPtr->PrimaryTasks->AssignTask(nextTask, GTA::TASK_PRIORITY_HIGHEST);
-			}
-			else if (curTask->GetID() != nextTask->GetID())
-			{
-				//rage::sysMemAllocator::Get()->free(curTask);
-				pedHandler->TasksPtr->PrimaryTasks->AssignTask(nextTask, GTA::TASK_PRIORITY_HIGHEST);
-			}
-			else
-			{
-				rage::sysMemAllocator::Get()->free(nextTask);
-				nextTask = curTask;
-			}
-			nextTask->Deserialize(ptr);
-			nextTask->timeFromBegin = time;
-			pedHandler->float_1 = f1;
-			pedHandler->float_2 = f2;
-			pedHandler->float_3 = f3;
-			pedHandler->float_4 = f4;
-			pedHandler->float_5 = f5;
-			rage::sysMemAllocator::Get()->free(ptr, rage::HEAP_TASK_CLONE);
+			pedHandler->TasksPtr->PrimaryTasks->AssignTask(CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask()->Clone(), GTA::TASK_PRIORITY_HIGH);
 		}
-		break;
-	}
+	}*/
+	
+
 	/*if (taskClones.size())
 	{
 		GTA::CTask* parentTask = nullptr;
@@ -506,13 +546,24 @@ void CNetworkPlayer::DrawTag()
 {
 	if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(CLocalPlayer::Get()->GetHandle(), Handle, 17))
 	{
-		CVector3 vecCurPos = GetPosition();
+		CVector3 *vecCurPos = &pedHandler->Position;
 		float health = (((m_Health < 100.f ? 100.f : m_Health) - 100.f) / (pedHandler->MaxHealth-100.f));
-		float distance = (vecCurPos - CLocalPlayer::Get()->GetPosition()).Length();
+		float distance = ((*vecCurPos) - CWorld::Get()->CPedPtr->Position).Length();
 		if (distance < 100.f)
 		{
-			CGraphics::Get()->Draw3DText(m_Name, .5f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f + (distance * 0.03f), { 0xFF, 0xFF, 0xFF, 0xFF });
-			CGraphics::Get()->Draw3DProgressBar({ 0, 0, 0, 100 }, { 200, 50, 50, 200 }, 0.08f, 0.018f, vecCurPos.fX, vecCurPos.fY, vecCurPos.fZ + 1.1f + (distance * 0.03f), health);
+			color_t bgColor, fgColor;
+			if (health > 0.2f)
+			{
+				bgColor = { 50, 100, 50, 150 };
+				fgColor = { 100, 200, 100, 150 };
+			}
+			else
+			{
+				bgColor = { 150, 30, 30, 150 };
+				fgColor = { 230, 70, 70, 150 };
+			}
+			CGraphics::Get()->Draw3DText(m_Name, .5f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), { 0xFF, 0xFF, 0xFF, 0xFF });
+			CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), health);
 		}
 	}
 }
@@ -521,6 +572,7 @@ void CNetworkPlayer::DrawTag()
 void CNetworkPlayer::SetModel(Hash model)
 {
 	m_Model = model;
+	//MemoryHook::call<int, int>((*GTA::CAddress::Get())[PED_CHANGE_MODEL], Handle, model);
 	CVector3 pos = GetPosition();
 	float heading = GetHeading();
 	ENTITY::DELETE_ENTITY(&Handle);
@@ -528,18 +580,18 @@ void CNetworkPlayer::SetModel(Hash model)
 		STREAMING::REQUEST_MODEL(model);
 	while (!STREAMING::HAS_MODEL_LOADED(model))
 		WAIT(0);
-	CWorld::Get()->CPedFactoryPtr->Create = PedFactoryHook::Get()->CreateHook;
 	Handle = PED::CREATE_PED(1, model, pos.fX, pos.fY, pos.fZ, heading, true, false);
 	pedHandler = (CPed*)getScriptHandleBaseAddress(Handle);
-	CWorld::Get()->CPedFactoryPtr->Create = &hookCreatePed;
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	/*PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
-	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, false, true);
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);*/
+	//pedHandler->Flags |= 1 << 30;
+	pedHandler->Flags |= 1 << 6;
+	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, true, true);
 	
 }
 

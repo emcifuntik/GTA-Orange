@@ -48,6 +48,7 @@ long Python::pCallFunc(char * fName, PyObject* args)
 			PyObject * value = PyObject_CallObject(pFunc, args);
 			Py_DECREF(pFunc);
 			long ret = PyLong_AsLong(value);
+			PyErr_Print();
 			if (ret != 0)
 				return ret;
 		}

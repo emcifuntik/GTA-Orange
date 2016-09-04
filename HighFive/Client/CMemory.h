@@ -25,6 +25,17 @@ public:
 	template <typename T> static T get_call(T address);
 	template <typename TTarget, typename T> static void set_call(TTarget* target, T address);
 	template <typename T> static inline uintptr_t get_adjusted(T _address);
+
+	DWORD getOffset(int offset)
+	{
+		DWORD* ptr = (DWORD*)((uintptr_t)address + offset);
+		return (DWORD)(*ptr + (((uintptr_t)address + offset + sizeof(DWORD)) - (uintptr_t)GetModuleHandle(NULL)));
+	}
+
+	DWORD getFunc()
+	{
+		return (DWORD)((uintptr_t)address - (uintptr_t)GetModuleHandle(NULL));
+	}
 	
 	CMemory operator+(int offset)
 	{

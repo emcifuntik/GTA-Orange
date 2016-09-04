@@ -52,6 +52,12 @@
     <Filter Include="Header Files\Rage">
       <UniqueIdentifier>{dc337850-0559-4813-bf57-939d7719ba85}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\GTA">
+      <UniqueIdentifier>{97bc587c-1d0c-4773-af56-20953395c3d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\GTA">
+      <UniqueIdentifier>{712f5577-708c-4d8a-948e-542455e4c1e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -126,7 +132,13 @@
     <ClCompile Include="VTasks.cpp">
       <Filter>Source Files\Rage</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\EugenePogrebnyak\Source\Repos\highfive\HighFive\Client\CLog.cpp">
+    <ClCompile Include="GTA\CAddress.cpp">
+      <Filter>Source Files\GTA</Filter>
+    </ClCompile>
+    <ClCompile Include="Hook.cpp">
+      <Filter>Source Files\Hooking</Filter>
+    </ClCompile>
+    <ClCompile Include="CLog.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
@@ -223,6 +235,27 @@
     </ClInclude>
     <ClInclude Include="VTasks.h">
       <Filter>Header Files\Rage</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CEntity.h">
+      <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CDynamicEntity.h">
+      <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CPed.h">
+      <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CWeaponInfo.h">
+      <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CHandlingData.h">
+      <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CPhysical.h">
+      <Filter>Header Files\GTA</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CAddress.h">
+      <Filter>Header Files\GTA</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

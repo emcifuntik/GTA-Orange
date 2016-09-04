@@ -249,15 +249,5 @@ _Pvt_Extensions
 .paket/paket.exe
 paket-files/
 
-# FAKE - F# Make
-.fake/
 
-# JetBrains Rider
-.idea/
-*.sln.iml
-/lib/INIReader.lib
-/lib/RakNet.lib
-/lib/ScriptHook.lib
-/lib/ScriptHookV.lib
-/lib/LUA.lib
-/HighFive/temp/x64-Debug
+/HighFive/Setup

@@ -153,6 +153,20 @@ void CNetworkPlayer::SetColor(unsigned int color)
 	CRPCPlugin::Get()->Signal("SetPlayerColor", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
 }
 
+//void CNetworkPlayer::SendTextMessage(const char *message, unsigned int color)
+//{
+//	RakNet::BitStream bsOut;
+//	RakNet::RakString msg(message);
+//	bsOut.Write(msg);
+//	color_t col;
+//	col.red = (BYTE)((color >> 24) & 0xFF);  // Extract the RR byte
+//	col.green = (BYTE)((color >> 16) & 0xFF);   // Extract the GG byte
+//	col.blue = (BYTE)((color >> 8) & 0xFF);   // Extract the GG byte
+//	col.alpha = (BYTE)((color) & 0xFF);        // Extract the BB byte
+//	bsOut.Write(col);
+//	CRPCPlugin::Get()->Signal("SendClientMessage", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, rnGUID, false, false);
+//}
+
 void CNetworkPlayer::Tick()
 {
 	for each (CNetworkPlayer *player in _players)

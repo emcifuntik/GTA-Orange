@@ -210,24 +210,24 @@ static bool IsPointInPolygon(int nvert, float *polyX, float *polyY, float pointX
 }
 };
 
-struct Vector2
+struct CVector2
 {
 	float fX;
 	float fY;
 
-	Vector2()
+	CVector2()
 	{
 		fX = fY = 0.0f;
 	}
 
-	Vector2(float _fX, float _fY)
+	CVector2(float _fX, float _fY)
 	{
 		fX = fX; fY = fY;
 	}
 };
 
 // TODO: Class'ify in its own file
-class Vector4
+class CVector4
 {
 public:
 	float fX; // 00-04
@@ -235,12 +235,12 @@ public:
 	float fZ; // 08-0C
 	float fW; // 0C-10
 
-	Vector4()
+	CVector4()
 	{
 		fX = fY = fZ = 0.0f;
 	}
 
-	Vector4(float _fX, float _fY, float _fZ, float _fW)
+	CVector4(float _fX, float _fY, float _fZ, float _fW)
 	{
 		fX = _fX; fY = _fY; fZ = _fZ; fW = _fW;
 	}

@@ -21,30 +21,46 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 
 		CMemory::Init();
 		// Disable intro
-		CMemory *m = CMemory::Find_t("platform:/movies/rockstar_logos");
-		if (m != nullptr)
-			m->put("./nonexistingfilenonexistingfil");
-		delete m;
 
-		m = CMemory::Find("72 1F E8 ? ? ? ? 8B 0D");
-		m->nop(2);
-		delete m;
+		MemoryHook::retn((*GTA::CAddress::Get())[SOME_STRANGE_HOOK]);
+		MemoryHook::retn((*GTA::CAddress::Get())[DISABLE_WANTED_GENERATION_1]);
+		(*MemoryHook::value<unsigned short*>((*GTA::CAddress::Get())[DISABLE_WANTED_GENERATION_2])) = 0xE990;
+		//
+		MemoryHook::nop((*GTA::CAddress::Get())[LOAD_SCREENS]);
+		(*MemoryHook::value<DWORD*>((*GTA::CAddress::Get())[LOAD_SINGLE_PLAYER1] + 0x3B)) = 
+			(*GTA::CAddress::Get())[LOAD_SINGLE_PLAYER2] - (*GTA::CAddress::Get())[LOAD_SINGLE_PLAYER1] - 0x3F;
+		MemoryHook::retn((*GTA::CAddress::Get())[DISABLE_LOGO]);
+		MemoryHook::retn((*GTA::CAddress::Get())[SHOW_TOOL_TIPS]);
+		MemoryHook::retn((*GTA::CAddress::Get())[SOCIAL_CLUB_NEWS]);
+		MemoryHook::nop((*GTA::CAddress::Get())[DISABLE_PAUSE_ESC]);
+		MemoryHook::nop((*GTA::CAddress::Get())[DISABLE_NORTH_BLIP], 46);
+		MemoryHook::retn((*GTA::CAddress::Get())[DISABLE_VEH_POPULATION1]);
+		MemoryHook::nop((*GTA::CAddress::Get())[DISABLE_VEH_POPULATION4]);
+		//MemoryHook::nop((*GTA::CAddress::Get())[CRASH_LOAD_MODELS_TOO_QUICKLY], 23);
+		//MemoryHook::nop((*GTA::CAddress::Get())[INTENTIONAL_CRASH]);
+		//MemoryHook::retn((*GTA::CAddress::Get())[CREATE_NETWORK_EVENT_BINDINGS]);
+		MemoryHook::retn((*GTA::CAddress::Get())[LOAD_NEW_GAME]);
+		MemoryHook::retn((*GTA::CAddress::Get())[OPEN_CHEAT_WINDOW]);
+		MemoryHook::retn((*GTA::CAddress::Get())[RESET_VEHICLE_DENSITY_LAST_FRAME]);
+		MemoryHook::retn((*GTA::CAddress::Get())[SET_CLOCK_FORWARD_AFTER_DEATH]);
+		MemoryHook::retn((*GTA::CAddress::Get())[DISABLE_LOADING_MP_DLC_CONTENT]);
+		MemoryHook::nop((*GTA::CAddress::Get())[VAR_VEHICLE_DENSITY_NOP], 30);
+		MemoryHook::nop((*GTA::CAddress::Get())[PED_DENSITY_NOP], 40);
 
-		m = CMemory::Find("70 6C 61 74 66 6F 72 6D 3A");
-		m->nop(1);
-		delete m;
-		////Usage:
-		//LoadGameNow(0); //To start a new game, any other value other than 0 just seems to make the loading screen load endlessly
+		MemoryHook::nop((*GTA::CAddress::Get())[MULTIPLAYER_MENU], 9);
+		/*MemoryHook::nop((*GTA::CAddress::Get())[GTAMP_NOP1]);
+		MemoryHook::nop((*GTA::CAddress::Get())[GTAMP_NOP2]);
+		MemoryHook::nop((*GTA::CAddress::Get())[GTAMP_NOP3]);*/
 
-		//m = Memory::Find("48 85 C9 0F 84 ? 00 00 00 48 8D 55 A7 E8");
-		//m += 13;
-		//m->call(Memory::Return<int, 0>);
-		//delete m;
+		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[VAR_VEHICLE_DENSITY1])) = 0.0f;
+		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[VAR_VEHICLE_DENSITY2])) = 0.0f;
+		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[VAR_VEHICLE_DENSITY3])) = 0.0f;
+		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[PED_DENSITY1])) = 0.0f;
+		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[PED_DENSITY2])) = 0.0f;
+		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[PED_DENSITY3])) = 0.0f;
+		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[PED_DENSITY4])) = 0.0f;
 
-		//m = Memory::Find("8D 4A 03 E8 ? ? ? ? E8 ? ? ? ? 84 C0 75 1E");
-		//m += 2;
-		//m->put<uint8_t>(8);
-		//delete m;
+		//17FC9C
 
 		scriptRegister(hModule, InitGameScript);
 		scriptRegisterAdditionalThread(hModule, ChatRendering);

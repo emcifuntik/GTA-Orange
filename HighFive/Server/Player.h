@@ -23,6 +23,8 @@ namespace Player
 	PyObject *setColor(PyObject * self, PyObject* args);
 	PyObject *getColor(PyObject * self, PyObject* args);
 	PyObject *getIP(PyObject * self, PyObject* args);
+	PyObject *sendClientMessage(PyObject * self, PyObject* args);
+	PyObject *broadcastClientMessage(PyObject * self, PyObject* args);
 
 	static PyMethodDef Methods[] = {
 		{ "setPos", setPos, METH_VARARGS, "Sets player\'s position" },
@@ -46,6 +48,8 @@ namespace Player
 		{ "setColor", setColor, METH_VARARGS, "Sets player\'s colour" },
 		{ "getColor", getColor, METH_VARARGS, "Return player colour" },
 		{ "getIP", getIP, METH_VARARGS, "Return player\'s IP address" },
+		{ "sendMessage", sendClientMessage, METH_VARARGS, "Sends message to client" },
+		{ "broadcastMessage", broadcastClientMessage, METH_VARARGS, "Sends message to all" },
 		{ NULL, NULL, 0, NULL }
 	};
 };

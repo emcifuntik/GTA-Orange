@@ -1,4 +1,4 @@
-#include "stdafx.h"
+	#include "stdafx.h"
 using namespace tinyxml2;
 
 int main(void)
@@ -16,7 +16,10 @@ int main(void)
 			Python::Get()->pCallFunc("onScriptInit", NULL);
 		}
 		else
+		{
 			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;
+			PyErr_Print();
+		}
 	}
 	auto netLoop = [=]()
 	{

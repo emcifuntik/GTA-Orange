@@ -31,7 +31,7 @@ bool CNetworkConnection::Connect(std::string host, unsigned short port)
 		connection = client->Connect(host.c_str(), port, 0, 0);
 		RakAssert(connection == RakNet::CONNECTION_ATTEMPT_STARTED);
 		bConnected = true;
-		CRPCPlugin::Get()->BindFunctions();
+		CRPCPlugin::Get();
 		return true;
 	}
 	return false;
@@ -64,7 +64,7 @@ void CNetworkConnection::Tick()
 				bsOut.Write(playerName);
 				CLocalPlayer::Get()->SetMoney(0);
 				CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[(GetTickCount() % 30) + 100]));
-				Hash adder = Utils::Hash("Adder");
+				Hash adder = Utils::Hash("voltic");
 				CNetworkVehicle *veh = new CNetworkVehicle(adder, -646.889892578125, -730.2916870117188, 29.687416076660156, 0.f);
 
 				client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);

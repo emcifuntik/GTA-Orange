@@ -36,11 +36,13 @@ void CPedestrian::SetDesiredHeading(float heading)
 
 void CPedestrian::TaskMove(CVector3 vecPos, float fMoveSpeed)
 {
+	//MemoryHook::call<void, Ped, float, float, float, float, int, float, float>((*GTA::CAddress::Get())[PED_TASK_MOVE_TO_COORD], Handle, vecPos.fX, vecPos.fY, vecPos.fZ, fMoveSpeed, -1, 0.0f, 0.0f);
 	AI::TASK_GO_STRAIGHT_TO_COORD(Handle, vecPos.fX, vecPos.fY, vecPos.fZ, fMoveSpeed, -1, 0.0f, 0.0f);
 }
 
 void CPedestrian::TaskAimAt(CVector3 vecAim, int duration)
 {
+	//MemoryHook::call<void, Ped, float, float, float, int, BOOL, BOOL>((*GTA::CAddress::Get())[PED_TASK_AIM_AT_COORD_AND_STAND_STILL], Handle, vecAim.fX, vecAim.fY, vecAim.fZ, duration, 0, 0);
 	AI::TASK_AIM_GUN_AT_COORD(Handle, vecAim.fX, vecAim.fY, vecAim.fZ, duration, 0, 0);
 }
 

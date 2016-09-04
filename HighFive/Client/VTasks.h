@@ -205,7 +205,7 @@ public:
 
 	std::string GetTaskName(int64_t id);
 	~VTasks();
-	void *GetTaskFromID(unsigned int taskID) { hook::call<0x64E60C, void*, unsigned int>(taskID); }
+	void *GetTaskFromID(unsigned int taskID) { MemoryHook::call<void*, unsigned int>((*GTA::CAddress::Get())[GET_TASK_BY_ID], taskID); }
 };
 
 

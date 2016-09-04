@@ -68,5 +68,6 @@ public:
 	unsigned int GetModel() { return hModel; }
 	float GetHeading() { return fHeading; }
 	float GetTagDrawDistance() { return fTagDrawDistance; }
+	void SendTextMessage(const char * message, unsigned int color);
 };
 

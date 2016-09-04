@@ -2,21 +2,25 @@
 
 PedFactoryHook* PedFactoryHook::singleInstance = nullptr;
 VehicleFactoryHook* VehicleFactoryHook::singleInstance = nullptr;
-bool SyncTree::initialized = false;
+//bool SyncTree::initialized = false;
 
 namespace rageGlobals
 {
 	void AllowChangeLanguage(bool toggle)
 	{
-		bool *_addr = hook::value<bool*>(0x293A657);// (bool*)((intptr_t)GetModuleHandle(NULL) + 0x293A657);
+		bool *_addr = MemoryHook::value<bool*>((*GTA::CAddress::Get())[LANG_CHANGE]);
 		(*_addr) = toggle;
 	}
 	void SetPlayerColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 	{
-		(*hook::value<unsigned char *>(0x1ECD18C)) = r;
-		(*hook::value<unsigned char *>(0x1ECD18D)) = g;
-		(*hook::value<unsigned char *>(0x1ECD18E)) = b;
-		(*hook::value<unsigned char *>(0x1ECD18F)) = a;
+		DWORD colorAddress = (*GTA::CAddress::Get())[COLOR_ADDRESS];
+		for (int i = 0; i < 4; ++i)
+		{
+			(*MemoryHook::value<unsigned char *>(colorAddress++)) = b;
+			(*MemoryHook::value<unsigned char *>(colorAddress++)) = g;
+			(*MemoryHook::value<unsigned char *>(colorAddress++)) = r;
+			(*MemoryHook::value<unsigned char *>(colorAddress++)) = a;
+		}
 	}
 };
 

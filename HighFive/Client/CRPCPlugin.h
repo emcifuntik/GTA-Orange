@@ -3,9 +3,9 @@ class CRPCPlugin
 {
 	static CRPCPlugin* singleInstance;
 	CRPCPlugin();
+	void BindFunctions();
 public:
 	static CRPCPlugin* Get();
-	void BindFunctions();
 
 	RPC4 rpc;
 	~CRPCPlugin();

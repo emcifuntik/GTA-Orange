@@ -34,7 +34,7 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\EugenePogrebnyak\Source\Repos\highfive\HighFive\Server\CLog.cpp" />
+    <ClCompile Include="CLog.cpp" />
     <ClCompile Include="CNetworkConnection.cpp" />
     <ClCompile Include="CNetworkPlayer.cpp" />
     <ClCompile Include="CConfig.cpp" />
@@ -236,8 +236,8 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.\;..\..\Shared;..\ScriptHookV;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <AdditionalIncludeDirectories>.\;..\..\Shared;..\python\include;..\tinyxml2-4.0.1;..\ScriptHookV;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>

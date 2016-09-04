@@ -5,6 +5,7 @@ CRPCPlugin* CRPCPlugin::singleInstance = nullptr;
 CRPCPlugin::CRPCPlugin()
 {
 	CNetworkConnection::Get()->client->AttachPlugin(&rpc);
+	BindFunctions();
 }
 
 void CRPCPlugin::BindFunctions()

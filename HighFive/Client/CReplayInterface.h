@@ -54,10 +54,7 @@ public:
 	
 	static ReplayInterfaces* Get()
 	{
-		if (Utils::IsSteam())
-			return (ReplayInterfaces*)(*(ReplayInterfaces**)((intptr_t)GetModuleHandle(NULL) + 0x1E0AC88));
-		else
-			return nullptr;//SC PTR
+		return (ReplayInterfaces*)(*(ReplayInterfaces**)((intptr_t)GetModuleHandle(NULL) + (*GTA::CAddress::Get())[REPLAY_INTERFACES]));
 	}
 };
 

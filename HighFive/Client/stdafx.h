@@ -74,14 +74,16 @@ using namespace RakNet;
 // Client
 #include "main.h"
 
+// Math
+#include "CMath.h"
+#include "CVector3.h"
+
 // Game Functions
 #include "GameScripts.h"
 #include "CUI.h"
 #include "CGraphics.h"
 
-// Math
-#include "../../Shared/CMath.h"
-#include "../../Shared/CVector3.h"
+
 #include "../../Shared/NetworkTypes.h"
 #include "../../Shared/Models.h"
 #include "CConfig.h"
@@ -95,10 +97,16 @@ using namespace RakNet;
 
 // Interface
 #include "CChat.h"
+#include <d3dtypes.h>
 
 // RAGE Stuff
+#include "GTA\CAddress.h"
 #include "sysAllocator.h"
 #include "VTasks.h"
+#include "GTA\CEntity.h"
+#include "GTA\CPed.h"
+#include "GTA\CWeaponInfo.h"
+#include "GTA\CHandlingData.h"
 #include "CRage.h"
 #include "CReplayInterface.h"
 

@@ -32,9 +32,30 @@ class CTaskTreeFunctions;
 class CTaskTreeMovement_;
 class VTasks;
 
+#define PED_UNCONTROLLABLE 0x40000000
+#define PED_ENEMY 0x40
+
 namespace GTA
 {
+
+	class CVehicleIntelligence;
+
 	class CVehicle;
+
+	class CViewportGame
+	{
+	public:
+		char pad_0x0000[0x24C]; //0x0000
+		_D3DMATRIX ViewPort; //0x024C 
+		char pad_0x028C[0x1C4]; //0x028C
+		__int32 Width; //0x0450 
+		__int32 Height; //0x0454 
+
+		static CViewportGame *Get()
+		{
+			return *(CViewportGame**)(((intptr_t)GetModuleHandle(NULL) + (*GTA::CAddress::Get())[GAME_VIEWPORT]));
+		}
+	}; //Size=0x028C
 	class CTask;
 };
 
@@ -64,17 +85,14 @@ public:
 
 	static CWorld *Get()
 	{
-		if (Utils::IsSteam())
-			return hook::value<CWorld*>(0x228FA58, true);
-		else
-			return hook::value<CWorld*>(0x228C910, true);
+		return MemoryHook::value<CWorld*>((*GTA::CAddress::Get())[CWORLD_ADDRESS], true);
 	}
 }; //Size=0x0010
 
 class CPed
 {
 public:
-	virtual ~CPed();
+	virtual void* Convert(bool somebool);
 	virtual void unknown_1();
 	virtual void unknown_2();
 	virtual void unknown_3();
@@ -115,7 +133,11 @@ public:
 	float float_5; //0x0554 
 	char pad_0x0558[0x20]; //0x0558
 	float MoveSpeed; //0x0578 
-	char pad_0x057C[0x624]; //0x057C
+	float MoveSpeed2; //0x0578 
+	float MoveSpeed3; //0x0578 
+	float MoveSpeed4; //0x0578 
+	float WalkSpeed; //0x0588 
+	char pad_0x058C[0x614]; //0x058C
 	CBuilding* CBuildingPtr; //0x0BA0 
 	char pad_0x0BA8[0x4D8]; //0x0BA8
 	Tasks* TasksPtr; //0x1080 
@@ -125,8 +147,8 @@ public:
 	char pad_0x10A0[0x2A0]; //0x10A0
 	CPedClothCollision* CPedClothCollisionPtr; //0x1340 
 	char pad_0x1348[0x78]; //0x1348
-	int64_t Flags; //0x13C0 
-	char pad_0x13C8[0xD0]; //0x13C8
+	int32_t Flags; //0x13C0 
+	char pad_0x13C4[0xD4]; //0x13C8
 	GTA::CVehicle* pedVehicle; //0x1498 
 	char pad_0x14A0[0x450]; //0x14A0
 
@@ -371,18 +393,14 @@ inline __int64 hookCreatePed(CPedFactory* pedFactory, unsigned char *a2, int *a3
 class CVehicleFactory
 {
 public:
-	//__int64(*func_1)(CVehicleFactory* vehicleFactory, bool a2); //0x0000 
-	__int64(*Create)(__int64 a1, __int64 a2, unsigned int a3, unsigned int a4, float a5, signed int *a6, char a7, char a8);
-	__int64(*func_3)(int *a1, __int64 a2, __int64 a3, __int64 a4, float a5, unsigned int a6, unsigned int a7, bool a8); //0x0010 
-	int(*func_4)(CVehicleFactory* vehicleFactory, __int64 a2, unsigned int a3, unsigned int a4, unsigned int a5, __int64 *a6); //0x0018 
-	char(*func_5)(CVehicleFactory* vehicleFactory, __int64 a2, unsigned int a3, unsigned int a4, unsigned int a5, WORD *a6); //0x0020 
-	char pad_0x0028[0x60]; //0x0028
+	virtual ~CVehicleFactory();
+	virtual int64_t CreateVehicle(__int64 a2, unsigned int a3, unsigned int a4, float a5, signed int *a6, char a7, char a8);
+	virtual int64_t func_3(__int64 a2, __int64 a3, __int64 a4, float a5, unsigned int a6, unsigned int a7, bool a8); //0x0010 
+	virtual int func_4(__int64 a2, unsigned int a3, unsigned int a4, unsigned int a5, __int64 *a6); //0x0018 
+	virtual char func_5(__int64 a2, unsigned int a3, unsigned int a4, unsigned int a5, WORD *a6); //0x0020 
 	static CVehicleFactory* Get()
 	{
-		if (Utils::IsSteam())
-			return hook::value<CVehicleFactory*>(0x18DFD70);// (CVehicleFactory*)((intptr_t)GetModuleHandle(NULL) + 0x18DFD70);
-		else
-			return hook::value<CVehicleFactory*>(0x18DCD80); //(CVehicleFactory*)((intptr_t)GetModuleHandle(NULL) + 0x18DCD80);
+		return MemoryHook::value<CVehicleFactory*>((*GTA::CAddress::Get())[VEHICLE_FACTORY]);// (CVehicleFactory*)((intptr_t)GetModuleHandle(NULL) + 0x18DFD70);
 	}
 }; //Size=0x0088
 
@@ -424,15 +442,37 @@ namespace rage
 
 namespace GTA
 {
+	class CVehicleIntelligence
+	{
+	public:
+		char pad_0x0000[0x7B8]; //0x0000
+		CTaskTree* PrimaryTasks; //0x07B8 
+		CTaskTree* SecondaryTasks; //0x07C0 
+	}; //Size=0x0808
+
 	class CVehicle
 	{
 	public:
-		char pad_0x0000[0x20]; //0x008
-		CVehicleModelInfo *VehicleModelInfo;
-		char pad_0x0018[0x70]; //0x0018
-		CVector3 Position; //0x0090 
-		char pad_0x009C[0x1624]; //0x009C
-	}; //Size=0x16C0
+		virtual void Function0(); //
+		virtual void Function1(); //
+		virtual void Function2(); //
+		virtual void Function3(); //
+		virtual void Function4(); //
+		virtual void Function5(); //
+		virtual void Function6(); //
+		virtual void Function7(); //
+		virtual void Function8(); //
+		virtual void Function9(); //
+
+		char pad_0x0008[0x18]; //0x0008
+		CVehicleModelInfo* VehicleModelInfo; //0x0020 
+		char pad_0x0028[0x68]; //0x0028
+		Vector3 Position; //0x0090 
+		char pad_0x009C[0x9F4]; //0x009C
+		CVehicleIntelligence* VehicleIntelligence; //0x0A90 
+		char pad_0x0A98[0xC28]; //0x0A98
+
+	};
 
 	class CObject
 	{
@@ -449,7 +489,7 @@ namespace GTA
 		virtual ~CTask();
 		virtual int64_t GetID();
 		virtual CTask* Clone();
-		virtual bool SetSubTask(int someInt, GTA::CTask* childTask);
+		virtual bool SetSubTask_(int someInt, GTA::CTask* childTask);
 		virtual bool IsSimple();
 		virtual void unknown_5();
 		virtual void unknown_6();
@@ -547,80 +587,80 @@ typedef void CTrainSyncTree;
 typedef void CPlaneSyncTree;
 typedef void CDoorSyncTree;
 
-class SyncTree
-{
-private:
-	static bool initialized;
-public:
-	static CAutomobileSyncTree* GetAutomobileSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A4378, true);
-	}
-	static CBikeSyncTree* GetBikeSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A43A0, true);
-	}
-	static CBoatSyncTree* GetBoatSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A44A8, true);
-	}
-
-	static CSubmarineSyncTree* GetSubmarineSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A3FE8, true);
-	}
-	static CObjectSyncTree* GetObjectSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A3F30, true);
-	}
-	static CPedSyncTree* GetPedSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A4370, true);
-	}
-	static CPickupSyncTree* GetPickupSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A4368, true);
-	}
-	static CPickupPlacementSyncTree* GetPickupPlacementSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A4358, true);
-	}
-	static CPlayerSyncTree* GetPlayerSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A40D0, true);
-	}
-	static CTrainSyncTree* GetTrainSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A3F28, true);
-	}
-	static CPlaneSyncTree* GetPlaneSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A35A8, true);
-	}
-	static CDoorSyncTree* GetDoorSyncTree()
-	{
-		Init();
-		return hook::value<CAutomobileSyncTree*>(0x26A4110, true);
-	}
-
-	static void Init()
-	{
-		if (!initialized)
-		{
-			hook::call<0x1005C68>();
-			initialized = true;
-		}
-	}
-};
-
+//class SyncTree
+//{
+//private:
+//	static bool initialized;
+//public:
+//	static CAutomobileSyncTree* GetAutomobileSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CAutomobileSyncTree*>(0x26A4378, true);
+//	}
+//	static CBikeSyncTree* GetBikeSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CBikeSyncTree*>(0x26A43A0, true);
+//	}
+//	static CBoatSyncTree* GetBoatSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CBoatSyncTree*>(0x26A44A8, true);
+//	}
+//
+//	static CSubmarineSyncTree* GetSubmarineSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CSubmarineSyncTree*>(0x26A3FE8, true);
+//	}
+//	static CObjectSyncTree* GetObjectSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CObjectSyncTree*>(0x26A3F30, true);
+//	}
+//	static CPedSyncTree* GetPedSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CPedSyncTree*>(0x26A4370, true);
+//	}
+//	static CPickupSyncTree* GetPickupSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CPickupSyncTree*>(0x26A4368, true);
+//	}
+//	static CPickupPlacementSyncTree* GetPickupPlacementSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CPickupPlacementSyncTree*>(0x26A4358, true);
+//	}
+//	static CPlayerSyncTree* GetPlayerSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CPlayerSyncTree*>(0x26A40D0, true);
+//	}
+//	static CTrainSyncTree* GetTrainSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CTrainSyncTree*>(0x26A3F28, true);
+//	}
+//	static CPlaneSyncTree* GetPlaneSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CPlaneSyncTree*>(0x26A35A8, true);
+//	}
+//	static CDoorSyncTree* GetDoorSyncTree()
+//	{
+//		Init();
+//		return MemoryHook::value<CDoorSyncTree*>(0x26A4110, true);
+//	}
+//
+//	static void Init()
+//	{
+//		if (!initialized)
+//		{
+//			MemoryHook::call(0x1005DEC);
+//			initialized = true;
+//		}
+//	}
+//};
+//

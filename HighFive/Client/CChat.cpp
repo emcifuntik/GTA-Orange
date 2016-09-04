@@ -83,14 +83,14 @@ void CChat::Input()
 		UI::SET_PAUSE_MENU_ACTIVE(false);
 }
 
-void CChat::AddChatMessage(std::string text, UINT64 rgba)
+void CChat::AddChatMessage(std::string text, unsigned int rgba)
 {
 	ChatLine tempLine;
 	tempLine.structColor = {
-		((rgba >> 24) & 0xFF) / 255,
-		((rgba >> 16) & 0xFF) / 255,
-		((rgba >> 8) & 0xFF) / 255,
-		((rgba) & 0xFF) / 255
+		((rgba >> 24) & 0xFF),
+		((rgba >> 16) & 0xFF),
+		((rgba >> 8) & 0xFF) ,
+		((rgba) & 0xFF)
 	};
 	tempLine.sLineText = text;
 	AddLine(tempLine);

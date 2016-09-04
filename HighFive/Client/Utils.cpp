@@ -1,19 +1,19 @@
 #include "stdafx.h"
 
-bool Utils::WorldToScreenRel(CVector3 worldCoords, Vector2& screenCoords)
+bool Utils::WorldToScreenRel(CVector3 worldCoords, CVector2& screenCoords)
 {
 	float num1, num2;
 
 	if (GRAPHICS::_WORLD3D_TO_SCREEN2D, worldCoords.fX, worldCoords.fY, worldCoords.fZ, &num1, &num2)
 	{
-		screenCoords = Vector2();
+		screenCoords = CVector2();
 		return false;
 	}
-	screenCoords = Vector2((num1 - 0.5f) * 2, (num2 - 0.5f) * 2);
+	screenCoords = CVector2((num1 - 0.5f) * 2, (num2 - 0.5f) * 2);
 	return true;
 }
 
-CVector3 Utils::ScreenRelToWorld(CVector3 camPos, CVector3 camRot, Vector2 coord)
+CVector3 Utils::ScreenRelToWorld(CVector3 camPos, CVector3 camRot, CVector2 coord)
 {
 	auto camForward = RotationToDirection(camRot);
 	auto rotUp = camRot + CVector3(10.f, 0, 0);
@@ -30,10 +30,10 @@ CVector3 Utils::ScreenRelToWorld(CVector3 camPos, CVector3 camRot, Vector2 coord
 	auto camUpRoll = camRight * (float)std::sin(rollRad) + camUp * (float)std::cos(rollRad);
 
 	auto point3D = camPos + camForward * 100.f + camRightRoll + camUpRoll;
-	Vector2 point2D;
+	CVector2 point2D;
 	if (!WorldToScreenRel(point3D, point2D)) return camPos + camForward * 100.f;
 	auto point3DZero = camPos + camForward * 100.0f;
-	Vector2 point2DZero;
+	CVector2 point2DZero;
 	if (!WorldToScreenRel(point3DZero, point2DZero)) return camPos + camForward * 100.f;
 
 	const double eps = 0.0000001;

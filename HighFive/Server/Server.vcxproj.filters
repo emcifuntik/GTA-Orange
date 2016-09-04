@@ -37,7 +37,9 @@
     <ClInclude Include="Player.h">
       <Filter>Header Files\Python\Natives</Filter>
     </ClInclude>
-    <ClInclude Include="CLog.h" />
+    <ClInclude Include="CLog.h">
+      <Filter>Header Files\Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -73,7 +75,7 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Python\Natives</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\EugenePogrebnyak\Source\Repos\highfive\HighFive\Server\CLog.cpp">
+    <ClCompile Include="CLog.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
   </ItemGroup>
