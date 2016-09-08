@@ -94,6 +94,9 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="VTasks.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\lib\ScriptHookV.lib" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{05C92719-05C7-4DED-9024-5489640AD286}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

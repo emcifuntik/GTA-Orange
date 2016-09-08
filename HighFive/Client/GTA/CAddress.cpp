@@ -220,7 +220,23 @@ namespace GTA
 			addressWriteFile.write((char*)&addresses[DISABLE_LOADING_MP_DLC_CONTENT], sizeof(DWORD));
 			log_debug << "DISABLE_LOADING_MP_DLC_CONTENT: 0x" << std::hex << addresses[DISABLE_LOADING_MP_DLC_CONTENT] << std::endl;
 
-			//DISABLE_LOADING_MP_DLC_CONTENT
+			addresses[CREATE_TASKINFO_BY_ID] = CMemory::Find("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20 33 F6 B8 ? ? ? ?")->getFunc();//CREATE_TASKINFO_BY_ID
+			addressWriteFile.write((char*)&addresses[CREATE_TASKINFO_BY_ID], sizeof(DWORD));
+			log_debug << "CREATE_TASKINFO_BY_ID: 0x" << std::hex << addresses[CREATE_TASKINFO_BY_ID] << std::endl;
+
+			addresses[INIT_BUFFER] = CMemory::Find("80 61 1C ? 33 C0 48 89 01 48 89 41 08 48 89 41 10 89 41 18 48 8B C1")->getFunc();//INIT_BUFFER
+			addressWriteFile.write((char*)&addresses[INIT_BUFFER], sizeof(DWORD));
+			log_debug << "INIT_BUFFER: 0x" << std::hex << addresses[INIT_BUFFER] << std::endl;
+
+			addresses[INIT_READ_BUFFER] = CMemory::Find("80 61 1C ? 80 49 1C ? 33 C0 48 89 41 10 89 41 18 48 89 11 44 89 41 0C 44 89 49 08")->getFunc();//INIT_READ_BUFFER
+			addressWriteFile.write((char*)&addresses[INIT_READ_BUFFER], sizeof(DWORD));
+			log_debug << "INIT_READ_BUFFER: 0x" << std::hex << addresses[INIT_READ_BUFFER] << std::endl;
+
+			addresses[INIT_WRITE_BUFFER] = CMemory::Find("80 61 1C ? 33 C0 48 89 11 48 89 41 10 89 41 18  44 89 41 0C 44 89 49 08")->getFunc();//INIT_WRITE_BUFFER
+			addressWriteFile.write((char*)&addresses[INIT_WRITE_BUFFER], sizeof(DWORD));
+			log_debug << "INIT_WRITE_BUFFER: 0x" << std::hex << addresses[INIT_WRITE_BUFFER] << std::endl;
+
+			//80 61 1C ? 33 C0 48 89 11 48 89 41 10 89 41 18  44 89 41 0C 44 89 49 08
 
 			addressWriteFile.close();
 		}

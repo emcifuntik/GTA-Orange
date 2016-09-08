@@ -103,6 +103,8 @@ public:
 
 	void SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMove, CVector3 aimPos, float moveSpeed, bool shooting);
 
+	void AssignTask(GTA::CTask * task);
+
 	void BuildTasksQueue();
 
 	void DrawTag();

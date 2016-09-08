@@ -12,5 +12,6 @@ namespace Utils
 	unsigned int Hash(char * inpStr);
 	bool IsValidPtr(PVOID Ptr);
 	bool IsSteam();
+	int RoundToBytes(int bits);
 }
 

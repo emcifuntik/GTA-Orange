@@ -258,4 +258,9 @@
       <Filter>Header Files\GTA</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\..\lib\ScriptHookV.lib">
+      <Filter>Shared</Filter>
+    </Library>
+  </ItemGroup>
 </Project>

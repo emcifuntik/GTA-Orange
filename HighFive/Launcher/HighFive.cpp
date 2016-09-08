@@ -135,7 +135,7 @@ void InjectDLL()
 		bool yes = ProcessRunning("GTA5.exe");
 
 		if (yes != NULL) {
-			Sleep(7500);
+			Sleep(10000);
 			if (GameStarted == false) {
 				GameStarted = true;
 			}

@@ -31,7 +31,7 @@ namespace GTA
 		if (!n)
 		{
 			task = this;
-			return VTasks::Get()->GetTaskName(this->GetID()) + GetTree(task->Child, n + 1);
+			return VTasks::Get()->GetTaskName(this->GetID()) + GetTree(task->SubTask, n + 1);
 		}
 		else
 		{
@@ -42,19 +42,21 @@ namespace GTA
 				res += "-";
 			res += " ";
 			res += VTasks::Get()->GetTaskName(task->GetID());
-			return res + GetTree(task->Child, n + 1);
+			return res + GetTree(task->SubTask, n + 1);
 		}
 	}
 
 	
 };
 
-GTA::CTask * CTaskTree::FindTask(int64_t taskID)
+GTA::CTask * CTaskTree::GetTaskByID(unsigned int taskID)
 {
-	for (GTA::CTask *task = this->GetTask(); task; task = task->Child)
+	for (GTA::CTask *task = GetTask(); task; task = task->SubTask)
 	{
 		if (task->GetID() == taskID)
+		{
 			return task;
+		}
 	}
 	return nullptr;
 }

@@ -127,23 +127,76 @@ void CNetworkConnection::Tick()
 			{
 				break;
 			}
-			case ID_VEHICLE_SYNC:
+			case ID_SEND_TASKS:
 			{
-				/*int count;
-				bsIn.Read(count);
-				for (int i = 0; i < count; ++i)
+				RakNet::RakNetGUID playerGUID;
+				bsIn.Read(playerGUID);
+				CNetworkPlayer * player = CNetworkPlayer::GetByGUID(playerGUID);
+				std::vector<TaskPair> ClonedTasks;
+				int parentTaskID = -1;
+				if (player)
 				{
-					VehicleData data;
-					bsIn.Read(data);
-					CNetworkVehicle * veh = CNetworkVehicle::GetByGUID(data.GUID);
-					if (!veh)
+					int tasks;
+					bsIn.Read(tasks);
+					for (int i = 0; i < tasks; i++)
 					{
-						veh = new CNetworkVehicle(data.hashModel, data.vecPos.fX, data.vecPos.fY, data.vecPos.fZ, data.vecRot.fZ);
-						veh->m_GUID = data.GUID;
-						CChat::Get()->AddChatMessage("Vehicle created", { 0, 255, 0, 255 });
+						unsigned short taskID;
+						bsIn.Read(taskID);
+						unsigned int size;
+						bsIn.Read(size);
+
+						int bytesSize = (size % 8) ? (size / 8 + 1) : (size / 8);
+						unsigned char* taskInfo = new unsigned char[bytesSize];
+						bsIn.ReadBits(taskInfo, size);
+						rageBuffer data;
+						MemoryHook::call<void, rageBuffer*>((*GTA::CAddress::Get())[INIT_BUFFER], &data);
+						MemoryHook::call<void, rageBuffer*, unsigned char*, int, int>((*GTA::CAddress::Get())[INIT_READ_BUFFER], &data, taskInfo, size, 0);
+						CSerialisedFSMTaskInfo* serTask = MemoryHook::call<CSerialisedFSMTaskInfo*, unsigned int>((*GTA::CAddress::Get())[CREATE_TASKINFO_BY_ID], taskID);
+						serTask->Read(&data);
+						ClonedTasks.push_back({ serTask, taskID });
+						delete[size] taskInfo;
+						if (parentTaskID == -1)
+							parentTaskID = taskID;
 					}
-					veh->SetVehicleData(data, 100);
-				}*/
+					if (parentTaskID != -1)
+					{
+						if (!player->pedHandler->TasksPtr->PrimaryTasks->GetTaskByID(parentTaskID))
+						{
+							GTA::CTask *parentTask = nullptr;
+							GTA::CTask *cursorTask = nullptr;
+							for each (auto cloned in ClonedTasks)
+							{
+								if (!parentTask)
+								{
+									parentTask = (GTA::CTask*)cloned.task->GetTask();
+									parentTask->Deserialize(cloned.task);
+									cursorTask = parentTask;
+								}
+								else
+								{
+									GTA::CTask *newTask = (GTA::CTask*)cloned.task->GetTask();
+									newTask->Deserialize(cloned.task);
+									cursorTask->NextSubTask = newTask;
+									cursorTask = newTask;
+								}
+							}
+							player->AssignTask(parentTask);
+						}
+						else
+						{
+							for each (auto cloned in ClonedTasks)
+							{
+								auto task = player->pedHandler->TasksPtr->PrimaryTasks->GetTaskByID(cloned.taskID);
+								if (task)
+								{
+									task->Deserialize(cloned.task);
+								}
+							}
+						}
+						for each (auto cloned in ClonedTasks)
+							rage::sysMemAllocator::Get()->free((void*)cloned.task, rage::HEAP_TASK_CLONE);
+					}
+				}
 				break;
 			}
 			case ID_PLAYER_LEFT:

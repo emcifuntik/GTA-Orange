@@ -95,12 +95,12 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 	pedHandler = (CPed*)getScriptHandleBaseAddress(Handle);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(m_Model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	/*PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);*/
-	//pedHandler->Flags |= 1 << 30;
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	pedHandler->Flags |= 1 << 30;
 	pedHandler->Flags |= 1 << 6;
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, true, true);
 }
@@ -332,7 +332,7 @@ void CNetworkPlayer::Interpolate()
 	UpdateTargetPosition();
 	SetMovementVelocity(m_vecMove);
 	PED::SET_PED_ACCURACY(Handle, 100);
-	BuildTasksQueue();
+	//BuildTasksQueue();
 }
 
 void CNetworkPlayer::SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float iMoveSpeed)
@@ -357,6 +357,14 @@ void CNetworkPlayer::SetMoveToDirectionAndAiming(CVector3 vecPos, CVector3 vecMo
 		//	tZ, aimPos.fX, aimPos.fY, aimPos.fZ, 1.f, 0, 0x3F000000, 0x40800000, 1, (shooting ? 0 : 1024), 1, 3337513804U);
 		AI::TASK_GO_TO_COORD_WHILE_AIMING_AT_COORD(Handle, tX, tY,
 			tZ, aimPos.fX, aimPos.fY, aimPos.fZ, 1.f, 0, 0x3F000000, 0x40800000, 1, (shooting ? 0 : 1024), 1, 3337513804U);
+	}
+}
+
+void CNetworkPlayer::AssignTask(GTA::CTask *task)
+{
+	if (IsSpawned())
+	{
+		pedHandler->TasksPtr->PrimaryTasks->AssignTask(task, GTA::TASK_PRIORITY_HIGHEST);
 	}
 }
 
@@ -406,140 +414,6 @@ void CNetworkPlayer::BuildTasksQueue()
 	{
 		AI::CLEAR_PED_TASKS(Handle);
 	}
-	/*RakNet::BitStream bsOut;
-	bsOut.Write((unsigned char)ID_SEND_TASKS);
-	bool foundPrimary = false;*/
-	/*std::vector<CSerialisedFSMTaskInfo*> taskClones;
-	pedHandler->WalkSpeed = CWorld::Get()->CPedPtr->WalkSpeed;
-	pedHandler->MoveSpeed = CWorld::Get()->CPedPtr->MoveSpeed;
-	pedHandler->MoveSpeed2 = CWorld::Get()->CPedPtr->MoveSpeed2;
-	pedHandler->MoveSpeed3 = CWorld::Get()->CPedPtr->MoveSpeed3;
-	pedHandler->MoveSpeed4 = CWorld::Get()->CPedPtr->MoveSpeed4;*/
-
-	/*if (CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask()->GetID() == GTA::CTaskPlayerOnFoot)
-	{
-		if (pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != GTA::CTaskPlayerOnFoot)
-		{
-			pedHandler->TasksPtr->PrimaryTasks->AssignTask(CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask()->Clone(), GTA::TASK_PRIORITY_HIGH);
-		}
-	}*/
-	
-
-	/*if (taskClones.size())
-	{
-		GTA::CTask* parentTask = nullptr;
-		GTA::CTask* cursorTask = nullptr;
-		for each (auto serTask in taskClones)
-		{
-			if (!parentTask)
-			{
-				parentTask = (GTA::CTask*)serTask->GetTask();
-				parentTask->Deserialize(serTask);
-				cursorTask = parentTask;
-			}
-			else
-			{
-				GTA::CTask *tempTask = (GTA::CTask*)serTask->GetTask();
-				tempTask->Deserialize(serTask);
-				TRACEN();
-				cursorTask->SetSubTask(0, tempTask);
-				cursorTask = tempTask;
-				TRACEN();
-			}
-		}
-		pedHandler->TasksPtr->PrimaryTasks->AssignTask(parentTask, GTA::TASK_PRIORITY_HIGHEST);
-	}
-	*/
-	/*auto curPedTask = pedHandler->TasksPtr->PrimaryTasks->GetTask();
-	auto nextTask = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ptr)->GetTask();
-	if (nextTask->GetID() == curPedTask->GetID())
-	{
-		curPedTask->Deserialize(ptr);
-		rage::sysMemAllocator::Get()->free(ptr, rage::HEAP_TASK_CLONE);
-		rage::sysMemAllocator::Get()->free(nextTask, rage::HEAP_TASK);
-	}
-	else
-		pedHandler->TasksPtr->PrimaryTasks->AssignTask(nextTask, GTA::TASK_PRIORITY_HIGHEST);*/
-	/*if (foundPrimary)
-	{
-		CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
-	}*/
-
-	//for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->MovementTasks->GetTask(); task; task = task->Child)
-	//{
-	//	if (!task->IsSerializable())
-	//		continue;
-	//	void* ser = task->Serialize();
-	//	if (ser)
-	//	{
-	//		GTA::CTask* tsk = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ser)->GetTask();
-	//		log_debug << "Task: 0x" << std::hex << tsk << std::endl;
-	//		//if (pedHandler->TasksPtr->PrimaryTasks->GetTask() && pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != tsk->GetID())
-	//		{
-	//			pedHandler->TasksPtr->MovementTasks->AssignTask(tsk, GTA::TASK_PRIORITY_HIGHEST);
-	//		}
-	//		/*else
-	//		{
-	//		rage::sysMemAllocator::Get()->free(tsk);
-	//		auto ret = ((CSerialisedFSMTaskInfo*)ser)->SetData(pedHandler->TasksPtr->PrimaryTasks->GetTask());
-	//		}*/
-	//		rage::sysMemAllocator::Get()->free(ser, rage::HEAP_TASK_CLONE);
-	//		break;
-	//	}
-	//}
-	//for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->MotionTasks->GetTask(); task; task = task->Child)
-	//{
-	//	if (!task->IsSerializable())
-	//		continue;
-	//	void* ser = task->Serialize();
-	//	if (ser)
-	//	{
-	//		GTA::CTask* tsk = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ser)->GetTask();
-	//		log_debug << "Task: 0x" << std::hex << tsk << std::endl;
-	//		//if (pedHandler->TasksPtr->PrimaryTasks->GetTask() && pedHandler->TasksPtr->PrimaryTasks->GetTask()->GetID() != tsk->GetID())
-	//		{
-	//			pedHandler->TasksPtr->MotionTasks->AssignTask(tsk, GTA::TASK_PRIORITY_HIGHEST);
-	//		}
-	//		/*else
-	//		{
-	//		rage::sysMemAllocator::Get()->free(tsk);
-	//		auto ret = ((CSerialisedFSMTaskInfo*)ser)->SetData(pedHandler->TasksPtr->PrimaryTasks->GetTask());
-	//		}*/
-	//		rage::sysMemAllocator::Get()->free(ser, rage::HEAP_TASK_CLONE);
-	//		break;
-	//	}
-	//}
-	//if (CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask())
-	//{
-
-	//	GTA::CTask *curTask = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask();
-	//	if (curTask->GetID() == GTA::CTaskPlayerOnFoot)
-	//	{
-	//		curTask = curTask->Child;
-	//		if (curTask && curTask->GetID() == GTA::CTaskPlayerWeapon)
-	//		{
-	//			curTask = curTask->Child;
-	//			if (curTask && curTask->GetID() == GTA::CTaskWeapon)
-	//			{
-	//				curTask = curTask->Child;
-	//				if (curTask && curTask->GetID() == GTA::CTaskGun)
-	//				{
-	//					void* ptr = curTask->Serialize();
-	//					
-
-	//					//curTask = curTask->Child;
-	//					//if (curTask && curTask->GetID() == GTA::CTaskAimGunOnFoot)
-	//					//{
-	//					//	void* ptr2 = curTask->Serialize();
-	//					//	GTA::CTask* tsk2 = (GTA::CTask*)((CSerialisedFSMTaskInfo*)ptr2)->GetTask();
-	//					//	tsk->Child = tsk2;
-	//					//	tsk2->Parent = tsk;
-	//					//}
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
 }
 
 void CNetworkPlayer::DrawTag()
@@ -584,12 +458,12 @@ void CNetworkPlayer::SetModel(Hash model)
 	pedHandler = (CPed*)getScriptHandleBaseAddress(Handle);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
-	/*PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
+	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);
 	PED::SET_PED_FLEE_ATTRIBUTES(Handle, 0, 0);
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
-	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);*/
-	//pedHandler->Flags |= 1 << 30;
+	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+	pedHandler->Flags |= 1 << 30;
 	pedHandler->Flags |= 1 << 6;
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, true, true);
 	

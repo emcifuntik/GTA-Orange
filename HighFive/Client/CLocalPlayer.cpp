@@ -147,28 +147,51 @@ void CLocalPlayer::SendOnFootData()
 
 void CLocalPlayer::SendTasks()
 {
-	RakNet::BitStream bsOut;
-	bsOut.Write((unsigned char)ID_SEND_TASKS);
-	bool foundPrimary = false;
+	if (PLAYER::IS_PLAYER_PLAYING(PLAYER::PLAYER_ID()))
+	{
+		RakNet::BitStream bsOut;
+		bsOut.Write((unsigned char)ID_SEND_TASKS);
+		bool foundPrimary = false;
 
-	for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->Child)
-	{
-		if (!task->IsSerializable())
-			continue;
-		auto ser = task->Serialize();
-		if (ser)
+		int tasks = 0;
+		for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->SubTask)
 		{
-			foundPrimary = true;
-			unsigned short taskID = ser->GetID();
-			bsOut.Write(taskID);
-			unsigned int size = ser->Size();
-			bsOut.Write(size);
-			bsOut.Write((char*)ser + 8, size);
+			if (!task->IsSerializable())
+				continue;
+			tasks++;
 		}
-	}
-	if (foundPrimary)
-	{
-		CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		bsOut.Write(tasks);
+
+		for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->SubTask)
+		{
+			if (!task->IsSerializable())
+				continue;
+			auto ser = task->Serialize();
+
+			if (ser)
+			{
+				foundPrimary = true;
+				unsigned short taskID = (unsigned short)task->GetID();
+				bsOut.Write(taskID);
+				unsigned int size = (unsigned int)ser->Size();
+				bsOut.Write(size);
+				rageBuffer data;
+				unsigned char *buffer = new unsigned char[Utils::RoundToBytes(size)];
+				memset(buffer, 0, Utils::RoundToBytes(size));
+				
+				MemoryHook::call<void, rageBuffer*>((*GTA::CAddress::Get())[INIT_BUFFER], &data);
+				MemoryHook::call<void, rageBuffer*, unsigned char*, int, int>((*GTA::CAddress::Get())[INIT_WRITE_BUFFER], &data, buffer, size, 0);
+
+				void *reader = ser->Write(&data);
+				bsOut.WriteBits(buffer, size);
+				delete[] buffer;
+			}
+			rage::sysMemAllocator::Get()->free(ser, rage::HEAP_TASK_CLONE);
+		}
+		if (foundPrimary)
+		{
+			CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+		}
 	}
 }
 

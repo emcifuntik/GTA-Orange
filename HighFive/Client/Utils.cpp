@@ -120,3 +120,8 @@ bool Utils::IsSteam()
 {
 	return !(getGameVersion() % 2);
 }
+
+int Utils::RoundToBytes(int bits)
+{
+	return (bits % 8) ? (bits / 8 + 1) : (bits / 8);
+}

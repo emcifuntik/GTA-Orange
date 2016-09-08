@@ -203,6 +203,27 @@
     <ClInclude Include="include\warnings.h" />
     <ClInclude Include="include\weakrefobject.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="libs\bz2.lib" />
+    <Library Include="libs\pyexpat.lib" />
+    <Library Include="libs\python27.lib" />
+    <Library Include="libs\python27_d.lib" />
+    <Library Include="libs\select.lib" />
+    <Library Include="libs\unicodedata.lib" />
+    <Library Include="libs\winsound.lib" />
+    <Library Include="libs\_bsddb.lib" />
+    <Library Include="libs\_ctypes.lib" />
+    <Library Include="libs\_ctypes_test.lib" />
+    <Library Include="libs\_elementtree.lib" />
+    <Library Include="libs\_hashlib.lib" />
+    <Library Include="libs\_msi.lib" />
+    <Library Include="libs\_multiprocessing.lib" />
+    <Library Include="libs\_socket.lib" />
+    <Library Include="libs\_sqlite3.lib" />
+    <Library Include="libs\_ssl.lib" />
+    <Library Include="libs\_testcapi.lib" />
+    <Library Include="libs\_tkinter.lib" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -58,7 +58,7 @@ int CommandProcessor(std::string command)
 		}
 		CPed *ped = (*pool)[pedID];
 		GTA::CTask *parent = nullptr;
-		for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->Child)
+		for (GTA::CTask *task = CWorld::Get()->CPedPtr->TasksPtr->PrimaryTasks->GetTask(); task; task = task->SubTask)
 		{
 			if (!task->IsSerializable())
 				continue;
@@ -78,7 +78,7 @@ int CommandProcessor(std::string command)
 				else
 				{
 					GTA::CTask *lastChild;
-					for (lastChild = parent; lastChild->Child; lastChild = lastChild->Child);
+					for (lastChild = parent; lastChild->SubTask; lastChild = lastChild->SubTask);
 					
 				}
 				rage::sysMemAllocator::Get()->free(ptr, rage::HEAP_TASK_CLONE);

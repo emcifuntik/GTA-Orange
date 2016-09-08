@@ -101,7 +101,6 @@ void LocalTick()
 	for (;;)
 	{
 		CLocalPlayer::Get()->Tick();
-		TRACEN();
 		if (CNetworkConnection::Get()->IsConnected()) {
 			if (CNetworkConnection::Get()->IsConnectionEstablished())
 			{

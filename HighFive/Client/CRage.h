@@ -184,7 +184,8 @@ public:
 class CPlayerInfo
 {
 public:
-	char pad_0x0000[0x210]; //0x0000
+	virtual ~CPlayerInfo();
+	char pad_0x0008[0x208]; //0x0000
 	float TimeSinceAim; //0x0210 
 	__int32 AimState; //0x0214 
 	__int32 CurrentWeaponHash; //0x0218 
@@ -219,6 +220,8 @@ public:
 	int32_t field_6;
 	GTA::CTask *TasksArray[5];
 
+	GTA::CTask* GetTaskByID(unsigned int taskID);
+
 	GTA::CTask* GetTask()
 	{
 		if (ActiveTask < 0)
@@ -227,9 +230,13 @@ public:
 			return TasksArray[ActiveTask];
 	}
 
-	GTA::CTask *FindTask(int64_t taskID);
-
 }; //Size=0x0008
+
+struct TaskPair
+{
+	CSerialisedFSMTaskInfo *task;
+	unsigned short taskID;
+};
 
 class CTaskTreeMotion
 {
@@ -561,8 +568,8 @@ namespace GTA
 		void *somePtr;
 		CPed *targetPed;
 		CTask *Parent;
-		CTask *Child;
-		int64_t field_1;
+		CTask *SubTask;
+		CTask* NextSubTask;
 		int32_t field_2;
 		int32_t field_3;
 		float timeFromBegin;
@@ -586,6 +593,20 @@ typedef void CPlayerSyncTree;
 typedef void CTrainSyncTree;
 typedef void CPlaneSyncTree;
 typedef void CDoorSyncTree;
+
+class rageBuffer
+{
+public:
+	unsigned char *Buffer; //0x0000 
+	DWORD Align; //0x0008 
+	DWORD StartSize; //0x000C 
+	DWORD FinalSize; //0x0010 
+	DWORD Size2; //0x0014 
+	DWORD Unknown; //0x0018 
+	unsigned char Flags; //0x001C 
+
+}; //Size=0x001D
+
 
 //class SyncTree
 //{

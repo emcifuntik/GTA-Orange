@@ -101,9 +101,9 @@ class CSerialisedFSMTaskInfo
 public:
 	virtual ~CSerialisedFSMTaskInfo();
 	virtual int64_t GetID();
-	virtual void* GetReader(void* task);
-	virtual void* GetWriter();
-	virtual void* GetLogger();
+	virtual void* Read(void* task);
+	virtual void* Write(void* task);
+	virtual void* Log(void* task);
 	virtual int64_t Size();
 	virtual int widen();
 	virtual void sub_F65F30_2();

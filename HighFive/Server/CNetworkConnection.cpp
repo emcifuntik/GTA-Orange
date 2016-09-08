@@ -178,12 +178,12 @@ void CNetworkConnection::Tick()
 				bsOut.Write(rsName);
 
 				player->GetOnFootData(data);
-#if 1
+#if _DEBUG
 				data.vecPos.fX += 1.f;
 				data.vecPos.fY += 1.f;
 #endif
 				bsOut.Write(data);
-#if 1
+#if _DEBUG
 
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 #else
@@ -195,6 +195,36 @@ void CNetworkConnection::Tick()
 			case ID_SEND_VEHICLE_DATA:
 			{
 				server->Send(&bsIn, MEDIUM_PRIORITY, UNRELIABLE_SEQUENCED, 0, packet->systemAddress, true);
+				break;
+			}
+			case ID_SEND_TASKS:
+			{
+				int tasks = 0;
+				bsIn.Read(tasks);
+				bsOut.Write((unsigned char)ID_SEND_TASKS);
+				bsOut.Write(packet->guid);
+				bsOut.Write(tasks);
+				for (int i = 0; i < tasks; ++i)
+				{
+					unsigned short taskID;
+
+					bsIn.Read(taskID);
+					bsOut.Write(taskID);
+
+					unsigned int size;
+
+					bsIn.Read(size);
+					bsOut.Write(size);
+
+					int bytesSize = (size % 8) ? (size / 8 + 1) : (size / 8);
+
+					unsigned char* taskInfo = new unsigned char[bytesSize];
+					bsIn.ReadBits(taskInfo, size);
+					bsOut.WriteBits(taskInfo, size);
+					delete[] taskInfo;
+				}
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+				bsOut.Reset();
 				break;
 			}
 			case ID_CONNECTED_PING:
