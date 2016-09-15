@@ -1,5 +1,12 @@
 #include "stdafx.h"
 
+void __fastcall eventHook(GTA::CTask* task)
+{
+	log_debug << task->GetTree() << std::endl;
+	CLocalPlayer::Get()->updateTasks = true;
+}
+
+
 CLocalPlayer* CLocalPlayer::Instance = nullptr;
 
 CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
@@ -175,6 +182,7 @@ void CLocalPlayer::SendTasks()
 				bsOut.Write(taskID);
 				unsigned int size = (unsigned int)ser->Size();
 				bsOut.Write(size);
+				
 				rageBuffer data;
 				unsigned char *buffer = new unsigned char[Utils::RoundToBytes(size)];
 				memset(buffer, 0, Utils::RoundToBytes(size));

@@ -205,6 +205,13 @@ public:
 
 }; //Size=0x0008
 
+
+struct TaskPair
+{
+	CSerialisedFSMTaskInfo *task;
+	unsigned short taskID;
+};
+
 class CTaskTree
 {
 public:
@@ -218,7 +225,7 @@ public:
 	int32_t field_4;
 	int32_t field_5;
 	int32_t field_6;
-	GTA::CTask *TasksArray[5];
+	GTA::CTask *TasksArray[6];
 
 	GTA::CTask* GetTaskByID(unsigned int taskID);
 
@@ -231,12 +238,6 @@ public:
 	}
 
 }; //Size=0x0008
-
-struct TaskPair
-{
-	CSerialisedFSMTaskInfo *task;
-	unsigned short taskID;
-};
 
 class CTaskTreeMotion
 {

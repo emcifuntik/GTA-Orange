@@ -40,7 +40,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 		//MemoryHook::nop((*GTA::CAddress::Get())[INTENTIONAL_CRASH]);
 		//MemoryHook::retn((*GTA::CAddress::Get())[CREATE_NETWORK_EVENT_BINDINGS]);
 		MemoryHook::retn((*GTA::CAddress::Get())[LOAD_NEW_GAME]);
-		MemoryHook::retn((*GTA::CAddress::Get())[OPEN_CHEAT_WINDOW]);
+		//MemoryHook::retn((*GTA::CAddress::Get())[OPEN_CHEAT_WINDOW]);
 		MemoryHook::retn((*GTA::CAddress::Get())[RESET_VEHICLE_DENSITY_LAST_FRAME]);
 		MemoryHook::retn((*GTA::CAddress::Get())[SET_CLOCK_FORWARD_AFTER_DEATH]);
 		MemoryHook::retn((*GTA::CAddress::Get())[DISABLE_LOADING_MP_DLC_CONTENT]);
@@ -48,6 +48,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 		MemoryHook::nop((*GTA::CAddress::Get())[PED_DENSITY_NOP], 40);
 
 		MemoryHook::nop((*GTA::CAddress::Get())[MULTIPLAYER_MENU], 9);
+		MemoryHook::retn((*GTA::CAddress::Get())[SET_PED_RUMBLE_REACTION]);
 		/*MemoryHook::nop((*GTA::CAddress::Get())[GTAMP_NOP1]);
 		MemoryHook::nop((*GTA::CAddress::Get())[GTAMP_NOP2]);
 		MemoryHook::nop((*GTA::CAddress::Get())[GTAMP_NOP3]);*/
@@ -60,7 +61,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[PED_DENSITY3])) = 0.0f;
 		(*MemoryHook::value<float*>((*GTA::CAddress::Get())[PED_DENSITY4])) = 0.0f;
 
-		//17FC9C
+		MemoryHook::jmp((*GTA::CAddress::Get())[NEW_EVENT_HOOK], (intptr_t)&eventHook);
 
 		scriptRegister(hModule, InitGameScript);
 		scriptRegisterAdditionalThread(hModule, ChatRendering);

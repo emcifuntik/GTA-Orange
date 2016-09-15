@@ -94,6 +94,8 @@ void ChatRendering()
 void NetworkTick()
 {
 	MemoryHook::call((*GTA::CAddress::Get())[INIT_ONLINE_COMPONENTS]);
+	MemoryHook::call(0xF7A8A8);
+
 }
 
 void LocalTick()
@@ -105,7 +107,11 @@ void LocalTick()
 			if (CNetworkConnection::Get()->IsConnectionEstablished())
 			{
 				CLocalPlayer::Get()->SendOnFootData();
-				CLocalPlayer::Get()->SendTasks();
+				if (CLocalPlayer::Get()->updateTasks)
+				{
+					TG(CLocalPlayer::Get()->updateTasks);
+					CLocalPlayer::Get()->SendTasks();
+				}
 			}
 		}
 		WAIT(0);

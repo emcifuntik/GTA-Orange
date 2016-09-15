@@ -1,5 +1,7 @@
 #pragma once
 
+void __fastcall eventHook(GTA::CTask* task);
+
 class CPedestrian;
 
 class CLocalPlayer: public CPedestrian
@@ -10,6 +12,7 @@ public:
 #if _DEBUG
 	bool isDebug = false;
 #endif
+	bool updateTasks = false;
 	CVector3 *aimPosition = nullptr;
 	Hash newModel = 0;
 

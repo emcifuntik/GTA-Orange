@@ -15,8 +15,8 @@ namespace rage
 		{
 			heaps = new int64_t[HEAP_LAST];
 
-			heaps[HEAP_TASK] = value<int64_t>(0x234EEA0, true);
-			heaps[HEAP_TASK_CLONE] = value<int64_t>(0x228FF40, true);
+			heaps[HEAP_TASK] = value<int64_t>((*GTA::CAddress::Get())[TASK_POOL], true);
+			heaps[HEAP_TASK_CLONE] = value<int64_t>((*GTA::CAddress::Get())[TASK_CLONE_POOL], true);
 		}
 		int64_t *heaps = nullptr;
 		static sysMemAllocator* singleInstance;
@@ -24,13 +24,13 @@ namespace rage
 		void* (*_allocate)(int64_t allocatorPtr, int64_t size, int64_t align, int64_t suballocator);
 		void* allocate(int64_t size, int64_t align, int heapNumber = HEAP_TASK, int64_t suballocator = 0)
 		{
-			return call<void*, int64_t, int64_t, int64_t, int64_t>(0x11B7D00, heaps[heapNumber], size, align, suballocator);
+			return call<void*, int64_t, int64_t, int64_t, int64_t>((*GTA::CAddress::Get())[POOL_ADD], heaps[heapNumber], size, align, suballocator);
 		}
 
 		void (*_free)(int64_t allocatorPtr, void* address);
 		void free(void* address, int heapNumber = HEAP_TASK)
 		{
-			call<void, int64_t, void*>(0x11B7D70, heaps[heapNumber], address);
+			call<void, int64_t, void*>((*GTA::CAddress::Get())[POOL_REMOVE], heaps[heapNumber], address);
 		}
 
 		static sysMemAllocator* Get()

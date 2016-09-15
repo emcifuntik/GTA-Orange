@@ -100,7 +100,9 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
 	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+#if _DEBUG
 	pedHandler->Flags |= 1 << 30;
+#endif
 	pedHandler->Flags |= 1 << 6;
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, true, true);
 }
@@ -364,7 +366,7 @@ void CNetworkPlayer::AssignTask(GTA::CTask *task)
 {
 	if (IsSpawned())
 	{
-		pedHandler->TasksPtr->PrimaryTasks->AssignTask(task, GTA::TASK_PRIORITY_HIGHEST);
+		pedHandler->TasksPtr->PrimaryTasks->AssignTask(task, GTA::TASK_PRIORITY_HIGH);
 	}
 }
 
@@ -463,7 +465,9 @@ void CNetworkPlayer::SetModel(Hash model)
 	PED::SET_PED_COMBAT_ATTRIBUTES(Handle, 17, 1);
 	PED::SET_PED_CAN_RAGDOLL(Handle, false);
 	PED::_SET_PED_RAGDOLL_FLAG(Handle, 1 | 2 | 4);
+#if _DEBUG
 	pedHandler->Flags |= 1 << 30;
+#endif
 	pedHandler->Flags |= 1 << 6;
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, true, true);
 	

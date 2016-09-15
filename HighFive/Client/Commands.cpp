@@ -21,6 +21,11 @@ int CommandProcessor(std::string command)
 	std::vector<std::string> params = split(command, ' ');
 	command = params[0];
 	params.erase(params.begin());
+	if (!command.compare("/quit") || !command.compare("/q"))
+	{
+		ExitProcess(EXIT_SUCCESS);
+		return true;
+	}
 #if _DEBUG
 	if (!command.compare("/model"))
 	{

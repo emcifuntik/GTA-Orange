@@ -204,9 +204,9 @@ namespace GTA
 			addressWriteFile.write((char*)&addresses[LOAD_NEW_GAME], sizeof(DWORD));
 			log_debug << "LOAD_NEW_GAME: 0x" << std::hex << addresses[LOAD_NEW_GAME] << std::endl;
 
-			addresses[OPEN_CHEAT_WINDOW] = CMemory::Find("40 55 48 8B EC 48 83 EC 50 C6 05 ? ? ? ? ? 48 8B 11 48 8B 41 ? 48")->getFunc();//OPEN_CHEAT_WINDOW
-			addressWriteFile.write((char*)&addresses[OPEN_CHEAT_WINDOW], sizeof(DWORD));
-			log_debug << "OPEN_CHEAT_WINDOW: 0x" << std::hex << addresses[OPEN_CHEAT_WINDOW] << std::endl;
+			//addresses[OPEN_CHEAT_WINDOW] = CMemory::Find("40 55 48 8B EC 48 83 EC ? C6 05 ? ? ? ? ? 48 8B 11 48 8B 41 ? 48")->getFunc();//OPEN_CHEAT_WINDOW
+			//addressWriteFile.write((char*)&addresses[OPEN_CHEAT_WINDOW], sizeof(DWORD));
+			//log_debug << "OPEN_CHEAT_WINDOW: 0x" << std::hex << addresses[OPEN_CHEAT_WINDOW] << std::endl;
 
 			addresses[RESET_VEHICLE_DENSITY_LAST_FRAME] = CMemory::Find("33 C0 0F 57 C0 C7 05 ? ? ? ? ? ? ? ?")->getFunc();//RESET_VEHICLE_DENSITY_LAST_FRAME
 			addressWriteFile.write((char*)&addresses[RESET_VEHICLE_DENSITY_LAST_FRAME], sizeof(DWORD));
@@ -236,7 +236,31 @@ namespace GTA
 			addressWriteFile.write((char*)&addresses[INIT_WRITE_BUFFER], sizeof(DWORD));
 			log_debug << "INIT_WRITE_BUFFER: 0x" << std::hex << addresses[INIT_WRITE_BUFFER] << std::endl;
 
-			//80 61 1C ? 33 C0 48 89 11 48 89 41 10 89 41 18  44 89 41 0C 44 89 49 08
+			addresses[NEW_EVENT_HOOK] = CMemory::Find("48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 4C  89 70 20 55 48 8B EC 48 83 EC 60 48 83 79 20 00")->getFunc();//NEW_EVENT_HOOK
+			addressWriteFile.write((char*)&addresses[NEW_EVENT_HOOK], sizeof(DWORD));
+			log_debug << "NEW_EVENT_HOOK: 0x" << std::hex << addresses[NEW_EVENT_HOOK] << std::endl;
+
+			addresses[TASK_POOL] = CMemory::Find("48 8B 0D ? ? ? ? 41 B8 10 00 00 00 E8 ? ? ? ? 48 8B D8 48 85 C0 75 ?")->getOffset(3);//TASK_POOL
+			addressWriteFile.write((char*)&addresses[TASK_POOL], sizeof(DWORD));
+			log_debug << "TASK_POOL: 0x" << std::hex << addresses[TASK_POOL] << std::endl;
+
+			addresses[TASK_CLONE_POOL] = CMemory::Find("48 8B 0D ? ? ? ? 45 33 C0 48 8B D3 E8 ? ? ? ? 48 8B 74 24 38")->getOffset(3);//TASK_CLONE_POOL
+			addressWriteFile.write((char*)&addresses[TASK_CLONE_POOL], sizeof(DWORD));
+			log_debug << "TASK_CLONE_POOL: 0x" << std::hex << addresses[TASK_CLONE_POOL] << std::endl;
+
+			addresses[POOL_ADD] = CMemory::Find("48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 18 57 48 83 EC 20 48 8D 99 A0 00 00 00 49 8B F0 48 8B EA")->getFunc();//POOL_ADD
+			addressWriteFile.write((char*)&addresses[POOL_ADD], sizeof(DWORD));
+			log_debug << "POOL_ADD: 0x" << std::hex << addresses[POOL_ADD] << std::endl;
+
+			addresses[POOL_REMOVE] = CMemory::Find("48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 48 8D 99 A0 00 00 00 48 8B F2 48 8B F9 48 83 3B 00 74 09")->getFunc();//POOL_REMOVE
+			addressWriteFile.write((char*)&addresses[POOL_REMOVE], sizeof(DWORD));
+			log_debug << "POOL_REMOVE: 0x" << std::hex << addresses[POOL_REMOVE] << std::endl;
+
+			addresses[SET_PED_RUMBLE_REACTION] = CMemory::Find("E8 ? ? ? ? 45 33 C0 48 8B CB 33 D2 E8 ? ? ? ? 48 8B 5C 24 ? 48 83 C4 40 5F C3 ? ? ? 40 53 48 83 EC 20 8A DA")->getFunc();//SET_PED_RUMBLE_REACTION
+			addressWriteFile.write((char*)&addresses[SET_PED_RUMBLE_REACTION], sizeof(DWORD));
+			log_debug << "SET_PED_RUMBLE_REACTION: 0x" << std::hex << addresses[SET_PED_RUMBLE_REACTION] << std::endl;
+
+			//
 
 			addressWriteFile.close();
 		}

@@ -125,4 +125,5 @@ namespace MemoryHook
 	
 	void nop(intptr_t address, int count = 5);
 	void retn(intptr_t address);
+	void jmp(intptr_t address, intptr_t jumpto);
 };

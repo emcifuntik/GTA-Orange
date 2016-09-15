@@ -142,6 +142,8 @@ void CNetworkConnection::Tick()
 					{
 						unsigned short taskID;
 						bsIn.Read(taskID);
+						log_debug << "Recieved " << VTasks::Get()->GetTaskName(taskID) << std::endl;
+
 						unsigned int size;
 						bsIn.Read(size);
 
@@ -160,39 +162,27 @@ void CNetworkConnection::Tick()
 					}
 					if (parentTaskID != -1)
 					{
-						if (!player->pedHandler->TasksPtr->PrimaryTasks->GetTaskByID(parentTaskID))
+						GTA::CTask *parentTask = nullptr;
+						GTA::CTask *cursorTask = nullptr;
+						for each (auto cloned in ClonedTasks)
 						{
-							GTA::CTask *parentTask = nullptr;
-							GTA::CTask *cursorTask = nullptr;
-							for each (auto cloned in ClonedTasks)
+							if (!parentTask)
 							{
-								if (!parentTask)
-								{
-									parentTask = (GTA::CTask*)cloned.task->GetTask();
-									parentTask->Deserialize(cloned.task);
-									cursorTask = parentTask;
-								}
-								else
-								{
-									GTA::CTask *newTask = (GTA::CTask*)cloned.task->GetTask();
-									newTask->Deserialize(cloned.task);
-									cursorTask->NextSubTask = newTask;
-									cursorTask = newTask;
-								}
+								parentTask = (GTA::CTask*)cloned.task->GetTask();
+								parentTask->Deserialize(cloned.task);
+								cursorTask = parentTask;
 							}
-							player->AssignTask(parentTask);
-						}
-						else
-						{
-							for each (auto cloned in ClonedTasks)
+							else
 							{
-								auto task = player->pedHandler->TasksPtr->PrimaryTasks->GetTaskByID(cloned.taskID);
-								if (task)
-								{
-									task->Deserialize(cloned.task);
-								}
+								GTA::CTask *newTask = (GTA::CTask*)cloned.task->GetTask();
+								newTask->Deserialize(cloned.task);
+								cursorTask->NextSubTask = newTask;
+								cursorTask = newTask;
 							}
 						}
+						log_debug << "Assigned: " << parentTask->GetTree() << std::endl;
+						player->AssignTask(parentTask);
+
 						for each (auto cloned in ClonedTasks)
 							rage::sysMemAllocator::Get()->free((void*)cloned.task, rage::HEAP_TASK_CLONE);
 					}
