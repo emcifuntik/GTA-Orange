@@ -26,7 +26,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tinyxml2", "tinyxml2-4.0.1\
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "python", "python\python.vcxproj", "{8CBACC5E-625E-4703-8C27-BE5F2A0373E3}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "HighFive", "Launcher\HighFive.vcxproj", "{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Launcher", "Launcher\Launcher.vcxproj", "{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -83,14 +83,12 @@ Global
 		{8CBACC5E-625E-4703-8C27-BE5F2A0373E3}.Release|x64.Build.0 = Release|x64
 		{8CBACC5E-625E-4703-8C27-BE5F2A0373E3}.Release|x86.ActiveCfg = Release|Win32
 		{8CBACC5E-625E-4703-8C27-BE5F2A0373E3}.Release|x86.Build.0 = Release|Win32
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Debug|x64.ActiveCfg = Debug|x64
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Debug|x64.Build.0 = Debug|x64
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Debug|x86.ActiveCfg = Debug|Win32
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Debug|x86.Build.0 = Debug|Win32
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Release|x64.ActiveCfg = Release|x64
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Release|x64.Build.0 = Release|x64
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Release|x86.ActiveCfg = Release|Win32
-		{8BFE7812-08C2-453D-B4EE-F481EDCDD3B8}.Release|x86.Build.0 = Release|Win32
+		{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}.Debug|x64.ActiveCfg = Debug|x64
+		{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}.Debug|x64.Build.0 = Debug|x64
+		{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}.Debug|x86.ActiveCfg = Debug|x64
+		{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}.Release|x64.ActiveCfg = Release|x64
+		{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}.Release|x64.Build.0 = Release|x64
+		{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

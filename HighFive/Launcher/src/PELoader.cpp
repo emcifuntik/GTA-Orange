@@ -2,6 +2,10 @@
 
 using POINTER_TYPE = ULONGLONG;
 
+#ifndef DYNAMIC_PE_ALLOC
+unsigned char pe[0x6000000];
+#endif
+
 void PELoader::VerifyPE()
 {
 	dosHeader = (PIMAGE_DOS_HEADER)(data);
@@ -29,20 +33,35 @@ void PELoader::VerifyPE()
 void PELoader::LoadHeaders()
 {
 	// Try to allocate the code
-	unsigned char * code = (unsigned char *)VirtualAlloc((LPVOID)(old_header->OptionalHeader.ImageBase), old_header->OptionalHeader.SizeOfImage, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
-	
+#ifndef DYNAMIC_PE_ALLOC
+	unsigned char * code = pe;
+	DWORD unused;
+	VirtualProtect(code, old_header->OptionalHeader.SizeOfImage, PAGE_READWRITE, &unused);
+#else
+	LPVOID code = (unsigned char *)VirtualAlloc((LPVOID)(old_header->OptionalHeader.ImageBase), old_header->OptionalHeader.SizeOfImage, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
+#endif
+
+	this->code = HMODULE(code);
 	if (code == NULL)
 	{
+#ifndef DYNAMIC_PE_ALLOC
+		throw std::runtime_error("Out of memory");
+#else
 		code = (unsigned char *)VirtualAlloc(NULL, old_header->OptionalHeader.SizeOfImage, MEM_RESERVE | MEM_COMMIT, PAGE_READWRITE);
 		if (code == NULL)
 		{
 			SetLastError(ERROR_OUTOFMEMORY);
 			throw std::runtime_error("Out of memory");
 		}
+#endif
 	}
-
-	unsigned char * headers = (unsigned char *)VirtualAlloc(code, old_header->OptionalHeader.SizeOfHeaders, MEM_COMMIT, PAGE_READWRITE);
-
+	
+#ifndef DYNAMIC_PE_ALLOC
+	unsigned char * headers = (unsigned char *)pe;
+	VirtualProtect(headers, old_header->OptionalHeader.SizeOfHeaders, PAGE_READWRITE, &unused);
+#else
+	LPVOID headers = VirtualAlloc(code, old_header->OptionalHeader.SizeOfHeaders, MEM_COMMIT, PAGE_READWRITE);
+#endif
 	memcpy(headers, data, old_header->OptionalHeader.SizeOfHeaders);
 
 	result_headers = (PIMAGE_NT_HEADERS)&((const unsigned char *)(headers))[dosHeader->e_lfanew];
@@ -59,7 +78,7 @@ void PELoader::BuildIAT()
 		PIMAGE_IMPORT_DESCRIPTOR importDesc = (PIMAGE_IMPORT_DESCRIPTOR)(result_headers->OptionalHeader.ImageBase + directory->VirtualAddress);
 		for (; !IsBadReadPtr(importDesc, sizeof(IMAGE_IMPORT_DESCRIPTOR)) && importDesc->Name; importDesc++)
 		{
-			HMODULE handle = LoadLibraryA((LPCSTR)(result_headers->OptionalHeader.ImageBase + importDesc->Name));
+			HMODULE handle = m_libraryLoader((LPCSTR)(result_headers->OptionalHeader.ImageBase + importDesc->Name));
 
 			if (handle == NULL)
 			{
@@ -78,7 +97,7 @@ void PELoader::BuildIAT()
 				if (IMAGE_SNAP_BY_ORDINAL(*thunkRef))
 					*funcRef = GetProcAddress(handle, (LPCSTR)IMAGE_ORDINAL(*thunkRef));
 				else
-					*funcRef = GetProcAddress(handle, (LPCSTR)&((PIMAGE_IMPORT_BY_NAME)(result_headers->OptionalHeader.ImageBase + (*thunkRef)))->Name);
+					*funcRef = (FARPROC)m_functionResolver(handle, (LPCSTR)&((PIMAGE_IMPORT_BY_NAME)(result_headers->OptionalHeader.ImageBase + (*thunkRef)))->Name);
 			}
 		}
 	}
@@ -86,11 +105,7 @@ void PELoader::BuildIAT()
 
 void PELoader::ApplyPermissions()
 {
-#ifdef _WIN64
 	ULONGLONG imageOffset = (result_headers->OptionalHeader.ImageBase & 0xffffffff00000000);
-#else
-#define imageOffset 0
-#endif
 	auto section = IMAGE_FIRST_SECTION(result_headers);
 	for (int i = 0; i < result_headers->FileHeader.NumberOfSections; i++, section++)
 	{
@@ -106,28 +121,33 @@ void PELoader::ApplyPermissions()
 
 		DWORD protect = PAGE_NOACCESS;
 
-		if (!executable)
-			if (!readable)
-				if (!writeable)
-					protect = PAGE_NOACCESS;
-				else
-					protect = PAGE_WRITECOPY;
-			else
-				if (!writeable)
-					protect = PAGE_READONLY;
-				else
-					protect = PAGE_READWRITE;
-		else
-			if (!readable)
-				if (!writeable)
-					protect = PAGE_EXECUTE;
-				else
-					protect = PAGE_EXECUTE_WRITECOPY;
-			else
+		if (executable)
+		{
+			if (readable)
+			{
+				protect = PAGE_EXECUTE_READWRITE;
 				if (!writeable)
 					protect = PAGE_EXECUTE_READ;
-				else
-					protect = PAGE_EXECUTE_READWRITE;
+			}
+			else
+			{
+				protect = PAGE_EXECUTE_WRITECOPY;
+				if (!writeable)
+					protect = PAGE_EXECUTE;
+			}
+		}
+		else if (readable)
+		{
+			protect = PAGE_READWRITE;
+			if (!writeable)
+				protect = PAGE_READONLY;
+		}
+		else
+		{
+			protect = PAGE_WRITECOPY;
+			if (!writeable)
+				protect = PAGE_NOACCESS;
+		}
 
 		if (section->Characteristics & IMAGE_SCN_MEM_NOT_CACHED)
 			protect |= PAGE_NOCACHE;
@@ -140,17 +160,41 @@ void PELoader::ApplyPermissions()
 				size = result_headers->OptionalHeader.SizeOfUninitializedData;
 
 		if (size > 0 && VirtualProtect((LPVOID)((POINTER_TYPE)section->Misc.PhysicalAddress | imageOffset), size, protect, &protect) == 0)
-			MessageBox(NULL, "Error protecting memory page", NULL, MB_OK);
+			printf_s("VirtualProtect error. Section: %s\n", section->Name);
 	}
 }
 
 void PELoader::DoTLS()
 {
-	auto directory = GetHeaderDictionary(IMAGE_DIRECTORY_ENTRY_TLS);
-	if (directory->VirtualAddress > 0)
+	HANDLE module = GetModuleHandle(NULL);
+	PIMAGE_DOS_HEADER targetHeader = (PIMAGE_DOS_HEADER)module;
+	IMAGE_NT_HEADERS* targetNtHeader = (IMAGE_NT_HEADERS*)((int64_t)module + targetHeader->e_lfanew);
+	if (targetNtHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].Size)
 	{
-		PIMAGE_TLS_DIRECTORY tls = (PIMAGE_TLS_DIRECTORY)(result_headers->OptionalHeader.ImageBase + directory->VirtualAddress);
+		PIMAGE_TLS_DIRECTORY targetTls = (PIMAGE_TLS_DIRECTORY)(targetNtHeader->OptionalHeader.ImageBase + targetNtHeader->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].VirtualAddress);
+		PIMAGE_TLS_DIRECTORY sourceTls = (PIMAGE_TLS_DIRECTORY)(result_headers->OptionalHeader.ImageBase + result_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].VirtualAddress);
+		PIMAGE_TLS_DIRECTORY tlsBase = (PIMAGE_TLS_DIRECTORY)__readgsqword(0x58);
+
+#ifndef DYNAMIC_PE_ALLOC
+		auto startAddr = /*sourceTls->StartAddressOfRawData - (0x140000000) + */intptr_t(result_headers->OptionalHeader.ImageBase) + 0xA44A878;
+		auto endAddr = /*sourceTls->EndAddressOfRawData - (0x140000000) + */intptr_t(result_headers->OptionalHeader.ImageBase) + 0xA44A878 + 2170;
+#else
+		auto startAddr = sourceTls->StartAddressOfRawData;
+		auto endAddr = sourceTls->EndAddressOfRawData;
+#endif
+
+		memcpy((LPVOID)tlsBase->StartAddressOfRawData, (LPVOID)startAddr, endAddr - startAddr);
+		memcpy((LPVOID)targetTls->StartAddressOfRawData, (LPVOID)startAddr, endAddr - startAddr);
+	}
+	if (result_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].Size)
+	{
+#ifndef DYNAMIC_PE_ALLOC
+		auto addressOfCallbacks = /*sourceTls->StartAddressOfRawData - (0x140000000) + */intptr_t(result_headers->OptionalHeader.ImageBase) + 0xA44A878 - 2170;
+		PIMAGE_TLS_CALLBACK* callback = (PIMAGE_TLS_CALLBACK *)addressOfCallbacks;
+#else
+		PIMAGE_TLS_DIRECTORY tls = (PIMAGE_TLS_DIRECTORY)(result_headers->OptionalHeader.ImageBase + result_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].VirtualAddress);
 		PIMAGE_TLS_CALLBACK* callback = (PIMAGE_TLS_CALLBACK *)tls->AddressOfCallBacks;
+#endif
 		if (callback)
 		{
 			while (*callback)
@@ -164,20 +208,21 @@ void PELoader::DoTLS()
 
 int PELoader::LoadFile(const char * filename)
 {
-	FILE* file = fopen(filename, "rb");
+	FILE* file = nullptr;
+	errno_t error = fopen_s(&file, filename, "rb");
 
-	if (!file)
+	if (error)
 	{
-		MessageBox(NULL, "Failed to open remote executable.", NULL, MB_OK);
+		printf_s("Failed to open remote executable. Please check if executable exists %s", filename);
 		return -1;
 	}
 
-	uint32_t length = 0;
+	uint32 length = 0;
 
 	fseek(file, 0, SEEK_END);
 	length = ftell(file);
 
-	data = new uint8_t[length];
+	data = new uint8[length];
 
 	fseek(file, 0, SEEK_SET);
 	fread(data, 1, length, file);
@@ -192,10 +237,21 @@ int PELoader::LoadFile(const char * filename)
 	ApplyPermissions();
 	DoTLS();
 
-	//utils::hooking::hooking_helpers::SetExecutableAddress(reinterpret_cast<uintptr_t>(result_headers) - dosHeader->e_lfanew);
+	/*PRUNTIME_FUNCTION exceptions = (PRUNTIME_FUNCTION)(result_headers->OptionalHeader.ImageBase + result_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXCEPTION].VirtualAddress);
+	auto exceptionsSize = result_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_EXCEPTION].Size / sizeof(RUNTIME_FUNCTION);
+	m_module = GetModuleHandle(NULL);
+	if (!RtlAddFunctionTable(exceptions, (unsigned int)exceptionsSize, (DWORD64)m_module))
+	{
+		printf_s("Can't install exception handler!\n");
+	}*/
 
+	DWORD oldProtect;
+	VirtualProtect(result_headers, 0x1000, PAGE_EXECUTE_READWRITE, &oldProtect);
+
+	result_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT] = old_header->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_IMPORT];
+	memcpy((void *)result_headers, (const void *)old_header, sizeof(IMAGE_SECTION_HEADER) * old_header->FileHeader.NumberOfSections + sizeof(IMAGE_NT_HEADERS));
 	entryPoint = ((void(*)(void))(result_headers->OptionalHeader.ImageBase + result_headers->OptionalHeader.AddressOfEntryPoint));
-
+	CGlobals::Get().baseAddr = (LPVOID)result_headers->OptionalHeader.ImageBase;
 	return 0;
 }
 
@@ -209,8 +265,14 @@ void PELoader::LoadSections()
 		{
 			if (result_headers->OptionalHeader.SectionAlignment > 0)
 			{
+#ifndef DYNAMIC_PE_ALLOC
+				DWORD unused;
+				unsigned char * dest = static_cast<unsigned char *>(pe + section->VirtualAddress);
+				VirtualProtect(dest, section->SizeOfRawData, PAGE_READWRITE, &unused);
+#else
 				unsigned char * dest = static_cast<unsigned char *>(VirtualAlloc((LPVOID)(result_headers->OptionalHeader.ImageBase
-					+ section->VirtualAddress), result_headers->OptionalHeader.SectionAlignment, MEM_COMMIT, PAGE_READWRITE));
+				+ section->VirtualAddress), result_headers->OptionalHeader.SectionAlignment, MEM_COMMIT, PAGE_READWRITE));
+#endif
 
 				section->Misc.PhysicalAddress = (DWORD)(POINTER_TYPE)dest;
 
@@ -219,11 +281,17 @@ void PELoader::LoadSections()
 		}
 		else
 		{
+			DWORD unused;
+#ifndef DYNAMIC_PE_ALLOC
+			unsigned char * dest = static_cast<unsigned char *>(pe + section->VirtualAddress);
+			VirtualProtect(dest, section->SizeOfRawData, PAGE_READWRITE, &unused);
+#else
 			unsigned char * dest = static_cast<unsigned char *>(VirtualAlloc((LPVOID)(result_headers->OptionalHeader.ImageBase + section->VirtualAddress),
 				section->SizeOfRawData, MEM_COMMIT, PAGE_READWRITE));
-
+#endif
 			memcpy(dest, &data[section->PointerToRawData], section->SizeOfRawData);
 			section->Misc.PhysicalAddress = (DWORD)(POINTER_TYPE)dest;
+			VirtualProtect(dest, section->SizeOfRawData, PAGE_EXECUTE_READWRITE, &unused);
 		}
 	}
 }
@@ -232,13 +300,13 @@ void PELoader::Relocate()
 {
 	DWORD locationDelta = static_cast<DWORD>(result_headers->OptionalHeader.ImageBase - old_header->OptionalHeader.ImageBase);
 	//utils::hooking::hooking_helpers::SetBaseDiffer(locationDelta);
-	if (locationDelta != 0)
+	if (result_headers->OptionalHeader.ImageBase != old_header->OptionalHeader.ImageBase)
 	{
-		PIMAGE_DATA_DIRECTORY directory = GetHeaderDictionary(IMAGE_DIRECTORY_ENTRY_BASERELOC);
-
-		if (directory->Size > 0)
+		if (locationDelta)
 		{
-			PIMAGE_BASE_RELOCATION relocation = (PIMAGE_BASE_RELOCATION)(result_headers->OptionalHeader.ImageBase + directory->VirtualAddress);
+			PIMAGE_BASE_RELOCATION relocation = (PIMAGE_BASE_RELOCATION)(result_headers->OptionalHeader.ImageBase
+				+ result_headers->OptionalHeader.DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC].VirtualAddress);
+			
 			while (relocation->VirtualAddress > 0)
 			{
 				unsigned char *dest = (unsigned char *)(result_headers->OptionalHeader.ImageBase + relocation->VirtualAddress);
@@ -246,9 +314,7 @@ void PELoader::Relocate()
 
 				for (DWORD i = 0; i < ((relocation->SizeOfBlock - sizeof(IMAGE_BASE_RELOCATION)) / 2); i++, relInfo++)
 				{
-#ifdef _WIN64
 					ULONGLONG *patchAddr64;
-#endif
 					int type, offset;
 
 					type = *relInfo >> 12;
@@ -256,12 +322,10 @@ void PELoader::Relocate()
 
 					if (type == IMAGE_REL_BASED_HIGHLOW)
 						*(DWORD *)(dest + offset) += locationDelta;
-#ifdef _WIN64
 					if (type == IMAGE_REL_BASED_DIR64) {
 						patchAddr64 = (ULONGLONG *)(dest + offset);
 						*patchAddr64 += (ULONGLONG)locationDelta;
 					}
-#endif
 				}
 
 				relocation = (PIMAGE_BASE_RELOCATION)(((char *)relocation) + relocation->SizeOfBlock);

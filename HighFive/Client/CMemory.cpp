@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+//TODO: Кэширование паттернов
+
 ptrdiff_t CMemory::baseDiff;
 
 CMemory::CMemory(UINT64 address)
@@ -71,29 +73,11 @@ CMemory * CMemory::Find(const char * pattern)
 	UINT64 address;
 	MODULEINFO info = { 0 };
 
-	address = (UINT64)GetModuleHandle(NULL);
-	GetModuleInformation(GetCurrentProcess(), GetModuleHandle(NULL), &info, sizeof(MODULEINFO));
-	size = (UINT64)info.SizeOfImage;
+	address = (UINT64)0x0000000140000000;
+	size = (UINT64)0x6000000i64;
 
 	for (i = 0; i < size; ++i)
 		if (CMemory::memoryCompare((BYTE *)(address + i), (BYTE *)search.c_str(), mask.c_str()))
-			return new CMemory((UINT64)(address + i));
-	return nullptr;
-}
-
-CMemory * CMemory::Find_t(const char * text)
-{
-	UINT64 i;
-	UINT64 size;
-	UINT64 address;
-	MODULEINFO info = { 0 };
-
-	address = (UINT64)GetModuleHandle(NULL);
-	GetModuleInformation(GetCurrentProcess(), GetModuleHandle(NULL), &info, sizeof(MODULEINFO));
-	size = (UINT64)info.SizeOfImage;
-
-	for (i = 0; i < size; ++i)
-		if (CMemory::memoryCompare((BYTE *)(address + i), (BYTE *)text, strlen(text)))
 			return new CMemory((UINT64)(address + i));
 	return nullptr;
 }

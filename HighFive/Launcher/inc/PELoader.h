@@ -31,22 +31,37 @@
 
 class PELoader
 {
-private:
+public:
 	void(*entryPoint)();
 
-	uint8_t * data = nullptr;
+	uint8 * data = nullptr;
 
 	PIMAGE_DOS_HEADER dosHeader = nullptr;
 	PIMAGE_NT_HEADERS old_header = nullptr;
 	PIMAGE_NT_HEADERS result_headers = nullptr;
+	HMODULE m_module = nullptr;
+	HMODULE(*m_libraryLoader)(const char*);
+	LPVOID(*m_functionResolver)(HMODULE, const char*);
+	HMODULE code = nullptr;
 
-	auto GetHeaderDictionary(uint32_t idx)
+	auto GetHeaderDictionary(uint32 idx)
 	{
 		return &result_headers->OptionalHeader.DataDirectory[idx];
 	}
 
 public:
+	PELoader()
+	{
+		SetLibraryLoader([](const char* name)
+		{
+			return LoadLibraryA(name);
+		});
 
+		SetFunctionResolver([](HMODULE module, const char* name)
+		{
+			return (LPVOID)GetProcAddress(module, name);
+		});
+	}
 	~PELoader()
 	{
 		delete[] data;
@@ -62,6 +77,16 @@ public:
 	void DoTLS();
 
 	int LoadFile(const char* filename);
+
+	inline void SetLibraryLoader(HMODULE(*loader)(const char*))
+	{
+		m_libraryLoader = loader;
+	}
+
+	inline void SetFunctionResolver(LPVOID(*functionResolver)(HMODULE, const char*))
+	{
+		m_functionResolver = functionResolver;
+	}
 
 	inline void Run()
 	{
