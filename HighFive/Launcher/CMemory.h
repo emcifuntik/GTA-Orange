@@ -27,15 +27,15 @@ public:
 	template <typename T> T* get(int offset);
 	template <typename T> T get_call();
 
-	LPVOID getOffset(int offset)
+	LPVOID getOffset(int offset = 3)
 	{
-		DWORD* ptr = (DWORD*)((uintptr_t)address + offset);
-		return (LPVOID)(*ptr + ((uintptr_t)address + offset + sizeof(DWORD)));
+		long* ptr = (long*)((intptr_t)address + offset);
+		return (LPVOID)(*ptr + ((intptr_t)address + offset + sizeof(long)));
 	}
 
 	DWORD getFunc()
 	{
-		return (DWORD)((uintptr_t)address - (uintptr_t)0x140000000);
+		return (DWORD)((uintptr_t)address);
 	}
 	
 	CMemory& operator+(uintptr_t offset)
@@ -108,7 +108,7 @@ inline T* CMemory::get(int offset)
 template<typename T>
 inline T CMemory::get_call()
 {
-	uintptr_t target = *(DWORD*)(uintptr_t(address) + 1);
-	target += (uintptr_t(address) + 5);
+	intptr_t target = *(long*)(intptr_t(address) + 1);
+	target += (intptr_t(address) + 5);
 	return (T)target;
 }

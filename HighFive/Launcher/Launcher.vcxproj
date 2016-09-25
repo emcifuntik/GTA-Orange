@@ -54,8 +54,8 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Code\HighFive\HighFive\tinyxml2-4.0.1;./;inc;$(SolutionDir)pe-loader\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Code\HighFive\Shared;D:\Code\HighFive\HighFive\tinyxml2-4.0.1;./;inc;$(SolutionDir)pe-loader\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <IntrinsicFunctions>true</IntrinsicFunctions>
     </ClCompile>
@@ -71,8 +71,8 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Code\HighFive\HighFive\tinyxml2-4.0.1;./;inc;$(SolutionDir)pe-loader\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Code\HighFive\Shared;D:\Code\HighFive\HighFive\tinyxml2-4.0.1;./;inc;$(SolutionDir)pe-loader\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <StringPooling>true</StringPooling>
@@ -91,21 +91,38 @@
     <ClCompile Include="EventGameFrame.cpp" />
     <ClCompile Include="Globals.cpp" />
     <ClCompile Include="MemoryCache.cpp" />
+    <ClCompile Include="nativeInvoker.cpp" />
     <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="scrEngine.cpp" />
+    <ClCompile Include="scrManager.cpp" />
+    <ClCompile Include="scrThread.cpp" />
     <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\PELoader.cpp" />
     <ClCompile Include="TlsInit.cpp" />
+    <ClCompile Include="Utils.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Shared\Console\CLog.h" />
+    <ClInclude Include="..\..\Shared\CVector3.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="CMemory.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="inc\PELoader.h" />
     <ClInclude Include="MemoryCache.h" />
+    <ClInclude Include="nativeCaller.h" />
+    <ClInclude Include="nativeInvoker.h" />
+    <ClInclude Include="Natives.h" />
+    <ClInclude Include="pgCollection.h" />
+    <ClInclude Include="pgPtrCollection.h" />
     <ClInclude Include="Registry.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="scrEngine.h" />
+    <ClInclude Include="scrManager.h" />
+    <ClInclude Include="scrThread.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="types.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

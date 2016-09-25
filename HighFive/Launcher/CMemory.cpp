@@ -55,6 +55,7 @@ void CMemory::farJmp(LPVOID func)
 	*((WORD*)(uintptr_t(address) + 10)) = 0xE0FF;
 	*((BYTE*)(uintptr_t(address) + 12)) = 0xC3;
 	VirtualProtect((LPVOID*)address, 13, dwOldProtect, &dwBkup);
+	address = (LPVOID)((uint64_t)address + 13);
 }
 
 CMemory& CMemory::Find(const char * pattern)

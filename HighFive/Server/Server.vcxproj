@@ -34,7 +34,6 @@
     <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CLog.cpp" />
     <ClCompile Include="CNetworkConnection.cpp" />
     <ClCompile Include="CNetworkPlayer.cpp" />
     <ClCompile Include="CConfig.cpp" />
@@ -235,7 +234,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;..\..\Shared;..\python\include;..\tinyxml2-4.0.1;..\ScriptHookV;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -258,7 +257,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;..\..\Shared;..\python\include;..\tinyxml2-4.0.1;..\ScriptHookV;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>

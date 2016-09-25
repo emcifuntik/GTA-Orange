@@ -75,9 +75,6 @@
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Python\Natives</Filter>
     </ClCompile>
-    <ClCompile Include="CLog.cpp">
-      <Filter>Source Files\Common</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">

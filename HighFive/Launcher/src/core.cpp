@@ -28,6 +28,17 @@ static HWND CreateWindowExWHook(_In_ DWORD dwExStyle,
 static void OutputDebugStringAHook(LPCSTR text)
 {
 	OutputDebugStringA(text);
+	std::ofstream out(CGlobals::Get().highFivePath + "\\Logs\\GTAV_Debug.log", std::ios_base::app);
+	out << DateTimeA() << " " << text;
+	out.close();
+}
+
+static void OutputDebugStringWHook(LPCWSTR text)
+{
+	OutputDebugStringW(text);
+	std::wofstream out(CGlobals::Get().highFivePath + "\\Logs\\GTAV_Debug.log", std::ios_base::app);
+	out << DateTimeW() << " " << text;
+	out.close();
 }
 
 static int NoWindowsHookExA(int, HOOKPROC, HINSTANCE, DWORD)
@@ -106,6 +117,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		else if (!_stricmp(functionName, "OutputDebugStringA"))
 		{
 			return OutputDebugStringAHook;
+		}
+		else if (!_stricmp(functionName, "OutputDebugStringW"))
+		{
+			return OutputDebugStringWHook;
 		}
 		else if (!_stricmp(functionName, "CreateWindowExW"))
 		{

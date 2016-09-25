@@ -25,6 +25,9 @@
     <Filter Include="Events">
       <UniqueIdentifier>{23032796-bacb-4030-98e8-88132fa8ff48}</UniqueIdentifier>
     </Filter>
+    <Filter Include="OpenHook">
+      <UniqueIdentifier>{2e9220f4-543d-4950-a317-834bd58a7740}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp">
@@ -57,6 +60,21 @@
     <ClCompile Include="Registry.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scrEngine.cpp">
+      <Filter>OpenHook</Filter>
+    </ClCompile>
+    <ClCompile Include="scrManager.cpp">
+      <Filter>OpenHook</Filter>
+    </ClCompile>
+    <ClCompile Include="scrThread.cpp">
+      <Filter>OpenHook</Filter>
+    </ClCompile>
+    <ClCompile Include="nativeInvoker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -84,6 +102,42 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Registry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shared\Console\CLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shared\CVector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scrEngine.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="pgPtrCollection.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="pgCollection.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="scrManager.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="scrThread.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="nativeInvoker.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Natives.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="nativeCaller.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
