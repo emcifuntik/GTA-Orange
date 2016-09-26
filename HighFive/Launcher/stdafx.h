@@ -72,3 +72,17 @@ static GameStateChange_ g_gameStateChange;
 static InitHUD HUDInit;
 static bool initialized = false;
 static LPARAM Icon;
+
+#pragma region script macro
+#define SCRIPT(x,y) static class _:\
+public CScript\
+{\
+public:\
+	_() : CScript(\
+		x\
+	) {}\
+protected:\
+	virtual void Run() override { scriptRegister(name, y); }\
+} _;
+#pragma endregion
+// USAGE: SCRIPT(name, function);

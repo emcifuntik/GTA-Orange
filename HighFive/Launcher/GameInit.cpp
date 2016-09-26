@@ -30,13 +30,4 @@ void Action()
 	}
 }
 
-static class _:
-	public CScript
-{
-public:
-	_(): CScript(
-		"gameInit"
-	) {}
-protected:
-	virtual void Run() override { scriptRegister(name, Action); }
-} _;
+SCRIPT("gameInit", Action);
