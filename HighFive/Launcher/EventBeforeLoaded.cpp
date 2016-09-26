@@ -852,14 +852,11 @@ class CEventBeforeLoaded :
 		// ignore launcher requirement
 		auto mem = CMemory::Find("E8 ? ? ? ? 84 C0 75 ? B2 01 B9 2F A9 C2 F4");
 		mem.put(0xEB90909090909090);
-		try {
+		if (CGlobals::Get().isSteam)
+		{
 			mem = CMemory::Find("FF 15 ? ? ? ? 84 C0 74 0C B2 01 B9 91 32 25 31 E8");
 			mem.nop(6);
 			(mem + 2).put(0xEBi8);
-		}
-		catch (...)
-		{
-
 		}
 
 		mem = CMemory::Find("48 85 C9 0F 84 ? 00 00 00 48 8D 55 A7 E8");
