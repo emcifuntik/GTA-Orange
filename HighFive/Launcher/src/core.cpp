@@ -6,12 +6,6 @@ static TCHAR szWindowClass[] = "highfive_app";
 
 void InitializeDummies();
 
-LONG_PTR SetWindowLongPtrAHook(HWND hWnd, int nIndex, LONG_PTR dwNewLong)
-{
-	
-	return SetWindowLongPtrA(hWnd, nIndex, dwNewLong);
-}
-
 static HWND CreateWindowExWHook(_In_ DWORD dwExStyle,
 	_In_opt_ LPCWSTR lpClassName,
 	_In_opt_ LPCWSTR lpWindowName,
@@ -106,6 +100,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		{
 			return (HMODULE)INVALID_HANDLE_VALUE;
 		}
+		if (!_stricmp(libName, "steam_api64.dll"))
+			CGlobals::Get().isSteam = true;
 		return LoadLibraryA(libName);
 	});
 
@@ -130,10 +126,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		else if (!_stricmp(functionName, "CreateWindowExW"))
 		{
 			return CreateWindowExWHook;
-		}
-		else if (!_stricmp(functionName, "SetWindowLongPtrA"))
-		{
-			return SetWindowLongPtrAHook;
 		}
 		return (LPVOID)GetProcAddress(module, functionName);
 	});

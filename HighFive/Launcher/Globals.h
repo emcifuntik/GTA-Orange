@@ -23,6 +23,7 @@ public:
 	bool *canLangChange = nullptr;
 	HWND gtaHwnd = nullptr;
 	WNDPROC gtaWndProc = nullptr;
+	bool isSteam = false;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;
