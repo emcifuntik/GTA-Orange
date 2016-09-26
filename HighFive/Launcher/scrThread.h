@@ -57,14 +57,10 @@ private:
 	char _0x0142[22];
 
 public:
-
 	virtual void				DoRun() = 0;
-
 	virtual eThreadState		Reset(uint32_t scriptHash, void* pArgs, uint32_t argCount);
 	virtual eThreadState		Run(uint32_t opsToExecute);
 	virtual eThreadState		Tick(uint32_t opsToExecute);
 	virtual void				Kill();
-
 	inline void *				GetScriptHandler() { return m_pScriptHandler; }
-
 };

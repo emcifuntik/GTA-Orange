@@ -7,11 +7,11 @@ protected:
 	virtual std::string Type() = 0;
 	virtual bool Action() = 0;
 public:
-	static bool Trigger(std::string eventName, bool multithreaded = false)
+	static bool Trigger(std::string name, bool multithreaded = false)
 	{
 		for (auto event : _events)
 		{
-			if (event->Type().compare(eventName))
+			if (name.compare(event->Type()))
 				continue;
 			if (!multithreaded)
 			{

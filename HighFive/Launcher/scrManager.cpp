@@ -6,6 +6,7 @@ ScriptManagerThread g_ScriptManagerThread;
 
 static HANDLE		mainFiber;
 static Script *		currentScript;
+scriptMap			ScriptManagerThread::m_scripts;
 
 void Script::Tick() 
 {

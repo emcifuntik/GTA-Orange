@@ -46,15 +46,13 @@ static int NoWindowsHookExA(int, HOOKPROC, HINSTANCE, DWORD)
 	return 1;
 }
 
-LPSTR  GetCommandLineAHook()
+LPSTR GetCommandLineAHook()
 {
 	if (CGlobals::Get().alreadyRunned)
 		return GetCommandLineA();
-
 	CGlobals::Get().alreadyRunned = true;
 	CGlobals::Get().baseAddr = loader.code;
 	CEvent::Trigger("onBeforeLoaded");
-
 	return GetCommandLineA();
 }
 

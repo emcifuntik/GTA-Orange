@@ -21,9 +21,14 @@
 #include <locale>
 #include <codecvt>
 #include <TimeAPI.h>
+#include <functional>
+#include <queue>
 #include "resource.h"
 #include "tinyxml2.h"
 #include "CVector3.h"
+#include "Utils.h"
+#include "Console\CConsole.h"
+#include "Console\CLog.h"
 #pragma endregion
 #pragma region events
 #include "Event.h"
@@ -41,11 +46,8 @@
 #include "scrManager.h"
 #include "scrEngine.h"
 #include "nativeCaller.h"
-#include "Natives.h"
+#include "Script.h"
 #pragma endregion
-#include "Utils.h"
-#include "Console\CConsole.h"
-#include "Console\CLog.h"
 #include "Registry.h"
 #include "CMemory.h"
 #include "Common.h"

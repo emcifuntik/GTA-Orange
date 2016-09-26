@@ -756,6 +756,20 @@ ScriptInfo scriptnames[748] = {
 	{ "yoga", false }
 };
 
+void Initialize()
+{
+#ifdef _DEBUG
+	AllocConsole();
+	SetConsoleTitle("GTA:V - HighFive Multiplayer");
+	FILE * unused = NULL;
+	freopen_s(&unused, "CONOUT$", "w", stdout);
+	freopen_s(&unused, "CONOUT$", "w", stderr);
+#endif
+	HUDInit();
+	if (!ScriptEngine::Initialize())
+		log_error << "Failed to initialize ScriptEngine" << std::endl;
+}
+
 static bool scriptsDisabled = false;
 
 bool IsAnyScriptLoaded()
@@ -776,54 +790,6 @@ void DisableScripts()
 	}
 }
 
-
-void GameInit()
-{
-	DisableScripts();
-	CGlobals::Get().ShutdownLoadingScreen();
-	CGlobals::Get().DoScreenFadeIn(0);
-	bool teleported = false;
-	while (true)
-	{
-		if (!teleported)
-		{
-			ENTITY::SET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 0.f, 0.f, 75.f, true, false, false, false);
-			auto model = Utils::Hash("mp_m_freemode_01");
-			if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
-				STREAMING::REQUEST_MODEL(model);
-			while (!STREAMING::HAS_MODEL_LOADED(model))
-				scriptWait(0);
-			PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
-			STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
-			/*Cam firstCam = CAM::CREATE_CAM("DEFAULT_SCRIPTED_CAMERA", false);
-			CAM::SET_CAM_COORD(firstCam, 0.f, 0.f, 100.f);
-			CAM::POINT_CAM_AT_COORD(firstCam, 300.f, 300.f, 50.f);
-			CAM::SET_CAM_ACTIVE(firstCam, true);
-			CAM::RENDER_SCRIPT_CAMS(true, false, 0, true, false);
-			UI::DISPLAY_HUD(false);
-			UI::DISPLAY_RADAR(false);*/
-			teleported = true;
-		}
-		scriptWait(0);
-	}
-}
-
-void Initialize()
-{
-#ifdef _DEBUG
-	AllocConsole();
-	SetConsoleTitle("GTA:V - HighFive Multiplayer");
-	FILE * unused = NULL;
-	freopen_s(&unused, "CONOUT$", "w", stdout);
-	freopen_s(&unused, "CONOUT$", "w", stderr);
-#endif
-	HUDInit();
-	if (!ScriptEngine::Initialize())
-		log_error << "Failed to initialize ScriptEngine" << std::endl;
-	scriptRegister("gameInit", &GameInit);
-}
-
-
 void OnGameStateChange(int gameState)
 {
 	switch (gameState)
@@ -831,6 +797,7 @@ void OnGameStateChange(int gameState)
 	case GameStatePlaying:
 		log_info << "Game ready" << std::endl;
 		ScriptEngine::CreateThread(&g_ScriptManagerThread);
+		CScript::RunAll();
 		break;
 	case GameStateMainMenu:
 		if (!initialized)
@@ -850,19 +817,13 @@ static bool gameStateChange_(int gameState)
 
 static bool OnLookAlive()
 {
-	//if (!scriptsDisabled && IsAnyScriptLoaded())
-	//{
-	//	DisableScripts();
-	//	CGlobals::Get().ShutdownLoadingScreen();
-	//	CGlobals::Get().DoScreenFadeIn(0);
-	//	scriptsDisabled = true;
-	//	/*int firstCam = CGlobals::Get().CreateCam("DEFAULT_SCRIPTED_CAMERA", false);
-	//	CGlobals::Get().SetCamCoord(firstCam, CVector3(0.f, 0.f, 200.f));
-	//	CGlobals::Get().PointCamAtCoord(firstCam, CVector3(100.f, 100.f, 100.f));
-	//	CGlobals::Get().SetCamActive(firstCam, true);
-	//	CGlobals::Get().RenderScriptCams(true, false, 2000, true, false, 0);*/
-	//	//CGlobals::Get().SetEntityCoords(CGlobals::Get().GetPlayerPed(), CVector3(0.f, 0.f, 75.f), 1, 0, 0, 0);
-	//}
+	if (!scriptsDisabled && IsAnyScriptLoaded())
+	{
+		DisableScripts();
+		CGlobals::Get().ShutdownLoadingScreen();
+		CGlobals::Get().DoScreenFadeIn(0);
+		scriptsDisabled = true;
+	}
 	CEvent::Trigger("onGameFrame");
 	return g_origLookAlive();
 }
@@ -1019,51 +980,25 @@ class CEventBeforeLoaded :
 		
 		mem = CMemory::Find("40 53 48 83 EC 20 8B 81 ? ? ? ? 48 8B D9 39 81 ? ? ? ?"); //ISABLE_COPS_AND_FIRE_TRUCKS_3
 		mem.retn();
-		
-		mem = CMemory::Find("48 89 5C 24 08 57 48 83 EC 20 8B FA 48 8B D9 E8 ? ? ? ? 41 83 C9 FF"); //FORCE_CLEANUP_FOR_ALL_THREADS_WITH_THIS_NAME
-		CGlobals::Get().ForceCleanupForAllThreadsWithThisName = (ForceCleanupForAllThreadsWithThisName_)mem();
-
-		mem = CMemory::Find("40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B D3 48 8B C8 E8 ? ? ? ? 85 C0 74 08"); //TerminateAllScriptsWithThisName
-		CGlobals::Get().TerminateAllScriptsWithThisName = (TerminateAllScriptsWithThisName_)mem();
-
-		mem = CMemory::Find("40 57 48 83 EC 20 8B 05 ? ? ? ? 85 C0 0F 84 ? ? ? ?"); //ShutdownLoadingScreen
-		CGlobals::Get().ShutdownLoadingScreen = (ShutdownLoadingScreen_)mem();
-
-		mem = CMemory::Find("48 83 EC 28 48 8D 54 24 38 C7 44 24 38 00 00 00 FF"); //DoScreenFadeIn
-		CGlobals::Get().DoScreenFadeIn = (DoScreenFadeIn_)mem();
-
-		mem = CMemory::Find("48 83 EC 28 4C 8B C1 48 8D 54 24 38 48 8D 0D ? ? ? ? E8 ? ? ? ? 8B 44 24 38"); //HasScriptLoaded
-		CGlobals::Get().HasScriptLoaded = (HasScriptLoaded_)mem();
-
-		mem = CMemory::Find("40 53 48 83 EC 50 44 8A C2 48 8B D1 48 8D 4C 24 20"); //CreateCam
-		CGlobals::Get().CreateCam = (CreateCam_)mem();
-
-		mem = CMemory::Find("48 8B C4 48 89 58 08 57 48 83 EC 60 0F 29 70 E8 F3 0F 10 32 0F 29 78 D8 F3 0F 10 7A 08 8B F9"); //SetCamCoord
-		CGlobals::Get().SetCamCoord = (SetCamCoord_)mem();
-
-		mem = CMemory::Find("48 8B C4 48 89 58 08 57 48 83 EC 30 F3 0F 10 02 F3 0F 10 4A 08 F3 0F 10 52 10 8B F9 F3 0F 11 40"); //PointCamAtCoord
-		CGlobals::Get().PointCamAtCoord = (PointCamAtCoord_)mem();
-
-		mem = CMemory::Find("48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 30 33  DB 41 8A F9 40 8A F1 84 D2"); //RenderScriptCams
-		CGlobals::Get().RenderScriptCams = (RenderScriptCams_)mem();
-
-		mem = CMemory::Find("48 89 5C 24 08 57 48 83 EC 20 40 8A FA 8B D9 85 C9 78 10 8B D1"); //SetCamActive
-		CGlobals::Get().SetCamActive = (SetCamActive_)mem();
-
-		mem = CMemory::Find("48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 55 48 8D 68 B9 48 81 EC 00 01 00 00 F3 0F 10 45 9B"); //SetEntityCoords
-		CGlobals::Get().SetEntityCoords = (SetEntityCoords_)mem();
 
 		callToMem = unusedMem();
 		unusedMem.farJmp(gameStateChange_);
-
-		auto gameStateChange = CMemory::Find("E8 ? ? ? ? 84 C0 74 1D E8 ? ? ? ? 0F B6 0D ? ? ? ? BA 01 00 00 00 80 38 00");
+		auto gameStateChange = CMemory::Find("E8 ? ? ? ? 84 C0 74 1D E8 ? ? ? ? 0F B6 0D ? ? ? ? BA 01 00 00 00 80 38 00"); // GameStateChange
 		auto gameStateMem = gameStateChange();
 		g_gameStateChange = gameStateChange.get_call<GameStateChange_>();
 		(gameStateChange + 1).put(long(callToMem - gameStateMem - 5));
 
+		CGlobals::Get().ForceCleanupForAllThreadsWithThisName = (ForceCleanupForAllThreadsWithThisName_)
+			CMemory::Find("48 89 5C 24 08 57 48 83 EC 20 8B FA 48 8B D9 E8 ? ? ? ? 41 83 C9 FF")(); //FORCE_CLEANUP_FOR_ALL_THREADS_WITH_THIS_NAME
+		CGlobals::Get().TerminateAllScriptsWithThisName = (TerminateAllScriptsWithThisName_)
+			CMemory::Find("40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B D3 48 8B C8 E8 ? ? ? ? 85 C0 74 08")(); //TerminateAllScriptsWithThisName
+		CGlobals::Get().ShutdownLoadingScreen = (ShutdownLoadingScreen_)
+			CMemory::Find("40 57 48 83 EC 20 8B 05 ? ? ? ? 85 C0 0F 84 ? ? ? ?")(); //ShutdownLoadingScreen
+		CGlobals::Get().DoScreenFadeIn = (DoScreenFadeIn_)
+			CMemory::Find("48 83 EC 28 48 8D 54 24 38 C7 44 24 38 00 00 00 FF")(); //DoScreenFadeIn
+		CGlobals::Get().HasScriptLoaded = (HasScriptLoaded_)
+			CMemory::Find("48 83 EC 28 4C 8B C1 48 8D 54 24 38 48 8D 0D ? ? ? ? E8 ? ? ? ? 8B 44 24 38")(); //HasScriptLoaded
 
-		//48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 55 48 8D 68 B9 48 81 EC 00 01 00 00 F3 0F 10 45 9B
-		
 		//mem = CMemory::Find("40 8A 35 ? ? ? ? 84 C0 74 05 45 84 FF"); //HECK_MULTIPLAYER_BYTE_DRAW_MAP_FRAME
 		//mem.put(0xB6400190i32);
 		//mem.nop(3);

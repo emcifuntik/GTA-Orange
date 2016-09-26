@@ -81,7 +81,7 @@
 //	return res;
 //}
 
-unsigned int Utils::Hash(char* inpStr)
+unsigned int Utils::Hash(const char* inpStr)
 {
 	unsigned int value = 0, temp = 0;
 	for (size_t i = 0; i<strlen(inpStr); i++)

@@ -58,7 +58,7 @@ typedef std::map<std::string, std::shared_ptr<Script>> scriptMap;
 class ScriptManagerThread : public ScriptThread
 {
 private:
-	scriptMap				m_scripts;
+	static scriptMap		m_scripts;
 public:
 	virtual void			DoRun() override;
 	virtual eThreadState	Reset(uint32_t scriptHash, void * pArgs, uint32_t argCount) override;
