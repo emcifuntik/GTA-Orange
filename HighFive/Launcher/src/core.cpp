@@ -66,7 +66,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	char _hfPath[MAX_PATH];
 	GetCurrentDirectory(MAX_PATH, _hfPath);
 	CGlobals::Get().highFivePath = std::string(_hfPath);
-
 	WNDCLASSEX wcex;
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
@@ -97,11 +96,11 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	loader.SetLibraryLoader([](const char* libName)
 	{
 		if (!_stricmp(libName, "xlive.dll"))
-		{
 			return (HMODULE)INVALID_HANDLE_VALUE;
-		}
 		if (!_stricmp(libName, "steam_api64.dll"))
 			CGlobals::Get().isSteam = true;
+		if (!_stricmp(libName, "kernel32.dll"))
+			return LoadLibraryA(libName);
 		return LoadLibraryA(libName);
 	});
 
