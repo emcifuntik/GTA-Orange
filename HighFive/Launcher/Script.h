@@ -3,14 +3,14 @@
 typedef void(*function_)();
 
 class CScript {
-	static std::queue<CScript*> * scriptQueue;
+	static std::queue<std::pair<std::string, CScript*>> * scriptQueue;
 protected:
-	std::string name;
 	virtual void Run() = 0;
-	CScript(std::string name):name(name) {
+	CScript(std::string _name)
+	{
 		if (!scriptQueue)
-			scriptQueue = new std::queue<CScript*>();
-		scriptQueue->push(this);
+			scriptQueue = new std::queue<std::pair<std::string, CScript*>>();
+		scriptQueue->push(std::pair<std::string, CScript*>(_name, this));
 	}
 public:
 	static void RunAll()
@@ -18,8 +18,8 @@ public:
 		log_debug << "Scripts in queue: " << scriptQueue->size() << std::endl;
 		while (!scriptQueue->empty())
 		{
-			scriptQueue->front()->Run();
-			log_debug << "Running new script" << std::endl;
+			log_debug << "Running new script: " << scriptQueue->front().first << std::endl;
+			scriptQueue->front().second->Run();
 			scriptQueue->pop();
 		}
 	}

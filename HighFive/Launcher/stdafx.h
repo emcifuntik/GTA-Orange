@@ -49,11 +49,14 @@
 #include "Script.h"
 #pragma endregion
 #include "Registry.h"
-#include "CMemory.h"
+#include "Memory.h"
 #include "Common.h"
 #include "PELoader.h"
 #include "Game.h"
 #include "Globals.h"
+#include "UI.h"
+#include "Graphics.h"
+#include "Chat.h"
 
 enum eGameState {
 	GameStatePlaying,
@@ -74,15 +77,15 @@ static bool initialized = false;
 static LPARAM Icon;
 
 #pragma region script macro
-#define SCRIPT(x,y) static class _:\
+#define SCRIPT(x,y,z) class z:\
 public CScript\
 {\
 public:\
-	_() : CScript(\
+	z() : CScript(\
 		x\
 	) {}\
 protected:\
-	virtual void Run() override { scriptRegister(name, y); }\
-} _;
+	virtual void Run() override { scriptRegister(x, y); }\
+} z;
 #pragma endregion
 // USAGE: SCRIPT(name, function);

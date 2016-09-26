@@ -84,8 +84,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Chat.cpp" />
+    <ClCompile Include="ChatScript.cpp" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Event.cpp" />
-    <ClCompile Include="CMemory.cpp" />
+    <ClCompile Include="Memory.cpp" />
     <ClCompile Include="EventBeforeLoaded.cpp" />
     <ClCompile Include="EventGameFrame.cpp" />
     <ClCompile Include="GameInit.cpp" />
@@ -105,8 +109,11 @@
   <ItemGroup>
     <ClInclude Include="..\..\Shared\Console\CLog.h" />
     <ClInclude Include="..\..\Shared\CVector3.h" />
+    <ClInclude Include="Chat.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Event.h" />
-    <ClInclude Include="CMemory.h" />
+    <ClInclude Include="Memory.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Globals.h" />
     <ClInclude Include="inc\PELoader.h" />

@@ -1,3 +1,3 @@
 #include "stdafx.h"
 
-std::queue<CScript*> * CScript::scriptQueue = nullptr;
+std::queue<std::pair<std::string, CScript*>> * CScript::scriptQueue = nullptr;

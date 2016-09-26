@@ -20,6 +20,9 @@ public:
 	LPVOID baseAddr = nullptr;
 	std::string highFivePath;
 	bool alreadyRunned = false;
+	bool *canLangChange = nullptr;
+	HWND gtaHwnd = nullptr;
+	WNDPROC gtaWndProc = nullptr;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;

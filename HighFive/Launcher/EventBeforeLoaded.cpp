@@ -790,12 +790,24 @@ void DisableScripts()
 	}
 }
 
+LRESULT APIENTRY WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+{
+	ScriptManager::WndProc(hwnd, uMsg, wParam, lParam);
+	//log_debug << "WndProc: " << hwnd << " " << uMsg << " " << wParam << " " << lParam << std::endl;
+	return CallWindowProc(CGlobals::Get().gtaWndProc, hwnd, uMsg, wParam, lParam);
+}
+
 void OnGameStateChange(int gameState)
 {
 	switch (gameState)
 	{
 	case GameStatePlaying:
 		log_info << "Game ready" << std::endl;
+		CGlobals::Get().gtaWndProc = (WNDPROC)SetWindowLongPtr(CGlobals::Get().gtaHwnd, GWLP_WNDPROC, (LONG_PTR)WndProc);
+		if (CGlobals::Get().gtaWndProc == NULL)
+			log_error << "Failed to attach input hook" << std::endl;
+		else
+			log_info << "Input hook attached: WndProc 0x" << std::hex << (DWORD_PTR)CGlobals::Get().gtaWndProc << std::endl;
 		ScriptEngine::CreateThread(&g_ScriptManagerThread);
 		CScript::RunAll();
 		break;
@@ -998,6 +1010,8 @@ class CEventBeforeLoaded :
 			CMemory::Find("48 83 EC 28 48 8D 54 24 38 C7 44 24 38 00 00 00 FF")(); //DoScreenFadeIn
 		CGlobals::Get().HasScriptLoaded = (HasScriptLoaded_)
 			CMemory::Find("48 83 EC 28 4C 8B C1 48 8D 54 24 38 48 8D 0D ? ? ? ? E8 ? ? ? ? 8B 44 24 38")(); //HasScriptLoaded
+
+		CGlobals::Get().canLangChange = (bool*)((uintptr_t)CMemory::Find("C6 05 ? ? ? ? 01 8B 8F A0 04 00 00").getOffset(2) + 1);
 
 		//mem = CMemory::Find("40 8A 35 ? ? ? ? 84 C0 74 05 45 84 FF"); //HECK_MULTIPLAYER_BYTE_DRAW_MAP_FRAME
 		//mem.put(0xB6400190i32);

@@ -6,6 +6,12 @@ static TCHAR szWindowClass[] = "highfive_app";
 
 void InitializeDummies();
 
+LONG_PTR SetWindowLongPtrAHook(HWND hWnd, int nIndex, LONG_PTR dwNewLong)
+{
+	
+	return SetWindowLongPtrA(hWnd, nIndex, dwNewLong);
+}
+
 static HWND CreateWindowExWHook(_In_ DWORD dwExStyle,
 	_In_opt_ LPCWSTR lpClassName,
 	_In_opt_ LPCWSTR lpWindowName,
@@ -22,6 +28,7 @@ static HWND CreateWindowExWHook(_In_ DWORD dwExStyle,
 	HWND hWnd = CreateWindowExW(dwExStyle, lpClassName, L"GTA:V - HighFive Multiplayer", dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 	SendMessage(hWnd, WM_SETICON, ICON_BIG, Icon);
 	SendMessage(hWnd, WM_SETICON, ICON_SMALL, Icon);
+	CGlobals::Get().gtaHwnd = hWnd;
 	return hWnd;
 }
 
@@ -123,6 +130,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		else if (!_stricmp(functionName, "CreateWindowExW"))
 		{
 			return CreateWindowExWHook;
+		}
+		else if (!_stricmp(functionName, "SetWindowLongPtrA"))
+		{
+			return SetWindowLongPtrAHook;
 		}
 		return (LPVOID)GetProcAddress(module, functionName);
 	});

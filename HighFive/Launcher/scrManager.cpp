@@ -134,7 +134,6 @@ uint64_t * nativeCall()
 	return reinterpret_cast<uint64_t*>(g_context.GetResultPointer());
 }
 
-typedef void(*TKeyboardFn)(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore, BOOL isUpNow);
 
 static std::set<TKeyboardFn> g_keyboardFunctions;
 

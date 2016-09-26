@@ -70,6 +70,8 @@ namespace ScriptManager {
 	void					WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 }
 
+typedef void(*TKeyboardFn)(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore, BOOL isUpNow);
+
 void nativeInit(UINT64 hash);
 void nativePush64(UINT64 val);
 PUINT64 nativeCall();
@@ -77,5 +79,8 @@ void scriptWait(unsigned long waitTime);
 void scriptRegister(std::string threadName, void(*function)());
 void scriptUnregister(std::string threadName);
 int32_t getGameVersion();
+void keyboardHandlerRegister(TKeyboardFn function);
+void keyboardHandlerUnregister(TKeyboardFn function);
+
 
 extern ScriptManagerThread	g_ScriptManagerThread;
