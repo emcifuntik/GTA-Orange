@@ -756,6 +756,9 @@ ScriptInfo scriptnames[748] = {
 	{ "yoga", false }
 };
 
+typedef void(*g_origFrontend_)(void*, void*, void*);
+static g_origFrontend_ g_origFrontend;
+
 void Initialize()
 {
 #ifdef _DEBUG
@@ -768,6 +771,8 @@ void Initialize()
 	HUDInit();
 	if (!ScriptEngine::Initialize())
 		log_error << "Failed to initialize ScriptEngine" << std::endl;
+	if (CGlobals::Get().d3dloaded)
+		VIngameConsole::HookD3D11(CGlobals::Get().gtaHwnd);
 }
 
 static bool scriptsDisabled = false;
@@ -1009,6 +1014,21 @@ class CEventBeforeLoaded :
 			CMemory::Find("48 83 EC 28 4C 8B C1 48 8D 54 24 38 48 8D 0D ? ? ? ? E8 ? ? ? ? 8B 44 24 38")(); //HasScriptLoaded
 
 		CGlobals::Get().canLangChange = (bool*)((uintptr_t)CMemory::Find("C6 05 ? ? ? ? 01 8B 8F A0 04 00 00").getOffset(2) + 1);
+
+		/*callToMem = unusedMem();
+		unusedMem.farJmp(DrawFrontendWrap);
+		auto RenderPhaseFrontEnd = (CMemory::Find("41 B9 10 00 00 00 C6 44 24 28 00 48 8B D9") + 25);
+		void* vtablePtr = RenderPhaseFrontEnd.getOffset();
+		auto temp1 = ((uintptr_t*)vtablePtr)[2];
+		auto temp2 = temp1 + 0xAB;
+		mem = CMemory(((uintptr_t*)vtablePtr)[2] + 0xAB);
+		g_origFrontend = CMemory(((uintptr_t*)vtablePtr)[2] + 0xAB).get_call<g_origFrontend_>();
+		(mem + 1).put(long(callToMem - mem() - 5));*/
+
+		//auto gameStateChange = CMemory::Find("E8 ? ? ? ? 84 C0 74 1D E8 ? ? ? ? 0F B6 0D ? ? ? ? BA 01 00 00 00 80 38 00"); // GameStateChange
+		//auto gameStateMem = gameStateChange();
+		//g_gameStateChange = gameStateChange.get_call<GameStateChange_>();
+		//(gameStateChange + 1).put(long(callToMem - gameStateMem - 5));
 
 		//mem = CMemory::Find("40 8A 35 ? ? ? ? 84 C0 74 05 45 84 FF"); //HECK_MULTIPLAYER_BYTE_DRAW_MAP_FRAME
 		//mem.put(0xB6400190i32);

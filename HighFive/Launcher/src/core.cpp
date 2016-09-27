@@ -22,6 +22,12 @@ static HWND CreateWindowExWHook(_In_ DWORD dwExStyle,
 	HWND hWnd = CreateWindowExW(dwExStyle, lpClassName, L"GTA:V - HighFive Multiplayer", dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 	SendMessage(hWnd, WM_SETICON, ICON_BIG, Icon);
 	SendMessage(hWnd, WM_SETICON, ICON_SMALL, Icon);
+
+	if (GetModuleHandle("D3D11.dll") != NULL)
+	{
+		CGlobals::Get().d3dloaded = true;
+	}
+
 	CGlobals::Get().gtaHwnd = hWnd;
 	return hWnd;
 }
@@ -99,8 +105,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			return (HMODULE)INVALID_HANDLE_VALUE;
 		if (!_stricmp(libName, "steam_api64.dll"))
 			CGlobals::Get().isSteam = true;
-		if (!_stricmp(libName, "kernel32.dll"))
-			return LoadLibraryA(libName);
 		return LoadLibraryA(libName);
 	});
 

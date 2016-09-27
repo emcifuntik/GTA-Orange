@@ -24,6 +24,7 @@ public:
 	HWND gtaHwnd = nullptr;
 	WNDPROC gtaWndProc = nullptr;
 	bool isSteam = false;
+	bool d3dloaded = false;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;

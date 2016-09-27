@@ -48,6 +48,7 @@
 #include "nativeCaller.h"
 #include "Script.h"
 #pragma endregion
+#include "D3D11\VIngameConsole.h"
 #include "Registry.h"
 #include "Memory.h"
 #include "Common.h"

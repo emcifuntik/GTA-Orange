@@ -31,6 +31,12 @@
     <Filter Include="Scripts">
       <UniqueIdentifier>{67276f77-2286-445e-9be8-e7e9e6e5e46b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="D3D">
+      <UniqueIdentifier>{fc4a9cb7-bdff-4419-9eb3-5fcbcc45a59f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D\Memory">
+      <UniqueIdentifier>{fd32d427-1079-4344-92e4-eb86609272f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp">
@@ -95,6 +101,114 @@
     </ClCompile>
     <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBAInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTargetInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1Factory.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FactoryInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapperInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlasInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProviderInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStatesInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheetInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawerInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometryInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRendererInterface.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1Precompiled.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Hook11.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Renderer11.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Main.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\GameMemory.cpp">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\Hooking.cpp">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\buffer.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde32.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde64.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\hook.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\trampoline.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\HMemory.cpp">
+      <Filter>D3D\Memory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -172,6 +286,90 @@
     </ClInclude>
     <ClInclude Include="Chat.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Factory.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Object.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1CompileSettings.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1Precompiled.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Includes11.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Renderer11.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\GameMemory.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\Memory.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\include\MinHook.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\buffer.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\hde32.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\hde64.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\pstdint.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\table32.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\table64.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\trampoline.h">
+      <Filter>D3D\Memory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
