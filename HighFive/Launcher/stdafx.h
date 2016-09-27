@@ -71,6 +71,28 @@ typedef void(*InitHUD)();
 typedef bool(*LookAlive)();
 typedef bool(*GameStateChange_)();
 
+struct Color
+{
+	int r;
+	int g;
+	int b;
+	int a;
+
+	Color(int ar, int ag, int ab, int aa)
+	{
+		r = ar;
+		g = ag;
+		b = ab;
+		a = aa;
+	}
+	UINT32 ToUINT32()
+	{
+		return ((UINT32)((((a) & 0xff) << 24) | (((b) & 0xff) << 16) | (((g) & 0xff) << 8) | ((r) & 0xff)));
+	}
+};
+
+void D3DTextDraw(int x, int y, Color col, std::string text);
+
 static LookAlive g_origLookAlive;
 static GameStateChange_ g_gameStateChange;
 static InitHUD HUDInit;

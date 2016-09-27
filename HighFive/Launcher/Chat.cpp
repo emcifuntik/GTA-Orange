@@ -60,7 +60,8 @@ void CChat::Render()
 
 	float heightupdate = 0.004f;
 	for (unsigned int i = uiFirstLine; i < uiLastLine; i++) {
-		CUI::PrintText(vChatLines[i].sLineText, 0.004f, heightupdate, vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha);
+		D3DTextDraw(0.004f * 800, heightupdate * 600, Color(vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha), vChatLines[i].sLineText);
+		//CUI::PrintText(vChatLines[i].sLineText, 0.004f, heightupdate, vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha);
 		heightupdate += 0.025f;
 	}
 	if (bOpened)

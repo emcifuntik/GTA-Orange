@@ -32,7 +32,7 @@ enum eFonts
 	_FONT_COUNT
 };
 static int FontSizes[_FONT_COUNT] = {
-	12,
+	8,
 	18,
 	25
 };
@@ -44,8 +44,8 @@ class IRenderer
 {
 public:
 	virtual void Setup(void* pSetupData) = 0;
-	virtual void DrawText(int x, int y, Color col, string sText) = 0; // Default Font is FONT_SMALL
-	virtual void DrawText(eFonts eFont, int x, int y, Color col, string sText) = 0;
+	virtual void DrawText(int x, int y, Color col, std::string sText) = 0; // Default Font is FONT_SMALL
+	virtual void DrawText(eFonts eFont, int x, int y, Color col, std::string sText) = 0;
 };
 
 extern IRenderer* g_pRenderer;

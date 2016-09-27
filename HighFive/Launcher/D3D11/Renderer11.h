@@ -13,8 +13,8 @@ class D3D11Renderer : public IRenderer
 {
 public:
 	void Setup(void* pSetupData);
-	void DrawText(int x, int y, Color col, string sText); // Default Font is FONT_SMALL
-	void DrawText(eFonts eFont, int x, int y, Color col, string sText);
+	void DrawText(int x, int y, Color col, std::string sText); // Default Font is FONT_SMALL
+	void DrawText(eFonts eFont, int x, int y, Color col, std::string sText);
 
 private:
 	ID3D11Device* m_pDevice;
