@@ -798,6 +798,7 @@ void DisableScripts()
 LRESULT APIENTRY WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 	ScriptManager::WndProc(hwnd, uMsg, wParam, lParam);
+	ImGui_ImplDX11_WndProcHandler(hwnd, uMsg, wParam, lParam);
 	//log_debug << "WndProc: " << hwnd << " " << uMsg << " " << wParam << " " << lParam << std::endl;
 	return CallWindowProc(CGlobals::Get().gtaWndProc, hwnd, uMsg, wParam, lParam);
 }
@@ -807,6 +808,7 @@ void OnGameStateChange(int gameState)
 	switch (gameState)
 	{
 	case GameStatePlaying:
+		//CGlobals::Get().SetMenuState("MP_Celeb_Win");
 		log_info << "Game ready" << std::endl;
 		CGlobals::Get().gtaWndProc = (WNDPROC)SetWindowLongPtr(CGlobals::Get().gtaHwnd, GWLP_WNDPROC, (LONG_PTR)WndProc);
 		if (CGlobals::Get().gtaWndProc == NULL)
@@ -934,8 +936,8 @@ class CEventBeforeLoaded :
 		mem = CMemory::Find("48 83 EC 28 E8 ? ? ? ? 48 8B ? ? ? ? ? 4C 8D ? ? ? ? ? 4C 8D ? ? ? ? ? BA 03 00 00 00 E8 ? ? ? ?"); //REATE_NETWORK_EVENT_BINDINGS
 		mem.retn();
 
-		//mem = CMemory::Find("40 53 48 83 EC 20 33 DB 8B CB E8 ? ? ? ? 84 C0 75 2C"); //OAD_NEW_GAME
-		//mem.retn();
+		mem = CMemory::Find("40 53 48 83 EC 20 33 DB 8B CB E8 ? ? ? ? 84 C0 75 2C"); //OAD_NEW_GAME
+		mem.retn();
 
 		mem = CMemory::Find("33 C0 0F 57 C0 C7 05 ? ? ? ? ? ? ? ?"); //ESET_VEHICLE_DENSITY_LAST_FRAME
 		mem.retn();
@@ -1015,25 +1017,22 @@ class CEventBeforeLoaded :
 
 		CGlobals::Get().canLangChange = (bool*)((uintptr_t)CMemory::Find("C6 05 ? ? ? ? 01 8B 8F A0 04 00 00").getOffset(2) + 1);
 
-		/*callToMem = unusedMem();
-		unusedMem.farJmp(DrawFrontendWrap);
-		auto RenderPhaseFrontEnd = (CMemory::Find("41 B9 10 00 00 00 C6 44 24 28 00 48 8B D9") + 25);
-		void* vtablePtr = RenderPhaseFrontEnd.getOffset();
-		auto temp1 = ((uintptr_t*)vtablePtr)[2];
-		auto temp2 = temp1 + 0xAB;
-		mem = CMemory(((uintptr_t*)vtablePtr)[2] + 0xAB);
-		g_origFrontend = CMemory(((uintptr_t*)vtablePtr)[2] + 0xAB).get_call<g_origFrontend_>();
-		(mem + 1).put(long(callToMem - mem() - 5));*/
+		CGlobals::Get().InitializeOnline = (InitializeOnline_)CMemory::Find("40 53 48 83 EC 50 80 3D ? ? ? ? ? C6 05 ? ? ? ? ?")();
 
-		//auto gameStateChange = CMemory::Find("E8 ? ? ? ? 84 C0 74 1D E8 ? ? ? ? 0F B6 0D ? ? ? ? BA 01 00 00 00 80 38 00"); // GameStateChange
-		//auto gameStateMem = gameStateChange();
-		//g_gameStateChange = gameStateChange.get_call<GameStateChange_>();
-		//(gameStateChange + 1).put(long(callToMem - gameStateMem - 5));
+		CGlobals::Get().SetMenuState = (SetMenuState_)CMemory::Find("48 83 EC 28 48 8B D1 33 C9 E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 8D 54 24 ? 41 B8 ? ? ? ?")();
 
-		//mem = CMemory::Find("40 8A 35 ? ? ? ? 84 C0 74 05 45 84 FF"); //HECK_MULTIPLAYER_BYTE_DRAW_MAP_FRAME
-		//mem.put(0xB6400190i32);
-		//mem.nop(3);
-		
+		CMemory::Find("48 83 EC 28 33 D2 E8 ? ? ? ? CC").retn();
+		CMemory::Find("48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 4C 89 60 20 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F B7 05 ? ? ? ?").retn();
+		//CMemory::Find("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 0F B6 81 ? ? ? ? 48 8D 79 18").retn();
+		CMemory::Find("80 3D ? ? ? ? ? 74 1B 84 DB 74 10 ? ? ? ? ? ? ? ? ? ? ? ? ? ? EB 39").nop(9);
+		CMemory::Find("48 89 5C 24 ? 57 48 83 EC 40 33 FF 40 38 3D ? ? ? ?").retn();
+		(CMemory::Find("48 83 64 24 30 00 83 4C 24 28 FF 33 D2 48") - 4).retn();
+
+		mem = CMemory::Find("40 8A 35 ? ? ? ? 84 C0 74 05 45 84 FF"); //HECK_MULTIPLAYER_BYTE_DRAW_MAP_FRAME
+		mem2 = CMemory(mem);
+		mem.nop(7);
+		mem2.put(0xB640i16);
+		mem2.put(0x01i8);
 		return true;
 	}
 } _ev;

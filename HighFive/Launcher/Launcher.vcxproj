@@ -70,8 +70,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <PrecompiledHeader>
-      </PrecompiledHeader>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -84,39 +83,17 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Code\HighFive\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>D:\Code\HighFive\lib;%DXSDK_DIR%Include\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>tinyxml2_$(Configuration)_$(Platform).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Chat.cpp" />
     <ClCompile Include="ChatScript.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBAInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTargetInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1Factory.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FactoryInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapperInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlasInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProviderInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStatesInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheetInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawerInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometryInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRendererInterface.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.cpp" />
-    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1Precompiled.cpp" />
     <ClCompile Include="D3D11\Hook11.cpp" />
+    <ClCompile Include="D3D11\imgui.cpp" />
+    <ClCompile Include="D3D11\imgui_draw.cpp" />
+    <ClCompile Include="D3D11\imgui_impl_dx11.cpp" />
     <ClCompile Include="D3D11\Main.cpp" />
     <ClCompile Include="D3D11\Memory\GameMemory.cpp" />
     <ClCompile Include="D3D11\Memory\Hooking.cpp" />
@@ -126,7 +103,6 @@
     <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde64.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\hook.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\trampoline.c" />
-    <ClCompile Include="D3D11\Renderer11.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Event.cpp" />
@@ -151,23 +127,9 @@
     <ClInclude Include="..\..\Shared\Console\CLog.h" />
     <ClInclude Include="..\..\Shared\CVector3.h" />
     <ClInclude Include="Chat.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Factory.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Object.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1CompileSettings.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.h" />
-    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1Precompiled.h" />
-    <ClInclude Include="D3D11\Includes11.h" />
+    <ClInclude Include="D3D11\imgui.h" />
+    <ClInclude Include="D3D11\imgui_impl_dx11.h" />
+    <ClInclude Include="D3D11\imgui_internal.h" />
     <ClInclude Include="D3D11\Memory\GameMemory.h" />
     <ClInclude Include="D3D11\Memory\Memory.h" />
     <ClInclude Include="D3D11\Memory\minhook\include\MinHook.h" />
@@ -178,7 +140,9 @@
     <ClInclude Include="D3D11\Memory\minhook\src\HDE\table32.h" />
     <ClInclude Include="D3D11\Memory\minhook\src\HDE\table64.h" />
     <ClInclude Include="D3D11\Memory\minhook\src\trampoline.h" />
-    <ClInclude Include="D3D11\Renderer11.h" />
+    <ClInclude Include="D3D11\stb_rect_pack.h" />
+    <ClInclude Include="D3D11\stb_textedit.h" />
+    <ClInclude Include="D3D11\stb_truetype.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Event.h" />

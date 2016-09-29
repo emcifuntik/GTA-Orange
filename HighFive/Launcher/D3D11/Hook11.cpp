@@ -1,10 +1,7 @@
-// =================================================================================
-// Includes
-// Thanks http://www.unknowncheats.me/forum/d3d-tutorials-and-source/88369-universal-d3d11-hook.html
-// =================================================================================
+#include "stdafx.h"
 #include "Includes.h"
 #include "VIngameConsole.h"
-#include "Includes11.h"
+#include "thirdparty/DirectX/Include/d3d11.h"
 #include "Memory\Memory.h"
 #include <sstream>
 
@@ -42,21 +39,17 @@ D3D11Present_t pD3D11_Present = NULL;
 HRESULT __stdcall D3D11_Present_Hook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
 	// Setup Renderer
-	if (g_pRenderer == NULL)
+	if (CGlobals::Get().renderer == false)
 	{
 		// Context
 		pSwapChain->GetDevice(__uuidof(pD3D11_Device), (void**)&pD3D11_Device);
 		pD3D11_Device->GetImmediateContext(&pD3D11_Context);
 
-		// Setup Data
-		D3D11Renderer_SetupData* pSetupData = new D3D11Renderer_SetupData();
-		pSetupData->pContext = pD3D11_Context;
-		pSetupData->pDevice = pD3D11_Device;
-
 		// Setup
-		g_pRenderer = new D3D11Renderer();
-		g_pRenderer->Setup((void*)pSetupData);
+		CGlobals::Get().renderer = true;
+		ImGui_ImplDX11_Init(CGlobals::Get().gtaWndProc, pD3D11_Device, pD3D11_Context);
 	}
+	CGlobals::Get().d3dSwapChain = pSwapChain;
 
 	// Render
 	VIngameConsole::Render();
@@ -107,6 +100,8 @@ bool VIngameConsole::HookD3D11(HWND hGameWindow)
 		MessageBox(hGameWindow, "Failed to create DirectX 11 Device and Swapchain!", "VIngameConsole", MB_ICONERROR);
 		return false;
 	}
+
+	CreateRenderTarget();
 
 	// Swapchain VTable
 	DWORD64* pD3D11_SwapChainVTable = (DWORD64*)pSwapChain;

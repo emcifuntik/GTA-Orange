@@ -60,13 +60,15 @@ void CChat::Render()
 
 	float heightupdate = 0.004f;
 	for (unsigned int i = uiFirstLine; i < uiLastLine; i++) {
-		D3DTextDraw(0.004f * 800, heightupdate * 600, Color(vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha), vChatLines[i].sLineText);
-		//CUI::PrintText(vChatLines[i].sLineText, 0.004f, heightupdate, vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha);
+		//CGlobals::Get().renderer->_RenderText(int(0.01f * 800), int(heightupdate * 600), vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha, 14.f, FW1_RESTORESTATE, (char*)vChatLines[i].sLineText.c_str());
 		heightupdate += 0.025f;
 	}
 	if (bOpened)
 	{
-		GRAPHICS::DRAW_RECT(0.004f, 0.025f + (0.025f * cuLinesOnScreen), 0.9f, 0.03f, 0, 0, 0, 150);
+		//CGlobals::Get().renderer->DrawBorder(int(0.01f * 800), int((0.025f + (0.025f * cuLinesOnScreen)) * 600), int(0.9f * 800), int(0.03f * 600), 2, 0x000000AA);
+		//CGlobals::Get().d3dDeviceContext->Draw()
+		//D3DRectDraw(int(0.01f*800), int((0.025f + (0.025f * cuLinesOnScreen))*600), int(0.9f * 800), int(0.03f * 600), Color(0,0,0,150));
+		//GRAPHICS::DRAW_RECT(0.004f, 0.025f + (0.025f * cuLinesOnScreen), 0.9f, 0.03f, 0, 0, 0, 150);
 		float chatInputHeight = 0.004f + (0.025f * cuLinesOnScreen) + 0.005f;
 		// Temporary here
 		using convert_type = std::codecvt_utf8<wchar_t>;
@@ -74,8 +76,7 @@ void CChat::Render()
 		std::wstring msgCopy(wsCurrentMessage);
 		msgCopy.insert(msgCopy.begin() + uiCarretPos, L'_');
 		std::string converted_str = std::string("> ") + converter.to_bytes(msgCopy);
-
-		CUI::PrintText(converted_str, 0.004f, chatInputHeight, 0xFF, 0xFF, 0xFF, 0xFF);
+		//CGlobals::Get().renderer->_RenderText(int(0.01f * 800), int(chatInputHeight * 600), 0xFFFFFFFF, 14.f, FW1_RESTORESTATE, (char*)converted_str.c_str());
 	}
 }
 

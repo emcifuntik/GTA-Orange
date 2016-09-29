@@ -1,6 +1,7 @@
 // =================================================================================
 // Includes
 // =================================================================================
+#include "stdafx.h"
 #include "../Includes.h"
 #include "Memory.h"
 
@@ -153,7 +154,7 @@ void GameMemory::FetchVersion()
 
 	// Build Version String
 	Version = new char[128];
-	sprintf(Version, "%d.%d.%d.%d",
+	sprintf_s(Version, 128, "%d.%d.%d.%d",
 		(pVersionInfo->dwFileVersionMS >> 16) & 0xffff,
 		(pVersionInfo->dwFileVersionMS >> 0) & 0xffff,
 		(pVersionInfo->dwFileVersionLS >> 16) & 0xffff,

@@ -29,6 +29,16 @@
 #include "Utils.h"
 #include "Console\CConsole.h"
 #include "Console\CLog.h"
+#include <cfloat>
+#include <cstdarg> 
+#include <cstddef>
+#include <cstring>
+#pragma endregion
+#pragma region D3D Stuff
+#include <d3d11.h>
+#include <d3dcompiler.h>
+#define DIRECTINPUT_VERSION 0x0800
+#include <dinput.h>
 #pragma endregion
 #pragma region events
 #include "Event.h"
@@ -48,9 +58,7 @@
 #include "nativeCaller.h"
 #include "Script.h"
 #pragma endregion
-#include "D3D11\VIngameConsole.h"
 #include "Registry.h"
-#include "Memory.h"
 #include "Common.h"
 #include "PELoader.h"
 #include "Game.h"
@@ -58,6 +66,14 @@
 #include "UI.h"
 #include "Graphics.h"
 #include "Chat.h"
+#include "Memory.h"
+
+#pragma region IMGUI
+#include <d3d11.h>
+#include "D3D11\VIngameConsole.h"
+#include "D3D11\imgui.h"
+#include "D3D11\imgui_impl_dx11.h"
+#pragma endregion
 
 enum eGameState {
 	GameStatePlaying,
@@ -70,6 +86,9 @@ enum eGameState {
 typedef void(*InitHUD)();
 typedef bool(*LookAlive)();
 typedef bool(*GameStateChange_)();
+
+IMGUI_API LRESULT ImGui_ImplDX11_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
+void CreateRenderTarget();
 
 struct Color
 {
@@ -90,8 +109,6 @@ struct Color
 		return ((UINT32)((((a) & 0xff) << 24) | (((b) & 0xff) << 16) | (((g) & 0xff) << 8) | ((r) & 0xff)));
 	}
 };
-
-void D3DTextDraw(int x, int y, Color col, std::string text);
 
 static LookAlive g_origLookAlive;
 static GameStateChange_ g_gameStateChange;

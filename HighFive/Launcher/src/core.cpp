@@ -135,19 +135,36 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	char GamePath[MAX_PATH] = { 0 };
 	bool social = true;
-	if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\rockstar games\\Grand Theft Auto V", "InstallFolder", GamePath, MAX_PATH))
+	if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\Grand Theft Auto V", "InstallFolder", GamePath, MAX_PATH))
 	{
 		social = false;
 		if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\GTAV", "InstallFolderSteam", GamePath, MAX_PATH))
 		{
-			MessageBox(NULL, "Cannot find game path in registry!", "Fatal Error", MB_ICONERROR);
+			MessageBox(NULL, "Cannot find game path!", "Fatal Error", MB_ICONERROR);
 			ExitProcess(0);
 			return 1;
+		}
+		else
+		{
+			for (size_t i = strlen(GamePath); i >= 0; --i)
+			{
+				if (GamePath[i] == '\\')
+				{
+					GamePath[i + 1] = '\0';
+					break;
+				}
+			}
 		}
 	}
 
 	SetCurrentDirectory(GamePath);
 	SetEnvironmentVariable("PATH", GamePath);
+	if (!GetFileAttributes("GTA5.exe"))
+	{
+		MessageBox(NULL, "Cannot find game path!", "Fatal Error", MB_ICONERROR);
+		ExitProcess(0);
+		return 1;
+	}
 	auto b = loader.LoadFile("GTA5.exe");
 	if (b != 0)
 	{
