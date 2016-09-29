@@ -38,23 +38,27 @@ D3D11Present_t pD3D11_Present = NULL;
 // =================================================================================
 HRESULT __stdcall D3D11_Present_Hook(IDXGISwapChain* pSwapChain, UINT SyncInterval, UINT Flags)
 {
+	CGlobals::Get().d3dSwapChain = pSwapChain;
 	// Setup Renderer
 	if (CGlobals::Get().renderer == false)
 	{
 		// Context
 		pSwapChain->GetDevice(__uuidof(pD3D11_Device), (void**)&pD3D11_Device);
 		pD3D11_Device->GetImmediateContext(&pD3D11_Context);
+		CGlobals::Get().d3dDevice = pD3D11_Device;
+		CGlobals::Get().d3dDeviceContext = pD3D11_Context;
 
 		// Setup
 		CGlobals::Get().renderer = true;
 		ImGui_ImplDX11_Init(CGlobals::Get().gtaWndProc, pD3D11_Device, pD3D11_Context);
+
+		ImGuiIO& io = ImGui::GetIO();
+		io.Fonts->AddFontDefault();
+
+		CreateRenderTarget();
 	}
-	CGlobals::Get().d3dSwapChain = pSwapChain;
 
-	// Render
 	VIngameConsole::Render();
-
-	// Done
 	return pD3D11_Present(pSwapChain, SyncInterval, Flags);
 }
 
@@ -67,7 +71,6 @@ bool VIngameConsole::HookD3D11(HWND hGameWindow)
 	// Import
 	imp_D3D11CreateDeviceAndSwapChain = (D3D11CreateDeviceAndSwapChain_t) GetProcAddress(GetModuleHandle("D3D11.dll"), "D3D11CreateDeviceAndSwapChain");
 
-	// Swapchain Desc
 	D3D_FEATURE_LEVEL featureLevel = D3D_FEATURE_LEVEL_11_0;
 	DXGI_SWAP_CHAIN_DESC swapChainDesc;
 	ZeroMemory(&swapChainDesc, sizeof(swapChainDesc));
@@ -100,9 +103,7 @@ bool VIngameConsole::HookD3D11(HWND hGameWindow)
 		MessageBox(hGameWindow, "Failed to create DirectX 11 Device and Swapchain!", "VIngameConsole", MB_ICONERROR);
 		return false;
 	}
-
-	CreateRenderTarget();
-
+	CGlobals::Get().d3dSwapChain = pSwapChain;
 	// Swapchain VTable
 	DWORD64* pD3D11_SwapChainVTable = (DWORD64*)pSwapChain;
 	pD3D11_SwapChainVTable = (DWORD64*)pD3D11_SwapChainVTable[0];

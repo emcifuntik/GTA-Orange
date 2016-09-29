@@ -763,7 +763,7 @@ void Initialize()
 {
 #ifdef _DEBUG
 	AllocConsole();
-	SetConsoleTitle("GTA:V - HighFive Multiplayer");
+	SetConsoleTitle("GTA:Orange");
 	FILE * unused = NULL;
 	freopen_s(&unused, "CONOUT$", "w", stdout);
 	freopen_s(&unused, "CONOUT$", "w", stderr);
@@ -815,8 +815,8 @@ void OnGameStateChange(int gameState)
 			log_error << "Failed to attach input hook" << std::endl;
 		else
 			log_info << "Input hook attached: WndProc 0x" << std::hex << (DWORD_PTR)CGlobals::Get().gtaWndProc << std::endl;
-		ScriptEngine::CreateThread(&g_ScriptManagerThread);
-		CScript::RunAll();
+		/*ScriptEngine::CreateThread(&g_ScriptManagerThread);
+		CScript::RunAll();*/
 		break;
 	case GameStateMainMenu:
 		if (!initialized)

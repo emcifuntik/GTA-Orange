@@ -8,7 +8,7 @@ void Action()
 	{
 		if (!teleported)
 		{
-			CGlobals::Get().InitializeOnline();
+			//CGlobals::Get().InitializeOnline();
 			ENTITY::SET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 0.f, 0.f, 73.f, true, false, false, false);
 			/*auto model = Utils::Hash("mp_m_freemode_01");
 			if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
@@ -25,7 +25,7 @@ void Action()
 			UI::DISPLAY_HUD(false);
 			UI::DISPLAY_RADAR(false);*/
 			teleported = true;
-			CChat::Get()->AddChatMessage("GTA:V HighFive Multiplayer loaded");
+			CChat::Get()->AddChatMessage("GTA:Orange loaded");
 		}
 		UI::SET_PAUSE_MENU_ACTIVE(false);
 		scriptWait(0);

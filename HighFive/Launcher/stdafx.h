@@ -129,3 +129,5 @@ protected:\
 } z;
 #pragma endregion
 // USAGE: SCRIPT(name, function);
+
+#define TRACE() log_debug << __FILE__ << " -> Line " << __LINE__ << std::endl

@@ -141,6 +141,9 @@
     <ClCompile Include="D3D11\imgui_draw.cpp">
       <Filter>D3D</Filter>
     </ClCompile>
+    <ClCompile Include="D3D11\imgui_demo.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
