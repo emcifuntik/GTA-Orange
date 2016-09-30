@@ -294,7 +294,9 @@ bool D3DHook::HookD3D11()
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
 	//io.ImeWindowHandle = CGlobals::Get().gtaHwnd;
-	CGlobals::Get().chatFont = io.Fonts->AddFontFromFileTTF((CGlobals::Get().highFivePath + "\\imgui\\fonts\\SEGUISB.TTF").c_str(), 16.0f);
+	char windowsPath[MAX_PATH];
+	GetWindowsDirectory(windowsPath, MAX_PATH);
+	CGlobals::Get().chatFont = io.Fonts->AddFontFromFileTTF((std::string(windowsPath) + "\\fonts\\SEGUISB.TTF").c_str(), 16.0f);
 	/*for (int i = 0; i < 256; ++i)
 		CGlobals::Get().chatFont->AddRemapChar(charTable[i].old_, charTable[i].new_, true);*/
 

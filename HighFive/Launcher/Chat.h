@@ -25,13 +25,13 @@ class CChat
 	bool bOpened = false;
 	bool bJustOpened = false;
 	bool bEnabled = true;
+	bool bScrollBottom = false;
 	int iOffset = 0;
 	std::wstring wsCurrentMessage;
 
 	unsigned int uiCarretPos = 0;
 
-	const unsigned cuChatHistorySize = 100;
-	const unsigned cuLinesOnScreen = 10;
+	const unsigned cuChatHistorySize = 1000;
 	int(*_commandProcess)(std::string command) = nullptr;
 public:
 	static CChat* Get();
