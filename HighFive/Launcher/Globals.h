@@ -40,6 +40,8 @@ public:
 	ImFont *chatFont = nullptr;
 	bool renderer = false;
 	bool *hudDisabled = nullptr;
+	bool displayServerBrowser = false;
+	int currentGameState = -1;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;

@@ -29,22 +29,32 @@ void CreateRenderTarget()
 
 void D3DHook::Render()
 {
-	//CChat::Get()->Render();
-	bool show_chat_window = true;
-	ImVec4 clear_col = ImColor(114, 144, 154);
 	ImGui_ImplDX11_NewFrame();
+	if(CGlobals::Get().currentGameState == GameStatePlaying)
+		CChat::Get()->Render();
+
+	if (CGlobals::Get().displayServerBrowser)
 	{
-		/*static float f = 0.0f;
-		ImGui::Text("Hello, world!");
-		ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
-		ImGui::ColorEdit3("clear color", (float*)&clear_col);
-		if (ImGui::Button("Test Window")) show_test_window ^= 1;
-		if (ImGui::Button("Another Window")) show_another_window ^= 1;
-		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);*/
+		ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiSetCond_Always);
+		ImGui::SetNextWindowPosCenter(ImGuiSetCond_Always);
+		ImGui::Begin("Server browser", NULL, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+		ImGui::Text("Direct connect");
+#if _DEBUG
+		char serverIP[32] = "127.0.0.1";
+#else
+		char serverIP[32] = "";
+#endif
+		ImGui::InputText(":", serverIP, 32);
+		ImGui::SameLine();
+		int port = 7788;
+		ImGui::InputInt("", &port, 1, 100);
+		if (ImGui::Button("Connect"))
+		{
+
+		}
+		ImGui::End();
+		ShowCursor(TRUE);
 	}
-	//Chat
-	//if(*CGlobals::Get().hudDisabled)
-	CChat::Get()->Render();
 
 	ImGui::Render();
 }
