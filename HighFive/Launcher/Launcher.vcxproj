@@ -90,6 +90,7 @@
   <ItemGroup>
     <ClCompile Include="Chat.cpp" />
     <ClCompile Include="ChatScript.cpp" />
+    <ClCompile Include="Commands.cpp" />
     <ClCompile Include="D3D11\d3dhook.cpp" />
     <ClCompile Include="D3D11\imgui.cpp" />
     <ClCompile Include="D3D11\imgui_demo.cpp" />
@@ -128,6 +129,7 @@
     <ClInclude Include="..\..\Shared\Console\CLog.h" />
     <ClInclude Include="..\..\Shared\CVector3.h" />
     <ClInclude Include="Chat.h" />
+    <ClInclude Include="Commands.h" />
     <ClInclude Include="D3D11\imgui.h" />
     <ClInclude Include="D3D11\imgui_impl_dx11.h" />
     <ClInclude Include="D3D11\imgui_internal.h" />

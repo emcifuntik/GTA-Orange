@@ -53,31 +53,80 @@ void CChat::Render()
 {
 	if (!bEnabled)
 		return;
+	ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1));
+
+	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Always);
+	ImGui::Begin("Chat", &bEnabled, ImVec2(400, 190), .2f, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+
 	int uiFirstLine = (int)(vChatLines.size() - cuLinesOnScreen - iOffset);
 	if (uiFirstLine < 0)
 		uiFirstLine = 0;
 	UINT uiLastLine = (UINT)min(uiFirstLine + cuLinesOnScreen, vChatLines.size());
 
-	float heightupdate = 0.004f;
+	ImGui::PushFont(CGlobals::Get().chatFont);
+	auto lines = uiLastLine - uiFirstLine;
 	for (unsigned int i = uiFirstLine; i < uiLastLine; i++) {
+		ImGui::TextColored(ImVec4(vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha), (char*)vChatLines[i].sLineText.c_str());
 		//CGlobals::Get().renderer->_RenderText(int(0.01f * 800), int(heightupdate * 600), vChatLines[i].structColor.red, vChatLines[i].structColor.green, vChatLines[i].structColor.blue, vChatLines[i].structColor.alpha, 14.f, FW1_RESTORESTATE, (char*)vChatLines[i].sLineText.c_str());
-		heightupdate += 0.025f;
 	}
+	
+	ImGui::End();
+	ImGui::PopStyleVar(2);
+
 	if (bOpened)
 	{
-		//CGlobals::Get().renderer->DrawBorder(int(0.01f * 800), int((0.025f + (0.025f * cuLinesOnScreen)) * 600), int(0.9f * 800), int(0.03f * 600), 2, 0x000000AA);
-		//CGlobals::Get().d3dDeviceContext->Draw()
-		//D3DRectDraw(int(0.01f*800), int((0.025f + (0.025f * cuLinesOnScreen))*600), int(0.9f * 800), int(0.03f * 600), Color(0,0,0,150));
-		//GRAPHICS::DRAW_RECT(0.004f, 0.025f + (0.025f * cuLinesOnScreen), 0.9f, 0.03f, 0, 0, 0, 150);
-		float chatInputHeight = 0.004f + (0.025f * cuLinesOnScreen) + 0.005f;
-		// Temporary here
-		using convert_type = std::codecvt_utf8<wchar_t>;
-		std::wstring_convert<convert_type, wchar_t> converter;
-		std::wstring msgCopy(wsCurrentMessage);
-		msgCopy.insert(msgCopy.begin() + uiCarretPos, L'_');
-		std::string converted_str = std::string("> ") + converter.to_bytes(msgCopy);
-		//CGlobals::Get().renderer->_RenderText(int(0.01f * 800), int(chatInputHeight * 600), 0xFFFFFFFF, 14.f, FW1_RESTORESTATE, (char*)converted_str.c_str());
+		//using convert_type = std::codecvt_utf8<wchar_t>;
+		//std::wstring_convert<convert_type, wchar_t> converter;
+		//std::wstring msgCopy(wsCurrentMessage);
+		//msgCopy.insert(msgCopy.begin() + uiCarretPos, L'_');
+		//std::string converted_str = std::string("> ") + converter.to_bytes(msgCopy);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 0.f);
+		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		if (CChat::Get()->Opened())
+			ShowCursor(TRUE);
+
+		ImGui::SetNextWindowPos(ImVec2(0, 190), ImGuiSetCond_Always);
+		ImGui::Begin("ChatInput", &bOpened, ImVec2(450, 50), .0f, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+
+		char buffer[256] = "";
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5.f, 2.f));
+		ImGui::PushItemWidth(400);
+		if (ImGui::InputText("", buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_CharsNoBlank/* | ImGuiInputTextFlags_CallbackHistory*/))
+		{
+			if (buffer[0] == '/')
+			{
+				if (_commandProcess != nullptr)
+				{
+					if (_commandProcess(buffer) != 1)
+					{
+						/*RakNet::BitStream sendmessage;
+						RakNet::RakString outStr(converted_str.c_str());
+
+						sendmessage.Write((MessageID)ID_COMMAND_MESSAGE);
+						sendmessage.Write(outStr);
+						CNetworkConnection::Get()->client->Send(&sendmessage,HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);*/
+					}
+				}
+			}
+			strcpy_s(buffer, 256, "");
+			ShowCursor(FALSE);
+			Close();
+		}
+		if (bJustOpened)
+		{
+			bJustOpened = false;
+			ShowCursor(TRUE);
+			ImGui::SetKeyboardFocusHere(0);
+		}
+		ImGui::PopItemWidth();
+		ImGui::PopStyleVar(6);
+		ImGui::End();
 	}
+	ImGui::PopFont();
 }
 
 void CChat::Input()
@@ -140,6 +189,7 @@ void CChat::Open()
 	PLAYER::SET_PLAYER_CONTROL(PLAYER::PLAYER_ID(), false, 0);
 	(*CGlobals::Get().canLangChange) = true;
 	bOpened = true;
+	bJustOpened = true;
 }
 
 
@@ -154,7 +204,7 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 {
 	CChat *Chat = CChat::Get();
 
-	if (Chat->bOpened && (isUpNow || wasDownBefore) && (key != VK_RETURN && key != VK_BACK && key != VK_DELETE && key != VK_ESCAPE))
+	/*if (Chat->bOpened && (isUpNow || wasDownBefore) && (key != VK_RETURN && key != VK_BACK && key != VK_DELETE && key != VK_ESCAPE))
 	{
 		LPWSTR outChars = new WCHAR[4];
 		BYTE keyState[256] = { 0 };
@@ -167,7 +217,7 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 				Chat->wsCurrentMessage.insert(Chat->wsCurrentMessage.begin() + Chat->uiCarretPos, outChars[i]);
 			Chat->uiCarretPos += charsTranslated;
 		}
-	}
+	}*/
 
 	if (isUpNow || wasDownBefore)
 	{
@@ -183,61 +233,61 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 		case VK_F7:
 			Chat->bEnabled = !Chat->bEnabled;
 			break;
-		case VK_RETURN:
-			if (Chat->bOpened)
-			{
-				if (Chat->wsCurrentMessage.empty())
-				{
-					Chat->Close();
-					break;
-				}
-				if (Chat->wsCurrentMessage[0] == L'/')
-				{
-					using convert_type = std::codecvt_utf8<wchar_t>;
-					std::wstring_convert<convert_type, wchar_t> converter;
-					std::string converted_str = converter.to_bytes(Chat->wsCurrentMessage);
-					if (Chat->_commandProcess != nullptr)
-					{
-						if (Chat->_commandProcess(converted_str) == 1)
-						{
-							Chat->wsCurrentMessage.clear();
-							Chat->Close();
-							Chat->uiCarretPos = 0;
-							break;
-						}
-						else
-						{
-							/*RakNet::BitStream sendmessage;
-							RakNet::RakString outStr(converted_str.c_str());
+		//case VK_RETURN:
+		//	if (Chat->bOpened)
+		//	{
+		//		if (Chat->wsCurrentMessage.empty())
+		//		{
+		//			Chat->Close();
+		//			break;
+		//		}
+		//		if (Chat->wsCurrentMessage[0] == L'/')
+		//		{
+		//			using convert_type = std::codecvt_utf8<wchar_t>;
+		//			std::wstring_convert<convert_type, wchar_t> converter;
+		//			std::string converted_str = converter.to_bytes(Chat->wsCurrentMessage);
+		//			if (Chat->_commandProcess != nullptr)
+		//			{
+		//				if (Chat->_commandProcess(converted_str) == 1)
+		//				{
+		//					Chat->wsCurrentMessage.clear();
+		//					Chat->Close();
+		//					Chat->uiCarretPos = 0;
+		//					break;
+		//				}
+		//				else
+		//				{
+		//					/*RakNet::BitStream sendmessage;
+		//					RakNet::RakString outStr(converted_str.c_str());
 
-							sendmessage.Write((MessageID)ID_COMMAND_MESSAGE);
-							sendmessage.Write(outStr);
-							CNetworkConnection::Get()->client->Send(&sendmessage,HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);*/
+		//					sendmessage.Write((MessageID)ID_COMMAND_MESSAGE);
+		//					sendmessage.Write(outStr);
+		//					CNetworkConnection::Get()->client->Send(&sendmessage,HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);*/
 
-							Chat->wsCurrentMessage.clear();
-							Chat->Close();
-							Chat->uiCarretPos = 0;
-							break;
-						}
-					}
-				}
-				using convert_type = std::codecvt_utf8<wchar_t>;
-				std::wstring_convert<convert_type, wchar_t> converter;
-				std::string converted_str = converter.to_bytes(Chat->wsCurrentMessage);
+		//					Chat->wsCurrentMessage.clear();
+		//					Chat->Close();
+		//					Chat->uiCarretPos = 0;
+		//					break;
+		//				}
+		//			}
+		//		}
+		//		using convert_type = std::codecvt_utf8<wchar_t>;
+		//		std::wstring_convert<convert_type, wchar_t> converter;
+		//		std::string converted_str = converter.to_bytes(Chat->wsCurrentMessage);
 
-				/*RakNet::BitStream sendmessage;
-				RakNet::RakString outStr(converted_str.c_str());
+		//		/*RakNet::BitStream sendmessage;
+		//		RakNet::RakString outStr(converted_str.c_str());
 
-				sendmessage.Write((MessageID)ID_CHAT_MESSAGE);
-				sendmessage.Write(outStr);
-				CNetworkConnection::Get()->client->Send(&sendmessage, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);*/
+		//		sendmessage.Write((MessageID)ID_CHAT_MESSAGE);
+		//		sendmessage.Write(outStr);
+		//		CNetworkConnection::Get()->client->Send(&sendmessage, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);*/
 
-				Chat->wsCurrentMessage.clear();
-				Chat->Close();
-				Chat->uiCarretPos = 0;
-			}
-			break;
-		case VK_LEFT:
+		//		Chat->wsCurrentMessage.clear();
+		//		Chat->Close();
+		//		Chat->uiCarretPos = 0;
+		//	}
+		//	break;
+		/*case VK_LEFT:
 			if (!Chat->bOpened)
 				break;
 			if (Chat->uiCarretPos > 0)
@@ -275,7 +325,7 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 			if (!Chat->bOpened)
 				break;
 			Chat->Scroll(SCROLL_DOWN);
-			break;
+			break;*/
 		}
 	}
 }

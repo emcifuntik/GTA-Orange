@@ -62,11 +62,11 @@
 #include "Common.h"
 #include "PELoader.h"
 #include "Game.h"
-#include "Globals.h"
 #include "UI.h"
 #include "Graphics.h"
 #include "Chat.h"
 #include "Memory.h"
+#include "Commands.h"
 
 #pragma region IMGUI
 #include <d3d11.h>
@@ -74,6 +74,9 @@
 #include "D3D11\imgui.h"
 #include "D3D11\imgui_impl_dx11.h"
 #pragma endregion
+
+#include "Globals.h"
+
 
 enum eGameState {
 	GameStatePlaying,

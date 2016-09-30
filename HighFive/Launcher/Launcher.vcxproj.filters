@@ -144,6 +144,9 @@
     <ClCompile Include="D3D11\d3dhook.cpp">
       <Filter>D3D</Filter>
     </ClCompile>
+    <ClCompile Include="Commands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -268,6 +271,9 @@
     </ClInclude>
     <ClInclude Include="D3D11\imgui_impl_dx11.h">
       <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Commands.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

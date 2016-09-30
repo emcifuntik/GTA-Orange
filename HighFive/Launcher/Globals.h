@@ -12,6 +12,7 @@ struct ID3D11Device;
 struct ID3D11DeviceContext;
 struct IDXGISwapChain;
 struct ID3D11RenderTargetView;
+struct ImFont;
 
 class CGlobals
 {
@@ -36,7 +37,9 @@ public:
 	ID3D11DeviceContext *d3dDeviceContext = nullptr;
 	IDXGISwapChain *d3dSwapChain = nullptr;
 	ID3D11RenderTargetView* d3dRenderTargetView = nullptr;
+	ImFont *chatFont = nullptr;
 	bool renderer = false;
+	bool *hudDisabled = nullptr;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;

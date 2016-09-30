@@ -23,6 +23,7 @@ class CChat
 	static CChat *singleInstance;
 	std::vector<ChatLine> vChatLines;
 	bool bOpened = false;
+	bool bJustOpened = false;
 	bool bEnabled = true;
 	int iOffset = 0;
 	std::wstring wsCurrentMessage;
@@ -37,6 +38,7 @@ public:
 
 	void RegisterCommandProcessor(int(*callback)(std::string));
 
+	bool Opened() { return bOpened; }
 	void Scroll(ScrollRoute route);
 	void Render();
 	void Input();

@@ -773,6 +773,7 @@ void Initialize()
 		log_error << "Failed to initialize ScriptEngine" << std::endl;
 	if (CGlobals::Get().d3dloaded)
 		D3DHook::HookD3D11();
+	CChat::Get()->RegisterCommandProcessor(CommandProcessor);
 }
 
 static bool scriptsDisabled = false;
@@ -1033,6 +1034,8 @@ class CEventBeforeLoaded :
 		mem.nop(7);
 		mem2.put(0xB640i16);
 		mem2.put(0x01i8);
+
+		CGlobals::Get().hudDisabled = (bool*)CMemory::Find("44 88 25 ? ? ? ? 40 88 3D ? ? ? ? 48 8D 05 ? ? ? ? BB ? ? ? ?").getOffset();
 		return true;
 	}
 } _ev;
