@@ -772,7 +772,7 @@ void Initialize()
 	if (!ScriptEngine::Initialize())
 		log_error << "Failed to initialize ScriptEngine" << std::endl;
 	if (CGlobals::Get().d3dloaded)
-		VIngameConsole::HookD3D11(CGlobals::Get().gtaHwnd);
+		D3DHook::HookD3D11();
 }
 
 static bool scriptsDisabled = false;
@@ -815,8 +815,8 @@ void OnGameStateChange(int gameState)
 			log_error << "Failed to attach input hook" << std::endl;
 		else
 			log_info << "Input hook attached: WndProc 0x" << std::hex << (DWORD_PTR)CGlobals::Get().gtaWndProc << std::endl;
-		/*ScriptEngine::CreateThread(&g_ScriptManagerThread);
-		CScript::RunAll();*/
+		ScriptEngine::CreateThread(&g_ScriptManagerThread);
+		CScript::RunAll();
 		break;
 	case GameStateMainMenu:
 		if (!initialized)

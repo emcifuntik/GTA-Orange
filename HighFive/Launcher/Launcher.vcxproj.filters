@@ -102,12 +102,6 @@
     <ClCompile Include="UI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D3D11\Hook11.cpp">
-      <Filter>D3D</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\Main.cpp">
-      <Filter>D3D</Filter>
-    </ClCompile>
     <ClCompile Include="D3D11\Memory\GameMemory.cpp">
       <Filter>D3D\Memory</Filter>
     </ClCompile>
@@ -142,6 +136,12 @@
       <Filter>D3D</Filter>
     </ClCompile>
     <ClCompile Include="D3D11\imgui_demo.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\renderer.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\d3dhook.cpp">
       <Filter>D3D</Filter>
     </ClCompile>
   </ItemGroup>

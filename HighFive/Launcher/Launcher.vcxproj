@@ -90,12 +90,12 @@
   <ItemGroup>
     <ClCompile Include="Chat.cpp" />
     <ClCompile Include="ChatScript.cpp" />
-    <ClCompile Include="D3D11\Hook11.cpp" />
+    <ClCompile Include="D3D11\d3dhook.cpp" />
     <ClCompile Include="D3D11\imgui.cpp" />
     <ClCompile Include="D3D11\imgui_demo.cpp" />
     <ClCompile Include="D3D11\imgui_draw.cpp" />
     <ClCompile Include="D3D11\imgui_impl_dx11.cpp" />
-    <ClCompile Include="D3D11\Main.cpp" />
+    <ClCompile Include="D3D11\renderer.cpp" />
     <ClCompile Include="D3D11\Memory\GameMemory.cpp" />
     <ClCompile Include="D3D11\Memory\Hooking.cpp" />
     <ClCompile Include="D3D11\Memory\HMemory.cpp" />
