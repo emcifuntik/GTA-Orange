@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{AE03790D-C643-4DE6-ACD7-B1B6E5664E26}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>peloadcon</RootNamespace>
+    <ProjectName>Launcher</ProjectName>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>..\..\bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Code\HighFive\Shared;D:\Code\HighFive\HighFive\tinyxml2-4.0.1;./;inc;$(SolutionDir)pe-loader\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Code\HighFive\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tinyxml2_$(Configuration)_$(Platform).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\Code\HighFive\Shared;D:\Code\HighFive\HighFive\tinyxml2-4.0.1;./;inc;$(SolutionDir)pe-loader\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <IntrinsicFunctions>false</IntrinsicFunctions>
+      <DebugInformationFormat>None</DebugInformationFormat>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>D:\Code\HighFive\lib;%DXSDK_DIR%Include\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>tinyxml2_$(Configuration)_$(Platform).lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Chat.cpp" />
+    <ClCompile Include="ChatScript.cpp" />
+    <ClCompile Include="D3D11\d3dhook.cpp" />
+    <ClCompile Include="D3D11\imgui.cpp" />
+    <ClCompile Include="D3D11\imgui_demo.cpp" />
+    <ClCompile Include="D3D11\imgui_draw.cpp" />
+    <ClCompile Include="D3D11\imgui_impl_dx11.cpp" />
+    <ClCompile Include="D3D11\renderer.cpp" />
+    <ClCompile Include="D3D11\Memory\GameMemory.cpp" />
+    <ClCompile Include="D3D11\Memory\Hooking.cpp" />
+    <ClCompile Include="D3D11\Memory\HMemory.cpp" />
+    <ClCompile Include="D3D11\Memory\minhook\src\buffer.c" />
+    <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde32.c" />
+    <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde64.c" />
+    <ClCompile Include="D3D11\Memory\minhook\src\hook.c" />
+    <ClCompile Include="D3D11\Memory\minhook\src\trampoline.c" />
+    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Event.cpp" />
+    <ClCompile Include="Memory.cpp" />
+    <ClCompile Include="EventBeforeLoaded.cpp" />
+    <ClCompile Include="EventGameFrame.cpp" />
+    <ClCompile Include="GameInit.cpp" />
+    <ClCompile Include="Globals.cpp" />
+    <ClCompile Include="MemoryCache.cpp" />
+    <ClCompile Include="nativeInvoker.cpp" />
+    <ClCompile Include="Registry.cpp" />
+    <ClCompile Include="scrEngine.cpp" />
+    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="scrManager.cpp" />
+    <ClCompile Include="scrThread.cpp" />
+    <ClCompile Include="src\core.cpp" />
+    <ClCompile Include="src\PELoader.cpp" />
+    <ClCompile Include="TlsInit.cpp" />
+    <ClCompile Include="Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Shared\Console\CLog.h" />
+    <ClInclude Include="..\..\Shared\CVector3.h" />
+    <ClInclude Include="Chat.h" />
+    <ClInclude Include="D3D11\imgui.h" />
+    <ClInclude Include="D3D11\imgui_impl_dx11.h" />
+    <ClInclude Include="D3D11\imgui_internal.h" />
+    <ClInclude Include="D3D11\Memory\GameMemory.h" />
+    <ClInclude Include="D3D11\Memory\Memory.h" />
+    <ClInclude Include="D3D11\Memory\minhook\include\MinHook.h" />
+    <ClInclude Include="D3D11\Memory\minhook\src\buffer.h" />
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\hde32.h" />
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\hde64.h" />
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\pstdint.h" />
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\table32.h" />
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\table64.h" />
+    <ClInclude Include="D3D11\Memory\minhook\src\trampoline.h" />
+    <ClInclude Include="D3D11\stb_rect_pack.h" />
+    <ClInclude Include="D3D11\stb_textedit.h" />
+    <ClInclude Include="D3D11\stb_truetype.h" />
+    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="Event.h" />
+    <ClInclude Include="Memory.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="Globals.h" />
+    <ClInclude Include="inc\PELoader.h" />
+    <ClInclude Include="MemoryCache.h" />
+    <ClInclude Include="nativeCaller.h" />
+    <ClInclude Include="nativeInvoker.h" />
+    <ClInclude Include="Natives.h" />
+    <ClInclude Include="pgCollection.h" />
+    <ClInclude Include="pgPtrCollection.h" />
+    <ClInclude Include="Registry.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="scrEngine.h" />
+    <ClInclude Include="Script.h" />
+    <ClInclude Include="scrManager.h" />
+    <ClInclude Include="scrThread.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="types.h" />
+    <ClInclude Include="Utils.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="D:\Code\HighFive\bin\Release\HF.ico" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

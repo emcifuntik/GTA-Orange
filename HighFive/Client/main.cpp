@@ -94,7 +94,6 @@ void ChatRendering()
 void NetworkTick()
 {
 	MemoryHook::call((*GTA::CAddress::Get())[INIT_ONLINE_COMPONENTS]);
-	MemoryHook::call(0xF7A8A8);
 
 }
 

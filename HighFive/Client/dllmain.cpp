@@ -63,13 +63,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 
 		MemoryHook::jmp((*GTA::CAddress::Get())[NEW_EVENT_HOOK], (intptr_t)&eventHook);
 
-		scriptRegister(hModule, InitGameScript);
+		/*scriptRegister(hModule, InitGameScript);
 		scriptRegisterAdditionalThread(hModule, ChatRendering);
 		scriptRegisterAdditionalThread(hModule, NetworkTick);
 		scriptRegisterAdditionalThread(hModule, LocalTick);
 
 		keyboardHandlerRegister(CChat::Get()->ScriptKeyboardMessage);
-		keyboardHandlerRegister(OnKeyboardMessage);
+		keyboardHandlerRegister(OnKeyboardMessage);*/
 #if _DEBUG
 		AllocConsole();
 		SetConsoleTitleA("HighFive Multiplayer Console" DEBUG_TEXT);
@@ -79,7 +79,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID lpReserved )
 #endif
 	}
 	if (reason == DLL_PROCESS_DETACH) {
-		scriptUnregister(hModule);
+		//scriptUnregister(hModule);
 #if _DEBUG
 		FreeConsole();
 #endif

@@ -1,0 +1,283 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ProjectCore">
+      <UniqueIdentifier>{378ff877-0379-4945-b1b5-f70b3fa11e62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProjectCore\Header Files">
+      <UniqueIdentifier>{b88138c6-65d7-4972-bf78-d939cca430cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ProjectCore\Source Files">
+      <UniqueIdentifier>{73edd7bb-40eb-41a1-9557-04c776d2aea3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Events">
+      <UniqueIdentifier>{23032796-bacb-4030-98e8-88132fa8ff48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenHook">
+      <UniqueIdentifier>{2e9220f4-543d-4950-a317-834bd58a7740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scripts">
+      <UniqueIdentifier>{67276f77-2286-445e-9be8-e7e9e6e5e46b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D">
+      <UniqueIdentifier>{fc4a9cb7-bdff-4419-9eb3-5fcbcc45a59f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D\Memory">
+      <UniqueIdentifier>{fd32d427-1079-4344-92e4-eb86609272f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\core.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PELoader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TlsInit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Event.cpp">
+      <Filter>ProjectCore\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EventBeforeLoaded.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="EventGameFrame.cpp">
+      <Filter>Events</Filter>
+    </ClCompile>
+    <ClCompile Include="MemoryCache.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Globals.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Registry.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="scrEngine.cpp">
+      <Filter>OpenHook</Filter>
+    </ClCompile>
+    <ClCompile Include="scrManager.cpp">
+      <Filter>OpenHook</Filter>
+    </ClCompile>
+    <ClCompile Include="scrThread.cpp">
+      <Filter>OpenHook</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameInit.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Script.cpp">
+      <Filter>ProjectCore\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Chat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChatScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="nativeInvoker.cpp">
+      <Filter>OpenHook</Filter>
+    </ClCompile>
+    <ClCompile Include="UI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\GameMemory.cpp">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\Hooking.cpp">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\buffer.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde32.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde64.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\hook.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\minhook\src\trampoline.c">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\Memory\HMemory.cpp">
+      <Filter>D3D\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\imgui.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\imgui_impl_dx11.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\imgui_draw.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\imgui_demo.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\renderer.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\d3dhook.cpp">
+      <Filter>D3D</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\PELoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Globals.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Event.h">
+      <Filter>ProjectCore\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MemoryCache.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Registry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shared\Console\CLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Shared\CVector3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scrEngine.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="pgPtrCollection.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="pgCollection.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="scrManager.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="scrThread.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="Natives.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="nativeCaller.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nativeInvoker.h">
+      <Filter>OpenHook</Filter>
+    </ClInclude>
+    <ClInclude Include="Script.h">
+      <Filter>ProjectCore\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Chat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\GameMemory.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\Memory.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\include\MinHook.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\buffer.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\hde32.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\hde64.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\pstdint.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\table32.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\HDE\table64.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\Memory\minhook\src\trampoline.h">
+      <Filter>D3D\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\imgui.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\imgui_internal.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\stb_rect_pack.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\stb_textedit.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\stb_truetype.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\imgui_impl_dx11.h">
+      <Filter>D3D</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="D:\Code\HighFive\bin\Release\HF.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
