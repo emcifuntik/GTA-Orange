@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <intrin.h>
 #include <string>
+#include <locale>
+#include <codecvt>
 #include <vector>
 #include <sstream>
 #include <Psapi.h>

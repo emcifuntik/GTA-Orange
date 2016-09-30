@@ -25,7 +25,7 @@ void Action()
 			UI::DISPLAY_HUD(false);
 			UI::DISPLAY_RADAR(false);*/
 			teleported = true;
-			CChat::Get()->AddChatMessage("GTA:Orange loaded");
+			CChat::Get()->AddChatMessage("Grand Theft Auto: Orange loaded");
 		}
 		UI::SET_PAUSE_MENU_ACTIVE(false);
 		scriptWait(0);

@@ -763,7 +763,7 @@ void Initialize()
 {
 #ifdef _DEBUG
 	AllocConsole();
-	SetConsoleTitle("GTA:Orange");
+	SetConsoleTitle("Grand Theft Auto: Orange");
 	FILE * unused = NULL;
 	freopen_s(&unused, "CONOUT$", "w", stdout);
 	freopen_s(&unused, "CONOUT$", "w", stderr);
