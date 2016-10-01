@@ -24,7 +24,7 @@ void Memory::Set(DWORD64 pAddress, BYTE* bData, size_t stSize)
 {
 	DWORD dwOldProtection;
 	VirtualProtect((void*)pAddress, stSize, PAGE_EXECUTE_READWRITE, &dwOldProtection);
-	memset((void*)pAddress, (int)bData, stSize);
+	memset((void*)pAddress, reinterpret_cast<int>(bData), stSize);
 	VirtualProtect((void*)pAddress, stSize, dwOldProtection, &dwOldProtection);
 }
 

@@ -1,14 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
     <Filter Include="Resource Files">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -37,16 +29,63 @@
     <Filter Include="D3D\Memory">
       <UniqueIdentifier>{fd32d427-1079-4344-92e4-eb86609272f2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{d3f966c4-b52c-446b-b5da-5b31bcb26d6a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Source files">
+      <UniqueIdentifier>{d9b27d99-a17f-4462-8e45-3641387be11d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\Header files">
+      <UniqueIdentifier>{657e829e-d82e-408c-b808-6d232cb9dfbe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GTA">
+      <UniqueIdentifier>{3ff0f636-7ee8-4c8f-b13e-7408d4b9564a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GTA\Header files">
+      <UniqueIdentifier>{1ae6c3ce-a852-4c18-b2d9-e51f8e53ac7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GTA\Source files">
+      <UniqueIdentifier>{b2a5c74d-5aa7-479e-ae1b-8817ddd9b930}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenHook\Source files">
+      <UniqueIdentifier>{6350c17c-be23-4594-a0b8-15c374c89ec5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OpenHook\Header files">
+      <UniqueIdentifier>{473dabab-a979-4377-9e61-4586bc6d04bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Launcher">
+      <UniqueIdentifier>{55b1dc7e-dd98-40a4-b285-ac70ee2ab7e3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Launcher\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Launcher\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="D3D\Header files">
+      <UniqueIdentifier>{00ef57a0-9acf-4519-94d8-f1bd17232283}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D\Source files">
+      <UniqueIdentifier>{d463cdf2-f9ab-4c33-905c-f29828f6ba63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D\Renderer">
+      <UniqueIdentifier>{49052724-0d89-4e6c-8974-80b0af0569cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="D3D\FW1">
+      <UniqueIdentifier>{a5f3a96b-0e9d-4ef4-a415-0a4470656388}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\PELoader.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="TlsInit.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Event.cpp">
       <Filter>ProjectCore\Source Files</Filter>
@@ -58,25 +97,16 @@
       <Filter>Events</Filter>
     </ClCompile>
     <ClCompile Include="MemoryCache.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Globals.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Registry.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="scrEngine.cpp">
-      <Filter>OpenHook</Filter>
-    </ClCompile>
-    <ClCompile Include="scrManager.cpp">
-      <Filter>OpenHook</Filter>
-    </ClCompile>
-    <ClCompile Include="scrThread.cpp">
-      <Filter>OpenHook</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Utils.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameInit.cpp">
       <Filter>Scripts</Filter>
@@ -85,22 +115,16 @@
       <Filter>ProjectCore\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Chat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Memory.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ChatScript.cpp">
       <Filter>Scripts</Filter>
     </ClCompile>
-    <ClCompile Include="nativeInvoker.cpp">
-      <Filter>OpenHook</Filter>
-    </ClCompile>
     <ClCompile Include="UI.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D3D11\Memory\GameMemory.cpp">
       <Filter>D3D\Memory</Filter>
@@ -126,103 +150,208 @@
     <ClCompile Include="D3D11\Memory\HMemory.cpp">
       <Filter>D3D\Memory</Filter>
     </ClCompile>
-    <ClCompile Include="D3D11\imgui.cpp">
-      <Filter>D3D</Filter>
+    <ClCompile Include="Commands.cpp">
+      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="D3D11\imgui_impl_dx11.cpp">
-      <Filter>D3D</Filter>
+    <ClCompile Include="nativeInvoker.cpp">
+      <Filter>OpenHook\Source files</Filter>
     </ClCompile>
-    <ClCompile Include="D3D11\imgui_draw.cpp">
-      <Filter>D3D</Filter>
+    <ClCompile Include="scrEngine.cpp">
+      <Filter>OpenHook\Source files</Filter>
     </ClCompile>
-    <ClCompile Include="D3D11\imgui_demo.cpp">
-      <Filter>D3D</Filter>
+    <ClCompile Include="scrManager.cpp">
+      <Filter>OpenHook\Source files</Filter>
     </ClCompile>
-    <ClCompile Include="D3D11\renderer.cpp">
-      <Filter>D3D</Filter>
+    <ClCompile Include="scrThread.cpp">
+      <Filter>OpenHook\Source files</Filter>
     </ClCompile>
     <ClCompile Include="D3D11\d3dhook.cpp">
-      <Filter>D3D</Filter>
+      <Filter>D3D\Source files</Filter>
     </ClCompile>
-    <ClCompile Include="Commands.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="D3D11\imgui.cpp">
+      <Filter>D3D\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\imgui_draw.cpp">
+      <Filter>D3D\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\imgui_impl_dx11.cpp">
+      <Filter>D3D\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CConfig.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CEntity.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CLocalPlayer.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CNetworkConnection.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CNetworkPlayer.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CNetworkVehicle.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CPedestrian.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CRPCPlugin.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\CVehicle.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Functions.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="GTA\CRage.cpp">
+      <Filter>GTA\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="GTA\CReplayInterface.cpp">
+      <Filter>GTA\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="GTA\VTasks.cpp">
+      <Filter>GTA\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="GTA\sysAllocator.cpp">
+      <Filter>GTA\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkScript.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="Renderer.cpp">
+      <Filter>D3D\Renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\rendering.cpp">
+      <Filter>D3D\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="GTA\CGraphics.cpp">
+      <Filter>GTA\Source files</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBAInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTargetInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1Factory.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FactoryInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapperInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlasInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProviderInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStatesInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheetInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawerInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometryInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRendererInterface.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.cpp">
+      <Filter>D3D\FW1</Filter>
+    </ClCompile>
+    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1Precompiled.cpp">
+      <Filter>D3D\FW1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Globals.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Event.h">
       <Filter>ProjectCore\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MemoryCache.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Registry.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Shared\Console\CLog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Shared\CVector3.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scrEngine.h">
-      <Filter>OpenHook</Filter>
-    </ClInclude>
-    <ClInclude Include="pgPtrCollection.h">
-      <Filter>OpenHook</Filter>
-    </ClInclude>
-    <ClInclude Include="pgCollection.h">
-      <Filter>OpenHook</Filter>
-    </ClInclude>
-    <ClInclude Include="scrManager.h">
-      <Filter>OpenHook</Filter>
-    </ClInclude>
-    <ClInclude Include="scrThread.h">
-      <Filter>OpenHook</Filter>
-    </ClInclude>
-    <ClInclude Include="Natives.h">
-      <Filter>OpenHook</Filter>
-    </ClInclude>
-    <ClInclude Include="types.h">
-      <Filter>OpenHook</Filter>
-    </ClInclude>
-    <ClInclude Include="nativeCaller.h">
-      <Filter>OpenHook</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Utils.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="nativeInvoker.h">
-      <Filter>OpenHook</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Script.h">
       <Filter>ProjectCore\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UI.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Chat.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="D3D11\Memory\GameMemory.h">
       <Filter>D3D\Memory</Filter>
@@ -254,29 +383,152 @@
     <ClInclude Include="D3D11\Memory\minhook\src\trampoline.h">
       <Filter>D3D\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="D3D11\imgui.h">
-      <Filter>D3D</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\imgui_internal.h">
-      <Filter>D3D</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\stb_rect_pack.h">
-      <Filter>D3D</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\stb_textedit.h">
-      <Filter>D3D</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\stb_truetype.h">
-      <Filter>D3D</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\imgui_impl_dx11.h">
-      <Filter>D3D</Filter>
-    </ClInclude>
     <ClInclude Include="Commands.h">
-      <Filter>Header Files</Filter>
+      <Filter>Launcher\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="nativeCaller.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="nativeInvoker.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Natives.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="pgCollection.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="pgPtrCollection.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="scrEngine.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="scrManager.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="scrThread.h">
+      <Filter>OpenHook\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="types.h">
+      <Filter>OpenHook\Header files</Filter>
     </ClInclude>
     <ClInclude Include="thirdparty\dxgi1_2.h">
-      <Filter>D3D</Filter>
+      <Filter>D3D\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\imgui.h">
+      <Filter>D3D\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\imgui_impl_dx11.h">
+      <Filter>D3D\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\imgui_internal.h">
+      <Filter>D3D\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\stb_rect_pack.h">
+      <Filter>D3D\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\stb_textedit.h">
+      <Filter>D3D\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\stb_truetype.h">
+      <Filter>D3D\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CConfig.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CEntity.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CLocalPlayer.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CNetworkConnection.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CNetworkPlayer.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CNetworkVehicle.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CPedestrian.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CRPCPlugin.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CVehicle.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Functions.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CRage.h">
+      <Filter>GTA\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CReplayInterface.h">
+      <Filter>GTA\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\VTasks.h">
+      <Filter>GTA\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\sysAllocator.h">
+      <Filter>GTA\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer.h">
+      <Filter>D3D\Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="GTA\CGraphics.h">
+      <Filter>GTA\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Factory.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Object.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1CompileSettings.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.h">
+      <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1Precompiled.h">
+      <Filter>D3D\FW1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

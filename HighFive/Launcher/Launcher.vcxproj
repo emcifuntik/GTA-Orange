@@ -58,7 +58,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\Shared;..\tinyxml2-4.0.1;.\;.\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Shared;..\tinyxml2-4.0.1;.\;inc;$(SolutionDir)pe-loader\inc;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -67,7 +67,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>..\..\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>tinyxml2_$(Configuration)_$(Platform).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tinyxml2_$(Configuration)_$(Platform).lib;RakNet_$(Configuration)_$(Platform).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -76,7 +76,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>D:\Code\HighFive\Shared;D:\Code\HighFive\HighFive\tinyxml2-4.0.1;./;inc;$(SolutionDir)pe-loader\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\Shared;..\tinyxml2-4.0.1;.\;inc;$(SolutionDir)pe-loader\inc;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -86,7 +86,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\Code\HighFive\lib;%DXSDK_DIR%Include\x64\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>tinyxml2_$(Configuration)_$(Platform).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>tinyxml2_$(Configuration)_$(Platform).lib;RakNet_$(Configuration)_$(Platform).lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -94,11 +94,35 @@
     <ClCompile Include="ChatScript.cpp" />
     <ClCompile Include="Commands.cpp" />
     <ClCompile Include="D3D11\d3dhook.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBAInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTargetInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1Factory.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FactoryInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapperInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlasInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProviderInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStatesInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheetInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawerInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometryInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRendererInterface.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.cpp" />
+    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1Precompiled.cpp" />
     <ClCompile Include="D3D11\imgui.cpp" />
-    <ClCompile Include="D3D11\imgui_demo.cpp" />
     <ClCompile Include="D3D11\imgui_draw.cpp" />
     <ClCompile Include="D3D11\imgui_impl_dx11.cpp" />
-    <ClCompile Include="D3D11\renderer.cpp" />
+    <ClCompile Include="D3D11\rendering.cpp" />
     <ClCompile Include="D3D11\Memory\GameMemory.cpp" />
     <ClCompile Include="D3D11\Memory\Hooking.cpp" />
     <ClCompile Include="D3D11\Memory\HMemory.cpp" />
@@ -107,7 +131,23 @@
     <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde64.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\hook.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\trampoline.c" />
-    <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GTA\CGraphics.cpp" />
+    <ClCompile Include="GTA\CRage.cpp" />
+    <ClCompile Include="GTA\CReplayInterface.cpp" />
+    <ClCompile Include="GTA\sysAllocator.cpp" />
+    <ClCompile Include="GTA\VTasks.cpp" />
+    <ClCompile Include="NetworkScript.cpp" />
+    <ClCompile Include="Network\CConfig.cpp" />
+    <ClCompile Include="Network\CEntity.cpp" />
+    <ClCompile Include="Network\CLocalPlayer.cpp" />
+    <ClCompile Include="Network\CNetworkConnection.cpp" />
+    <ClCompile Include="Network\CNetworkPlayer.cpp" />
+    <ClCompile Include="Network\CNetworkVehicle.cpp" />
+    <ClCompile Include="Network\CPedestrian.cpp" />
+    <ClCompile Include="Network\CRPCPlugin.cpp" />
+    <ClCompile Include="Network\CVehicle.cpp" />
+    <ClCompile Include="Network\Functions.cpp" />
+    <ClCompile Include="Renderer.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Memory.cpp" />
@@ -132,6 +172,22 @@
     <ClInclude Include="..\..\Shared\CVector3.h" />
     <ClInclude Include="Chat.h" />
     <ClInclude Include="Commands.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Factory.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Object.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1CompileSettings.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.h" />
+    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1Precompiled.h" />
     <ClInclude Include="D3D11\imgui.h" />
     <ClInclude Include="D3D11\imgui_impl_dx11.h" />
     <ClInclude Include="D3D11\imgui_internal.h" />
@@ -148,7 +204,22 @@
     <ClInclude Include="D3D11\stb_rect_pack.h" />
     <ClInclude Include="D3D11\stb_textedit.h" />
     <ClInclude Include="D3D11\stb_truetype.h" />
-    <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GTA\CGraphics.h" />
+    <ClInclude Include="GTA\CRage.h" />
+    <ClInclude Include="GTA\CReplayInterface.h" />
+    <ClInclude Include="GTA\sysAllocator.h" />
+    <ClInclude Include="GTA\VTasks.h" />
+    <ClInclude Include="Renderer.h" />
+    <ClInclude Include="Network\CConfig.h" />
+    <ClInclude Include="Network\CEntity.h" />
+    <ClInclude Include="Network\CLocalPlayer.h" />
+    <ClInclude Include="Network\CNetworkConnection.h" />
+    <ClInclude Include="Network\CNetworkPlayer.h" />
+    <ClInclude Include="Network\CNetworkVehicle.h" />
+    <ClInclude Include="Network\CPedestrian.h" />
+    <ClInclude Include="Network\CRPCPlugin.h" />
+    <ClInclude Include="Network\CVehicle.h" />
+    <ClInclude Include="Network\Functions.h" />
     <ClInclude Include="thirdparty\dxgi1_2.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Event.h" />

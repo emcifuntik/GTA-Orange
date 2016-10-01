@@ -120,8 +120,13 @@ unsigned int Utils::Hash(const char* inpStr)
 //{
 //	return !(getGameVersion() % 2);
 //}
-//
-//int Utils::RoundToBytes(int bits)
-//{
-//	return (bits % 8) ? (bits / 8 + 1) : (bits / 8);
-//}
+
+int Utils::RoundToBytes(int bits)
+{
+	return (bits % 8) ? (bits / 8 + 1) : (bits / 8);
+}
+
+DWORD Utils::RGBAToHex(BYTE r, BYTE g, BYTE b, BYTE a)
+{
+	return ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((g & 0xff) << 8) + (a & 0xff);
+}

@@ -43,7 +43,7 @@ void CChat::Render()
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Always);
 	ImGui::Begin("Chat", &bEnabled, ImVec2(400, 190), .2f, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
-	ImGui::PushFont(CGlobals::Get().chatFont);
+	//ImGui::PushFont(CGlobals::Get().chatFont);
 	for each (auto chatLine in vChatLines)
 		ImGui::TextColored(ImVec4(chatLine.structColor.red, chatLine.structColor.green, chatLine.structColor.blue, chatLine.structColor.alpha), (char*)chatLine.sLineText.c_str());
 	
@@ -109,7 +109,7 @@ void CChat::Render()
 		ImGui::PopStyleVar(6);
 		ImGui::End();
 	}
-	ImGui::PopFont();
+	//ImGui::PopFont();
 }
 
 void CChat::Input()

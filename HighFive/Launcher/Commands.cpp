@@ -94,7 +94,7 @@ int CommandProcessor(std::string command)
 	}
 	if (!command.compare("/debug"))
 	{
-		TG(CLocalPlayer::Get()->isDebug);
+		CLocalPlayer::Get()->isDebug ^= 1;
 		return true;
 	}
 #endif

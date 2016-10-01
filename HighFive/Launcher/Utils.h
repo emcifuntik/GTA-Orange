@@ -11,7 +11,8 @@ namespace Utils
 	double BoundRotationDeg(double angleDeg);*/
 	unsigned int Hash(const char * inpStr);
 	/*bool IsValidPtr(PVOID Ptr);
-	bool IsSteam();
-	int RoundToBytes(int bits);*/
+	bool IsSteam();*/
+	int RoundToBytes(int bits);
+	DWORD RGBAToHex(BYTE r, BYTE g, BYTE b, BYTE a);
 }
 

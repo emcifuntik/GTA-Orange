@@ -34,19 +34,28 @@
 #include <cstddef>
 #include <cstring>
 #pragma endregion
+
 #pragma region D3D Stuff
 #include <d3d11.h>
 #include <d3dcompiler.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
+#include "D3D11\Include\d3dx11async.h"
+#include "D3D11\d3dx11effect.h" 
+#include <D3D11Shader.h> 
+#include "D3D11\FW1FontWrapper\src\FW1FontWrapper.h"
+#include "Renderer.h"
 #pragma endregion
+
 #pragma region events
 #include "Event.h"
 //#include "EventBeforeLoaded.h"
 #pragma endregion
+
 #pragma region memory caching
 #include "MemoryCache.h"
 #pragma endregion
+
 #pragma region CustomHook
 #include "types.h"
 #include "pgCollection.h"
@@ -57,15 +66,63 @@
 #include "scrEngine.h"
 #include "nativeCaller.h"
 #include "Script.h"
+#include "Natives.h"
 #pragma endregion
+
+#pragma region RakNet
+#include <MessageIdentifiers.h>
+#include <RakPeerInterface.h>
+#include <RakNetStatistics.h>
+#include <RakNetTypes.h>
+#include <BitStream.h>
+#include <RakSleep.h>
+#include <PacketLogger.h>
+#include <Kbhit.h>
+#include <Gets.h>
+#include <WindowsIncludes.h>
+#include <GetTime.h>
+#include <RPC4Plugin.h>
+using namespace RakNet;
+#pragma endregion
+
+#pragma region tinyxml2
+#include <tinyxml2.h>
+#pragma endregion
+
+#pragma region Shared
+#include "CMath.h"
+#include "Memory.h"
+#include "NetworkTypes.h"
+#include "Models.h"
+#include "Network\CConfig.h"
+#pragma endregion
+
+#pragma region RAGE Stuff
+#include "GTA\sysAllocator.h"
+#include "GTA\VTasks.h"
+#include "GTA\CRage.h"
+#include "GTA\CReplayInterface.h"
+#include "GTA\CGraphics.h"
+#pragma endregion
+
+#pragma region Network
+#include "Network\CEntity.h"
+#include "Network\CPedestrian.h"
+#include "Network\CVehicle.h"
+#include "Network\CLocalPlayer.h"
+#include "Network\CNetworkPlayer.h"
+#include "Network\CNetworkVehicle.h"
+#include "Network\CNetworkConnection.h"
+#include "Network\Functions.h"
+#include "Network\CRPCPlugin.h"
+#pragma endregion
+
 #include "Registry.h"
 #include "Common.h"
 #include "PELoader.h"
 #include "Game.h"
 #include "UI.h"
-#include "Graphics.h"
 #include "Chat.h"
-#include "Memory.h"
 #include "Commands.h"
 
 #pragma region IMGUI

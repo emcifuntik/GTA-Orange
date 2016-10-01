@@ -14,6 +14,8 @@ struct IDXGISwapChain;
 struct ID3D11RenderTargetView;
 struct ImFont;
 
+class Dx11Renderer;
+
 class CGlobals
 {
 	CGlobals() {}
@@ -41,7 +43,9 @@ public:
 	bool renderer = false;
 	bool *hudDisabled = nullptr;
 	bool displayServerBrowser = false;
+	bool showChat = false;
 	int currentGameState = -1;
+	Dx11Renderer *DX11Renderer = nullptr;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;
