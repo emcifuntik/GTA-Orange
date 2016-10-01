@@ -48,6 +48,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
+    <IncludePath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\Shared;..\Shared;C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\tinyxml2-4.0.1;..\HighFive\tinyxml2-4.0.1;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\lib;..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -147,6 +149,7 @@
     <ClInclude Include="D3D11\stb_textedit.h" />
     <ClInclude Include="D3D11\stb_truetype.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="thirdparty\dxgi1_2.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Memory.h" />

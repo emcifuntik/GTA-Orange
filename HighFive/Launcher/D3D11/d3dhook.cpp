@@ -1,11 +1,26 @@
 #include "stdafx.h"
 #include "Includes.h"
+
+//this disables broken typedef
+#define __dxgitype_h__
+
+//ONLY IF YOU HAVE WIN 10 ANNIVERSARY
+typedef struct _DXGI_RGBA {
+	float r;
+	float g;
+	float b;
+	float a;
+} DXGI_RGBA;
+
+
 #include "VIngameConsole.h"
+#include <thirdparty\DirectX\Include\DXGIFormat.h>
+#include "thirdparty\DirectX\Include\DXGI.h"
+#include "thirdparty\dxgitype.h"
+#include "thirdparty\dxgi1_2.h"
 #include "thirdparty/DirectX/Include/d3d11.h"
 #include "Memory\Memory.h"
 #include <sstream>
-#include <d3d11.h>
-#include <dxgi1_2.h>
 
 struct charTableItem {
 	SHORT old_;
