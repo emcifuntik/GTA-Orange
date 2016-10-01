@@ -1,0 +1,147 @@
+diff --git .gn .gn
+index 1e0e3bd..9e70917 100644
+--- .gn
++++ .gn
+@@ -231,6 +231,8 @@ exec_script_whitelist = [
+   "//build/toolchain/win/BUILD.gn",
+   "//build/util/branding.gni",
+   "//build/util/version.gni",
++  "//cef/BUILD.gn",
++  "//cef/libcef/common/extensions/api/schemas.gni",
+   "//chrome/android/BUILD.gn",
+   "//chrome/browser/BUILD.gn",
+   "//chrome/browser/chromeos/BUILD.gn",
+diff --git BUILD.gn BUILD.gn
+index acc203c..49113a4 100644
+--- BUILD.gn
++++ BUILD.gn
+@@ -265,6 +265,7 @@ group("both_gn_and_gyp") {
+     # and whether there should be other targets that are iOS-only and missing.
+     deps += [
+       "//cc:cc_unittests",
++      "//cef",
+       "//chrome/test:telemetry_perf_unittests",
+       "//chrome/test:unit_tests",
+       "//components:components_browsertests",
+diff --git build/config/win/visual_studio_version.gni build/config/win/visual_studio_version.gni
+index 5bfa9a7..5e6e05d 100644
+--- build/config/win/visual_studio_version.gni
++++ build/config/win/visual_studio_version.gni
+@@ -12,9 +12,8 @@ declare_args() {
+   # Use "2013" for Visual Studio 2013, or "2013e" for the Express version.
+   visual_studio_version = ""
+ 
+-  # Directory of the Windows driver kit. If visual_studio_path is empty, this
+-  # will be auto-filled.
+-  wdk_path = ""
++  # Path to Visual Studio runtime libraries.
++  visual_studio_runtime_dirs = ""
+ 
+   # Full path to the Windows SDK, not including a backslash at the end.
+   # This value is the default location, override if you have a different
+@@ -28,12 +27,11 @@ if (visual_studio_path == "") {
+   visual_studio_path = toolchain_data.vs_path
+   windows_sdk_path = toolchain_data.sdk_path
+   visual_studio_version = toolchain_data.vs_version
+-  wdk_path = toolchain_data.wdk_dir
+   visual_studio_runtime_dirs = toolchain_data.runtime_dirs
+ } else {
+   assert(visual_studio_version != "",
+          "You must set the visual_studio_version if you set the path")
+-  assert(wdk_path != "",
+-         "You must set the wdk_path if you set the visual studio path")
+-  visual_studio_runtime_dirs = []
++  assert(visual_studio_runtime_dirs != "",
++         "You must set the visual_studio_runtime_dirs if you set the visual " +
++         "studio path")
+ }
+diff --git build/toolchain/win/setup_toolchain.py build/toolchain/win/setup_toolchain.py
+index 0d0975d..cfb5d3f 100644
+--- build/toolchain/win/setup_toolchain.py
++++ build/toolchain/win/setup_toolchain.py
+@@ -127,11 +127,15 @@ def _LoadToolchainEnv(cpu, sdk_dir):
+     script_path = os.path.normpath(os.path.join(
+                                        os.environ['GYP_MSVS_OVERRIDE_PATH'],
+                                        'VC/vcvarsall.bat'))
+-    if not os.path.exists(script_path):
+-      raise Exception('%s is missing - make sure VC++ tools are installed.' %
+-                      script_path)
+-    args = [script_path, 'amd64_x86' if cpu == 'x86' else 'amd64']
+-    variables = _LoadEnvFromBat(args)
++    if os.path.exists(script_path):
++      args = [script_path, 'amd64_x86' if cpu == 'x86' else 'amd64', \
++              '10.0.10586.0']
++      variables = _LoadEnvFromBat(args)
++    else:
++      variables = []
++      for k in sorted(os.environ.keys()):
++        variables.append('%s=%s' % (str(k), str(os.environ[k])))
++      variables = '\n'.join(variables)
+   return _ExtractImportantEnvironment(variables)
+ 
+ 
+diff --git build/vs_toolchain.py build/vs_toolchain.py
+index 829e718..89361a0 100755
+--- build/vs_toolchain.py
++++ build/vs_toolchain.py
+@@ -74,11 +74,18 @@ def SetEnvironmentAndGetRuntimeDllDirs():
+     runtime_path = os.path.pathsep.join(vs_runtime_dll_dirs)
+     os.environ['PATH'] = runtime_path + os.path.pathsep + os.environ['PATH']
+   elif sys.platform == 'win32' and not depot_tools_win_toolchain:
++    has_override_path = True
+     if not 'GYP_MSVS_OVERRIDE_PATH' in os.environ:
++      has_override_path = False
+       os.environ['GYP_MSVS_OVERRIDE_PATH'] = DetectVisualStudioPath()
+     if not 'GYP_MSVS_VERSION' in os.environ:
+       os.environ['GYP_MSVS_VERSION'] = GetVisualStudioVersion()
+ 
++    if has_override_path:
++      # Don't attempt to copy DLLs when using a custom toolchain.
++      # The DLLs should already be discoverable via the PATH env variable.
++      return None
++
+     # When using an installed toolchain these files aren't needed in the output
+     # directory in order to run binaries locally, but they are needed in order
+     # to create isolates or the mini_installer. Copying them to the output
+diff --git chrome/BUILD.gn chrome/BUILD.gn
+index aa67e96..e2af2f3 100644
+--- chrome/BUILD.gn
++++ chrome/BUILD.gn
+@@ -709,7 +709,7 @@ if (is_win) {
+     ]
+ 
+     foreach(locale, locales_as_mac_outputs) {
+-      sources += [ "$root_gen_dir/repack/locales/$locale.pak" ]
++      sources += [ "$root_gen_dir/chrome/repack/locales/$locale.pak" ]
+     }
+ 
+     outputs = [
+diff --git chrome/chrome_repack_locales.gni chrome/chrome_repack_locales.gni
+index b9a1d95..54d7677 100644
+--- chrome/chrome_repack_locales.gni
++++ chrome/chrome_repack_locales.gni
+@@ -189,9 +189,9 @@ template("chrome_repack_locales") {
+       if (defined(invoker.output_dir)) {
+         output = "${invoker.output_dir}/${output_locale}.pak"
+       } else if (is_mac || is_ios) {
+-        output = "${root_gen_dir}/repack/locales/${output_locale}.pak"
++        output = "${root_gen_dir}/chrome/repack/locales/${output_locale}.pak"
+       } else {
+-        output = "${root_out_dir}/locales/${output_locale}.pak"
++        output = "${root_out_dir}/chrome/locales/${output_locale}.pak"
+       }
+ 
+       if (defined(invoker.additional_source_patterns)) {
+diff --git chrome/installer/mini_installer/BUILD.gn chrome/installer/mini_installer/BUILD.gn
+index 1e269aa..b562c3e 100644
+--- chrome/installer/mini_installer/BUILD.gn
++++ chrome/installer/mini_installer/BUILD.gn
+@@ -125,7 +125,7 @@ template("generate_mini_installer") {
+     inputs = [
+       "$chrome_dll_file",
+       "$root_out_dir/chrome.exe",
+-      "$root_out_dir/locales/en-US.pak",
++      "$root_out_dir/chrome/locales/en-US.pak",
+       "$root_out_dir/setup.exe",
+       release_file,
+     ]
