@@ -48,7 +48,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>true</LinkIncremental>
     <OutDir>..\..\bin\$(Configuration)\</OutDir>
-    <IncludePath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\Shared;..\Shared;C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\tinyxml2-4.0.1;..\HighFive\tinyxml2-4.0.1;$(IncludePath)</IncludePath>
+    <IncludePath>..\HighFive\cef\include;C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\Shared;..\Shared;C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\tinyxml2-4.0.1;..\HighFive\tinyxml2-4.0.1;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\lib;..\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

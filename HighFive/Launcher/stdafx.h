@@ -11,6 +11,7 @@
 #include <sstream>
 #include <intrin.h>
 #include <vector>
+#include <io.h>
 #include <thread>
 #include <set>
 #include <unordered_set>

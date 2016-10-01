@@ -17,10 +17,11 @@ void Action()
 				scriptWait(0);
 			PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
 			STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);*/
-			Cam firstCam = CAM::CREATE_CAM("DEFAULT_SCRIPTED_CAMERA", false);
-			CAM::SET_CAM_COORD(firstCam, 0.f, 0.f, 100.f);
-			CAM::POINT_CAM_AT_COORD(firstCam, 300.f, 300.f, 50.f);
-			CAM::SET_CAM_ACTIVE(firstCam, true);
+			CGlobals::Get().currentcam = 
+		    CAM::CREATE_CAM("DEFAULT_SCRIPTED_CAMERA", false);
+			CAM::SET_CAM_COORD(CGlobals::Get().currentcam, 0.f, 0.f, 100.f);
+			CAM::POINT_CAM_AT_COORD(CGlobals::Get().currentcam, 300.f, 300.f, 50.f);
+			CAM::SET_CAM_ACTIVE(CGlobals::Get().currentcam, true);
 			CAM::RENDER_SCRIPT_CAMS(true, false, 0, true, false);
 			UI::DISPLAY_HUD(false);
 			UI::DISPLAY_RADAR(false);
