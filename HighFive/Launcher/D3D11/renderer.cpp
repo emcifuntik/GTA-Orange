@@ -27,13 +27,22 @@ void CreateRenderTarget()
 	pBackBuffer->Release();
 }
 
+bool quickmenu = false;
+
+bool getKeyPressed(int key) {
+	return (GetAsyncKeyState(key) & 0xFFFF) == 0x8001;
+}
+
+#include "Natives.h"
+
 void D3DHook::Render()
 {
 	ImGui_ImplDX11_NewFrame();
 	if(CGlobals::Get().currentGameState == GameStatePlaying)
 		CChat::Get()->Render();
 
-	if (CGlobals::Get().displayServerBrowser)
+	//block escape key on first start
+	if (CGlobals::Get().displayServerBrowser && CGlobals::Get().blockquickswitch)
 	{
 		ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiSetCond_Always);
 		ImGui::SetNextWindowPosCenter(ImGuiSetCond_Always);
@@ -50,7 +59,22 @@ void D3DHook::Render()
 		ImGui::InputInt("", &port, 1, 100);
 		if (ImGui::Button("Connect"))
 		{
-
+		//	if (strcmp(serverIP, "127.0.0.1") == 0)
+		//	{
+		//
+		//	}
+			//if he is a dev we can send user on localhost
+			if (CGlobals::Get().isorangedev)
+			{
+				CGlobals::Get().displayServerBrowser = false;
+				CGlobals::Get().blockquickswitch = false;
+				//disable static cam
+		//		CAM::SET_CAM_ACTIVE(CGlobals::Get().currentcam, false);
+		//		CAM::DESTROY_CAM(CGlobals::Get().currentcam, true);
+		//		CAM::DESTROY_ALL_CAMS(true);
+		//		CAM::SET_FOLLOW_PED_CAM_VIEW_MODE(1);
+				CAM::RENDER_SCRIPT_CAMS(false, false, 0, false, false);
+			}
 		}
 		ImGui::End();
 		ShowCursor(TRUE);

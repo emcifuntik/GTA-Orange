@@ -16,6 +16,8 @@ std::vector<std::string> split(const std::string &s, char delim) {
 	return elems;
 }
 
+#include "Natives.h"
+
 int CommandProcessor(std::string command)
 {
 	std::vector<std::string> params = split(command, ' ');
@@ -24,6 +26,19 @@ int CommandProcessor(std::string command)
 	if (!command.compare("/quit") || !command.compare("/q"))
 	{
 		ExitProcess(EXIT_SUCCESS);
+		return true;
+	}
+	if (!command.compare("/vehicle"))
+	{
+		if (!params.size())
+		{
+			CChat::Get()->AddChatMessage("USAGE: /vehicle [modelname]", 0xAAAAAAFF);
+			return true;
+		}
+		command.erase(0, 9);
+		Vector3 spos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 0);
+		Hash c = GAMEPLAY::GET_HASH_KEY((char*)command.c_str());
+		VEHICLE::CREATE_VEHICLE(c,spos.x,spos.x,spos.z,0.0f,true,true);
 		return true;
 	}
 #if _DEBUG

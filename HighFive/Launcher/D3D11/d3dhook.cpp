@@ -4,7 +4,7 @@
 //this disables broken typedef
 #define __dxgitype_h__
 
-//ONLY IF YOU HAVE WIN 10 ANNIVERSARY
+//ONLY IF YOU HAVE WIN 10 ANNIVERSARY else comment it
 typedef struct _DXGI_RGBA {
 	float r;
 	float g;

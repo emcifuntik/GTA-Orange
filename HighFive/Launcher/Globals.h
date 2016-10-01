@@ -31,7 +31,9 @@ public:
 	bool *canLangChange = nullptr;
 	HWND gtaHwnd = nullptr;
 	WNDPROC gtaWndProc = nullptr;
+	Cam currentcam;
 	bool isSteam = false;
+	bool isorangedev = false;
 	bool d3dloaded = false;
 	ID3D11Device *d3dDevice = nullptr;
 	ID3D11DeviceContext *d3dDeviceContext = nullptr;
@@ -41,6 +43,7 @@ public:
 	bool renderer = false;
 	bool *hudDisabled = nullptr;
 	bool displayServerBrowser = false;
+	bool blockquickswitch = true;
 	int currentGameState = -1;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
