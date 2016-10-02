@@ -451,8 +451,8 @@ void CNetworkPlayer::DrawTag()
 				fgColor = { 230, 70, 70, 150 };
 			}
 			auto viewPortGame = GTA::CViewportGame::Get();
-			CGraphics::Get()->Draw3DText(m_Name, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.06f), { 0xFF, 0xFF, 0xFF, 0xFF });
-			CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), health);
+			CGraphics::Get()->Draw3DText(m_Name, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.04f), { 0xFF, 0xFF, 0xFF, 0xFF });
+			CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.04f), health);
 		}
 	}
 }
