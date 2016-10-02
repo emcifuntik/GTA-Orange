@@ -40,6 +40,12 @@
     <ClInclude Include="CLog.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
+    <ClInclude Include="PluginLoad.h">
+      <Filter>Source Files\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="PeIMG.h">
+      <Filter>Source Files\Plugins</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -74,6 +80,12 @@
     </ClCompile>
     <ClCompile Include="Player.cpp">
       <Filter>Source Files\Python\Natives</Filter>
+    </ClCompile>
+    <ClCompile Include="PluginLoad.cpp">
+      <Filter>Source Files\Plugins</Filter>
+    </ClCompile>
+    <ClCompile Include="PeIMG.cpp">
+      <Filter>Source Files\Plugins</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -115,6 +127,9 @@
     </Filter>
     <Filter Include="Header Files\Python\Natives">
       <UniqueIdentifier>{e7e04126-21a4-4411-a04f-f68aa8f435bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Plugins">
+      <UniqueIdentifier>{06b428d5-f058-40f3-b870-0d75e6b1e7bb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

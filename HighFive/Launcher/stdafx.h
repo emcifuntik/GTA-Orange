@@ -2,6 +2,13 @@
 #define WIN32_LEAN_AND_MEAN
 #define DYNAMIC_PE_ALLOC
 
+typedef struct _DXGI_RGBA {
+	float r;
+	float g;
+	float b;
+	float a;
+} DXGI_RGBA;
+
 #pragma region core
 #include <cstdint>
 #include <windows.h>
@@ -38,13 +45,27 @@
 #pragma endregion
 
 #pragma region D3D Stuff
+//#include <d3d11.h>
 #include <d3d11.h>
 #include <d3dcompiler.h>
+#pragma comment (lib , "D3dcompiler.lib")
+#ifndef _DEBUG
+//#pragma comment (lib , "Effects11.lib")
+#else
+//#pragma comment (lib , "Effects11d.lib")
+#endif 
+#include "thirdparty\d3d11.h"
+#include <D3D11Shader.h>
+//#include <d3d11.h>
+//#include <d3dx11effect.h>
+#include "D3D11\d3dx11effect.h"
+//#include "thirdparty\d3dcompiler.h"
+//#include <d3dcompiler.h>
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
-#include "D3D11\Include\d3dx11async.h"
-#include "D3D11\d3dx11effect.h" 
-#include <D3D11Shader.h> 
+//#include "D3D11\Include\d3dx11async.h"
+//#include "D3D11\d3dx11effect.h" 
+//#include "thirdparty\d3d11shader.h"
 #include "D3D11\FW1FontWrapper\src\FW1FontWrapper.h"
 #include "Renderer.h"
 #pragma endregion

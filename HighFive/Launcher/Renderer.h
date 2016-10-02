@@ -1,3 +1,6 @@
+
+#include <d3d11.h>
+
 #ifndef D3DCOLOR_ABGR 
 #define D3DCOLOR_ABGR(a,b,g,r) ((DWORD)((((a) & 0xff) << 24) | (((b) & 0xff) << 16) | (((g) & 0xff) << 8) | ((r) & 0xff)))
 #endif 

@@ -27,7 +27,9 @@
     <ClInclude Include="CConfig.h" />
     <ClInclude Include="CPyArgBuilder.h" />
     <ClInclude Include="m_Python.h" />
+    <ClInclude Include="PeIMG.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PluginLoad.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="CRPCPlugin.h" />
     <ClInclude Include="stdafx.h" />
@@ -55,7 +57,9 @@
     <ClCompile Include="CNetworkVehicle.cpp" />
     <ClCompile Include="CRPCPlugin.cpp" />
     <ClCompile Include="m_Python.cpp" />
+    <ClCompile Include="PeIMG.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PluginLoad.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

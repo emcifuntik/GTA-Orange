@@ -1,4 +1,5 @@
 #include "stdafx.h"
+#include "Globals.h"
 #include "Includes.h"
 
 //this disables broken typedef
@@ -6,20 +7,29 @@
 
 //ONLY IF YOU HAVE WIN 10 ANNIVERSARY
 //#undef DXGI_RGBA
-//typedef struct _DXGI_RGBA {
-//	float r;
-//	float g;
-//	float b;
-//	float a;
-//} DXGI_RGBA;
+/*
+typedef struct _DXGI_RGBA {
+	float r;
+	float g;
+	float b;
+	float a;
+} DXGI_RGBA;*/
+
 
 
 #include "VIngameConsole.h"
+
 #include <thirdparty\DirectX\Include\DXGIFormat.h>
 #include "thirdparty\DirectX\Include\DXGI.h"
 #include "thirdparty\dxgitype.h"
 #include "thirdparty\dxgi1_2.h"
 #include "thirdparty/DirectX/Include/d3d11.h"
+
+/*#include <DXGIFormat.h>
+#include <DXGI.h>
+#include <DXGIType.h>
+#include <dxgi1_2.h>
+#include <d3d11.h>*/
 #include "Memory\Memory.h"
 #include <sstream>
 
