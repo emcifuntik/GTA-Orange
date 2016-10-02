@@ -199,6 +199,7 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 {
 	CChat *Chat = CChat::Get();
 
+	
 	if (isUpNow || wasDownBefore)
 	{
 		switch (key)
@@ -206,6 +207,14 @@ void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL i
 		case VK_ESCAPE:
 			if (Chat->bOpened)
 				Chat->Close();
+			if (!Chat->bOpened)
+			{
+				CGlobals::Get().mainmenushown = !CGlobals::Get().mainmenushown;
+				if (CGlobals::Get().mainmenushown)
+				{
+					Chat->Close();
+				}
+			}
 			break;
 		case VK_F6:
 			Chat->Toggle();

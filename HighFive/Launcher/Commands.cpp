@@ -23,7 +23,7 @@ int CommandProcessor(std::string command)
 	std::vector<std::string> params = split(command, ' ');
 	command = params[0];
 	params.erase(params.begin());
-	if (!command.compare("/quit") || !command.compare("/q"))
+	if (!command.compare("/quit") || !command.compare("/q") || !command.compare("/exit"))
 	{
 		ExitProcess(EXIT_SUCCESS);
 		return true;
@@ -37,7 +37,12 @@ int CommandProcessor(std::string command)
 		}
 		Vector3 spos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 0);
 		Hash c = Utils::Hash(params[0].c_str());
-		VEHICLE::CREATE_VEHICLE(c,spos.x,spos.x,spos.z,0.0f,true,true);
+		int lol = VEHICLE::CREATE_VEHICLE(c,spos.x,spos.x,spos.z,0.0f,true,true);
+		//request vehicle as admin (once type was unlocked by this it can be spawned using the fake decors)
+		if (!STATS::STAT_GET_INT(GAMEPLAY::GET_HASH_KEY("MPPLY_VEHICLE_ID_ADMIN_WEB"), &lol, 1))
+		{
+			STATS::STAT_SET_INT(GAMEPLAY::GET_HASH_KEY("MPPLY_VEHICLE_ID_ADMIN_WEB"), lol, 1);
+		}
 		return true;
 	}
 	if (!command.compare("/snow"))
