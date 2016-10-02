@@ -25,9 +25,6 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 
 	auto addr = CMemory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
 	addr.nop(20);
-	GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
-	GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
-	GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
 
 	typedef int(*ShowAbilityBar)(bool);
 	((ShowAbilityBar)CMemory::Find("40 53 48 83 EC 30 41 83 C9 FF 8A D9 88 ? ? ? ? ? 8B ? ? ? ? ?")())(false);

@@ -35,12 +35,29 @@ int CommandProcessor(std::string command)
 			CChat::Get()->AddChatMessage("USAGE: /vehicle [modelname]", 0xAAAAAAFF);
 			return true;
 		}
-		command.erase(0, 9);
 		Vector3 spos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 0);
-		Hash c = GAMEPLAY::GET_HASH_KEY((char*)command.c_str());
+		Hash c = Utils::Hash(params[0].c_str());
 		VEHICLE::CREATE_VEHICLE(c,spos.x,spos.x,spos.z,0.0f,true,true);
 		return true;
 	}
+	if (!command.compare("/snow"))
+	{
+		GAMEPLAY::SET_WEATHER_TYPE_NOW_PERSIST("XMAS");
+		GRAPHICS::_SET_FORCE_PED_FOOTSTEPS_TRACKS(true);
+		GRAPHICS::_SET_FORCE_VEHICLE_TRAILS(true);
+		return true;
+	}
+	if (!command.compare("/model"))
+	{
+		if (!params.size())
+		{
+			CChat::Get()->AddChatMessage("USAGE: /model [model id]", 0xAAAAAAFF);
+			return true;
+		}
+		CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[std::atoi(params[0].c_str())]));
+		return true;
+	}
+	
 #if _DEBUG
 	if (!command.compare("/model"))
 	{

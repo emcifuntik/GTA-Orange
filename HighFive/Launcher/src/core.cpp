@@ -6,6 +6,53 @@ static TCHAR szWindowClass[] = "highfive_app";
 
 void InitializeDummies();
 
+static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
+{
+
+	if (uMsg == BFFM_INITIALIZED)
+	{
+		std::string tmp = (const char *)lpData;
+		std::cout << "path: " << tmp << std::endl;
+		SendMessage(hwnd, BFFM_SETSELECTION, TRUE, lpData);
+	}
+
+	return 0;
+}
+
+std::string BrowseFolder(std::string saved_path)
+{
+	TCHAR path[MAX_PATH];
+
+	const char * path_param = saved_path.c_str();
+
+	BROWSEINFO bi = { 0 };
+	bi.lpszTitle = ("Browse for GTAV folder...");
+	bi.ulFlags = BIF_RETURNONLYFSDIRS | BIF_NEWDIALOGSTYLE;
+	bi.lpfn = BrowseCallbackProc;
+	bi.lParam = (LPARAM)path_param;
+
+	LPITEMIDLIST pidl = SHBrowseForFolder(&bi);
+
+	if (pidl != 0)
+	{
+		//get the name of the folder and put it in path
+		SHGetPathFromIDList(pidl, path);
+
+		//free memory used
+		IMalloc * imalloc = 0;
+		if (SUCCEEDED(SHGetMalloc(&imalloc)))
+		{
+			imalloc->Free(pidl);
+			imalloc->Release();
+		}
+
+		return path;
+	}
+
+	return "";
+}
+
+
 static HWND CreateWindowExWHook(_In_ DWORD dwExStyle,
 	_In_opt_ LPCWSTR lpClassName,
 	_In_opt_ LPCWSTR lpWindowName,
@@ -61,6 +108,14 @@ void CheckDev()
 		CGlobals::Get().isorangedev = true;
 	//	MessageBoxA(NULL, "Dev mode toolinit!", "Orange-mp", MB_OK | MB_ICONWARNING);
 	}
+}
+
+BOOL FileExists(LPCTSTR szPath)
+{
+	DWORD dwAttrib = GetFileAttributes(szPath);
+
+	return (dwAttrib != INVALID_FILE_ATTRIBUTES &&
+		!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
 LPSTR GetCommandLineAHook()
@@ -145,36 +200,48 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	char GamePath[MAX_PATH] = { 0 };
 	bool social = true;
-	if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\Grand Theft Auto V", "InstallFolder", GamePath, MAX_PATH))
+	if (!CConfig::Get()->gtaPath.length())
 	{
-		social = false;
-		if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\GTAV", "InstallFolderSteam", GamePath, MAX_PATH))
+		if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\Grand Theft Auto V", "InstallFolder", GamePath, MAX_PATH))
 		{
-			MessageBox(NULL, "Cannot find game path!", "Fatal Error", MB_ICONERROR);
-			ExitProcess(0);
-			return 1;
+			social = false;
+			if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\GTAV", "InstallFolderSteam", GamePath, MAX_PATH))
+			{
+				strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
+			}
+			else
+			{
+				CConfig::Get()->gtaPath = std::string(GamePath);
+			}
 		}
 		else
 		{
-			for (size_t i = strlen(GamePath); i >= 0; --i)
-			{
-				if (GamePath[i] == '\\')
-				{
-					GamePath[i + 1] = '\0';
-					break;
-				}
-			}
+			CConfig::Get()->gtaPath = std::string(GamePath);
 		}
 	}
-
-	SetCurrentDirectory(GamePath);
-	SetEnvironmentVariable("PATH", GamePath);
-	if (!GetFileAttributes("GTA5.exe"))
+	else
 	{
-		MessageBox(NULL, "Cannot find game path!", "Fatal Error", MB_ICONERROR);
-		ExitProcess(0);
-		return 1;
+		strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
 	}
+	
+
+	while (1)
+	{
+		SetCurrentDirectory(GamePath);
+		SetEnvironmentVariable("PATH", GamePath);
+		if (!FileExists("GTA5.exe"))
+		{
+			strcpy_s(GamePath, MAX_PATH, BrowseFolder("").c_str());
+			continue;
+		}
+		else
+		{
+			CConfig::Get()->gtaPath = std::string(GamePath);
+			CConfig::Get()->Save();
+			break;
+		}
+	}
+	
 	auto b = loader.LoadFile("GTA5.exe");
 	if (b != 0)
 	{

@@ -43,9 +43,6 @@
     <ClInclude Include="PluginLoad.h">
       <Filter>Source Files\Plugins</Filter>
     </ClInclude>
-    <ClInclude Include="PeIMG.h">
-      <Filter>Source Files\Plugins</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -82,9 +79,6 @@
       <Filter>Source Files\Python\Natives</Filter>
     </ClCompile>
     <ClCompile Include="PluginLoad.cpp">
-      <Filter>Source Files\Plugins</Filter>
-    </ClCompile>
-    <ClCompile Include="PeIMG.cpp">
       <Filter>Source Files\Plugins</Filter>
     </ClCompile>
   </ItemGroup>

@@ -3,6 +3,7 @@ class CConfig
 {
 	static CConfig *singleInstance;
 	CConfig();
+	void InitConfig();
 public:
 	static CConfig *Get()
 	{
@@ -15,6 +16,7 @@ public:
 	const char *sFileName = "config.xml";
 	std::string sNickName;
 	std::string sIP;
+	std::string gtaPath;
 	unsigned int uiPort;
 
 	void Save();

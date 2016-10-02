@@ -123,7 +123,7 @@ void CNetworkConnection::Tick()
 				if (!Python::Get()->pCallFunc("onPlayerText", args()))
 				{
 					std::stringstream ss;
-					ss << "~b~" << CNetworkPlayer::GetByGUID(packet->guid)->GetName() << ":~w~ " << playerText.C_String();
+					ss << CNetworkPlayer::GetByGUID(packet->guid)->GetName() << ": " << playerText.C_String();
 					RakNet::RakString toSend(ss.str().c_str());
 					bsOut.Write(toSend);
 					color_t messageColor = { 200, 200, 255, 255 };

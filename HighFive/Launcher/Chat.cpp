@@ -44,7 +44,7 @@ void CChat::Render()
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1));
 
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Always);
-	ImGui::Begin("Chat", &bEnabled, ImVec2(400, 190), .2f, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
+	ImGui::Begin("Chat", &bEnabled, ImVec2(400, 190), .0f, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
 	ImGui::PushFont(CGlobals::Get().chatFont);
 	access.lock();
@@ -77,6 +77,7 @@ void CChat::Render()
 
 		char buffer[256] = "";
 		ImGui::PushItemWidth(400);
+		ImGui::PushFont(CGlobals::Get().chatFont);
 		if (ImGui::InputText("", buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue/* | ImGuiInputTextFlags_CallbackHistory*/))
 		{
 			if (strlen(buffer))
@@ -109,6 +110,7 @@ void CChat::Render()
 			}
 			Close();
 		}
+		ImGui::PopFont();
 		if (bJustOpened)
 		{
 			bJustOpened = false;

@@ -23,6 +23,7 @@
 #include <locale>
 #include <codecvt>
 #include <TimeAPI.h>
+#include <shlobj.h>
 #include <functional>
 #include <queue>
 #include "resource.h"
