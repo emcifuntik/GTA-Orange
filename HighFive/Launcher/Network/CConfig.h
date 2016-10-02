@@ -17,6 +17,7 @@ public:
 	std::string sIP;
 	unsigned int uiPort;
 
+	void Save();
 	~CConfig();
 };
 

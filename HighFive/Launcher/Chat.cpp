@@ -5,9 +5,12 @@ CChat *CChat::singleInstance = nullptr;
 
 void CChat::AddLine(ChatLine line)
 {
+	access.lock();
 	if (vChatLines.size() >= cuChatHistorySize)
 		vChatLines.erase(vChatLines.begin());
 	vChatLines.push_back(line);
+	access.unlock();
+	bScrollBottom = true;
 }
 
 CChat::CChat() :uiCarretPos(0)
@@ -43,16 +46,19 @@ void CChat::Render()
 	ImGui::SetNextWindowPos(ImVec2(0, 0), ImGuiSetCond_Always);
 	ImGui::Begin("Chat", &bEnabled, ImVec2(400, 190), .2f, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
-	//ImGui::PushFont(CGlobals::Get().chatFont);
+	ImGui::PushFont(CGlobals::Get().chatFont);
+	access.lock();
 	for each (auto chatLine in vChatLines)
 		ImGui::TextColored(ImVec4(chatLine.structColor.red, chatLine.structColor.green, chatLine.structColor.blue, chatLine.structColor.alpha), (char*)chatLine.sLineText.c_str());
-	
+	access.unlock();
+
+
 	if (bScrollBottom)
 	{
 		ImGui::SetScrollPosHere();
 		bScrollBottom = false;
 	}
-
+	ImGui::PopFont();
 	ImGui::End();
 	ImGui::PopStyleVar(2);
 
@@ -60,9 +66,9 @@ void CChat::Render()
 	{
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0, 0));
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(0, 0));
 		ImGui::PushStyleVar(ImGuiStyleVar_IndentSpacing, 0.f);
 		ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0, 0));
+		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5.f, 2.f));
 		if (CChat::Get()->Opened())
 			ShowCursor(TRUE);
 
@@ -70,7 +76,6 @@ void CChat::Render()
 		ImGui::Begin("ChatInput", &bOpened, ImVec2(450, 50), .0f, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize);
 
 		char buffer[256] = "";
-		ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(5.f, 2.f));
 		ImGui::PushItemWidth(400);
 		if (ImGui::InputText("", buffer, 256, ImGuiInputTextFlags_EnterReturnsTrue/* | ImGuiInputTextFlags_CallbackHistory*/))
 		{
@@ -82,20 +87,24 @@ void CChat::Render()
 					{
 						if (_commandProcess(buffer) != 1)
 						{
-							/*RakNet::BitStream sendmessage;
-							RakNet::RakString outStr(converted_str.c_str());
+							RakNet::BitStream sendmessage;
+							RakNet::RakString outStr(buffer);
 
 							sendmessage.Write((MessageID)ID_COMMAND_MESSAGE);
 							sendmessage.Write(outStr);
-							CNetworkConnection::Get()->client->Send(&sendmessage,HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);*/
+							CNetworkConnection::Get()->client->Send(&sendmessage,HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 						}
 					}
 				}
 				else
 				{
-					AddChatMessage(buffer);
-					bScrollBottom = true;
+					RakNet::BitStream sendmessage;
+					RakNet::RakString outStr(buffer);
+					sendmessage.Write((MessageID)ID_CHAT_MESSAGE);
+					sendmessage.Write(outStr);
+					CNetworkConnection::Get()->client->Send(&sendmessage, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 				}
+				bScrollBottom = true;
 				strcpy_s(buffer, 256, "");
 			}
 			Close();
@@ -106,10 +115,9 @@ void CChat::Render()
 			ImGui::SetKeyboardFocusHere(0);
 		}
 		ImGui::PopItemWidth();
-		ImGui::PopStyleVar(6);
 		ImGui::End();
+		ImGui::PopStyleVar(5);
 	}
-	//ImGui::PopFont();
 }
 
 void CChat::Input()

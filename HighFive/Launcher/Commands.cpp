@@ -109,7 +109,7 @@ int CommandProcessor(std::string command)
 	}
 	if (!command.compare("/debug"))
 	{
-		CLocalPlayer::Get()->isDebug ^= 1;
+		CGlobals::Get().isDebug ^= 1;
 		return true;
 	}
 #endif

@@ -97,7 +97,7 @@ namespace GTA
 
 		static CViewportGame *Get()
 		{
-			return *(CViewportGame**)(nullptr);
+			return *(CViewportGame**)(CMemory::Find("4C 8B 3D ? ? ? ? 4D 85 FF 0F 84 ? ? ? ? 48 8B 0D ? ? ? ? 33 DB 0F B7 41 08").getOffset());
 		}
 	}; //Size=0x028C
 	class CTask;

@@ -27,12 +27,15 @@ typedef int ColourIndex;
 typedef int Sphere;
 typedef int ScrHandle;
 
-#pragma pack(push, 16)
+#pragma pack(push, 1)
 typedef struct
 {
 	float x;
+	float __padding_x;
 	float y;
+	float __padding_y;
 	float z;
+	float __padding_z;
 } Vector3;
 #pragma pack(pop)
 

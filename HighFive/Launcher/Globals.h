@@ -49,6 +49,10 @@ public:
 	bool blockquickswitch = true;
 	int currentGameState = -1;
 	Dx11Renderer *DX11Renderer = nullptr;
+	char serverIP[32] = "";
+	char nickName[32] = "";
+	int serverPort = 7788;
+	bool isDebug = false;
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;

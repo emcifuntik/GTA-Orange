@@ -69,7 +69,7 @@ void CGraphics::Draw3DText(std::string text, float size, float x, float y, float
 	CVector3 screenPos;
 	WorldToScreen(CVector3(x, y, z), screenPos);
 	auto viewPortGame = GTA::CViewportGame::Get();
-	CGlobals::Get().DX11Renderer->RenderText(screenPos.fX * viewPortGame->Width, screenPos.fY * viewPortGame->Height, color.red, color.green, color.blue, color.alpha, true, text.c_str());
+	CGlobals::Get().DX11Renderer->RenderText(screenPos.fX * viewPortGame->Width, screenPos.fY * viewPortGame->Height, color.red, color.green, color.blue, color.alpha, true, 14.f, FW1_CENTER, text.c_str());
 }
 
 void CGraphics::Draw3DProgressBar(color_t bgColor, color_t frontColor, float width, float height, float x, float y, float z, float value)

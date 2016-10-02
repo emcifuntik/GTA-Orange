@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <mutex>
 #include <types.h>
 
 typedef struct tagChatLine
@@ -28,10 +29,11 @@ class CChat
 	bool bScrollBottom = false;
 	int iOffset = 0;
 	std::wstring wsCurrentMessage;
+	std::mutex access;
 
 	unsigned int uiCarretPos = 0;
 
-	const unsigned cuChatHistorySize = 1000;
+	const unsigned cuChatHistorySize = 100;
 	int(*_commandProcess)(std::string command) = nullptr;
 public:
 	static CChat* Get();

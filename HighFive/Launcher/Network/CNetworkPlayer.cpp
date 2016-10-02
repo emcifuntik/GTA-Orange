@@ -345,7 +345,7 @@ void CNetworkPlayer::Interpolate()
 	UpdateTargetPosition();
 	SetMovementVelocity(m_vecMove);
 	PED::SET_PED_ACCURACY(Handle, 100);
-	//BuildTasksQueue();
+	BuildTasksQueue();
 }
 
 void CNetworkPlayer::SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float iMoveSpeed)
@@ -450,7 +450,7 @@ void CNetworkPlayer::DrawTag()
 				fgColor = { 230, 70, 70, 150 };
 			}
 			CGraphics::Get()->Draw3DText(m_Name, .5f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), { 0xFF, 0xFF, 0xFF, 0xFF });
-			CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), health);
+			//CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), health);
 		}
 	}
 }
