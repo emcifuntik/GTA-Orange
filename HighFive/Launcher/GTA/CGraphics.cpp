@@ -69,7 +69,9 @@ void CGraphics::Draw3DText(std::string text, float x, float y, float z, color_t 
 	CVector3 screenPos;
 	WorldToScreen(CVector3(x, y, z), screenPos);
 	auto viewPortGame = GTA::CViewportGame::Get();
-	ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 14.f, ImVec2(x, y), Utils::RGBAToHex(color.red, color.green, color.blue, color.alpha), text.c_str());
+	x = screenPos.fX * viewPortGame->Width;
+	y = screenPos.fY * viewPortGame->Height;
+	ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 14.f, ImVec2(x, y), ImColor(color.red, color.green, color.blue, color.alpha), text.c_str());
 }
 
 void CGraphics::Draw3DProgressBar(color_t bgColor, color_t frontColor, float width, float height, float x, float y, float z, float value)
@@ -80,11 +82,16 @@ void CGraphics::Draw3DProgressBar(color_t bgColor, color_t frontColor, float wid
 	WorldToScreen(CVector3(x, y, z), screenPos);
 	screenPos.fY += 0.04f;
 	auto viewPortGame = GTA::CViewportGame::Get();
-	DWORD colorOut = Utils::RGBAToHex(bgColor.red, bgColor.blue, bgColor.green, bgColor.alpha);
-	DWORD colorIn = Utils::RGBAToHex(bgColor.red, bgColor.blue, bgColor.green, bgColor.alpha);
-	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + width, y + height), Utils::RGBAToHex(bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha), 1.f);
-	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + (width * value), y + height), Utils::RGBAToHex(frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha), 1.f);
-	ImGui::GetWindowDrawList()->AddRect(ImVec2(x - 1, y - 1), ImVec2(x + width + 2, y + height + 2), Utils::RGBAToHex(0, 0, 0, 150), 1.f);
+	DWORD colorOut = ImColor(bgColor.red, bgColor.blue, bgColor.green, bgColor.alpha);
+	DWORD colorIn = ImColor(bgColor.red, bgColor.blue, bgColor.green, bgColor.alpha);
+	x = screenPos.fX * viewPortGame->Width;
+	y = screenPos.fY * viewPortGame->Height;
+	width *= viewPortGame->Width;
+	height *= viewPortGame->Height;
+	x -= (width / 2);
+	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + width, y + height), colorOut, 1.f);
+	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + (width * value), y + height), colorIn, 1.f);
+	ImGui::GetWindowDrawList()->AddRect(ImVec2(x - 1, y - 1), ImVec2(x + width + 2, y + height + 2), ImColor(0,0,0,0.5), 1.f);
 }
 
 CGraphics::~CGraphics()

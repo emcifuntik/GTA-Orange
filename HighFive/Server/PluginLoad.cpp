@@ -1,9 +1,5 @@
 #pragma once
-
 #include "stdafx.h"
-#include "PeIMG.h"
-
-using namespace Utility;
 
 const std::string GetRunningExecutableFolder() {
 
@@ -29,16 +25,11 @@ void LoadPlugins()
 			HMODULE module = LoadLibraryA(ppath.c_str());
 			if (!module)
 			{
-				char buf[30];
+				char buf[256];
 				snprintf(buf, sizeof(buf), "\t Failed to Load \"%s\" => 0x%p", filedat.cFileName, module);
 				MessageBoxA(NULL, buf, "Orange MP server", MB_OK | MB_ICONWARNING);
 			}
 		} while (FindNextFileA(fileh, &filedat));
-
 		FindClose(fileh);
-		//loaded image
-
 	}
-
-
 }
