@@ -434,7 +434,8 @@ void CNetworkPlayer::DrawTag()
 	if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(CLocalPlayer::Get()->GetHandle(), Handle, 17))
 	{
 		CVector3 *vecCurPos = &pedHandler->Position;
-		float health = (((m_Health < pedHandler->MaxHealth ? pedHandler->MaxHealth : m_Health)) / (pedHandler->MaxHealth));
+		//float health = (((m_Health < 100.f ? 100.f : m_Health) - 100.f) / (pedHandler->MaxHealth - 100.f));
+		float health = ((((m_Health - 100.f) < pedHandler->MaxHealth ? (m_Health - 100.f) : pedHandler->MaxHealth)) / (pedHandler->MaxHealth-100.f));
 		float distance = ((*vecCurPos) - CWorld::Get()->CPedPtr->Position).Length();
 		if (distance < 100.f)
 		{
