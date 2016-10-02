@@ -38,15 +38,11 @@
 #pragma endregion
 
 #pragma region D3D Stuff
-#include <d3d11.h>
-#include <d3dcompiler.h>
+#include "D3D11\Include\d3d11.h"
+#include "D3D11\Include\d3dcompiler.h"
+#include "D3D11\Include\dxgi1_2.h"
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
-#include "D3D11\Include\d3dx11async.h"
-#include "D3D11\d3dx11effect.h" 
-#include <D3D11Shader.h> 
-#include "D3D11\FW1FontWrapper\src\FW1FontWrapper.h"
-#include "Renderer.h"
 #pragma endregion
 
 #pragma region events
@@ -123,12 +119,10 @@ using namespace RakNet;
 #include "Common.h"
 #include "PELoader.h"
 #include "Game.h"
-#include "UI.h"
 #include "Chat.h"
 #include "Commands.h"
 
 #pragma region IMGUI
-#include <d3d11.h>
 #include "D3D11\VIngameConsole.h"
 #include "D3D11\imgui.h"
 #include "D3D11\imgui_impl_dx11.h"

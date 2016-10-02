@@ -449,8 +449,13 @@ void CNetworkPlayer::DrawTag()
 				bgColor = { 150, 30, 30, 150 };
 				fgColor = { 230, 70, 70, 150 };
 			}
-			CGraphics::Get()->Draw3DText(m_Name, .5f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), { 0xFF, 0xFF, 0xFF, 0xFF });
-			//CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), health);
+			auto viewPortGame = GTA::CViewportGame::Get();
+			ImGui::SetNextWindowPos(ImVec2(0.f, 0.f), ImGuiSetCond_Always);
+			ImGui::Begin("Background", 0, ImVec2(viewPortGame->Width, viewPortGame->Height), 0.f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings);
+			CGraphics::Get()->Draw3DText(m_Name, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), { 0xFF, 0xFF, 0xFF, 0xFF });
+			CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.03f), health);
+			ImGui::Dummy(ImVec2(viewPortGame->Width, viewPortGame->Height));
+			ImGui::End();
 		}
 	}
 }

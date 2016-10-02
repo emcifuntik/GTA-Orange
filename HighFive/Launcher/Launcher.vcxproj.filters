@@ -70,9 +70,6 @@
     <Filter Include="D3D\Source files">
       <UniqueIdentifier>{d463cdf2-f9ab-4c33-905c-f29828f6ba63}</UniqueIdentifier>
     </Filter>
-    <Filter Include="D3D\Renderer">
-      <UniqueIdentifier>{49052724-0d89-4e6c-8974-80b0af0569cd}</UniqueIdentifier>
-    </Filter>
     <Filter Include="D3D\FW1">
       <UniqueIdentifier>{a5f3a96b-0e9d-4ef4-a415-0a4470656388}</UniqueIdentifier>
     </Filter>
@@ -122,9 +119,6 @@
     </ClCompile>
     <ClCompile Include="ChatScript.cpp">
       <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="UI.cpp">
-      <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="D3D11\Memory\GameMemory.cpp">
       <Filter>D3D\Memory</Filter>
@@ -221,9 +215,6 @@
     </ClCompile>
     <ClCompile Include="NetworkScript.cpp">
       <Filter>Scripts</Filter>
-    </ClCompile>
-    <ClCompile Include="Renderer.cpp">
-      <Filter>D3D\Renderer</Filter>
     </ClCompile>
     <ClCompile Include="D3D11\rendering.cpp">
       <Filter>D3D\Source files</Filter>
@@ -343,9 +334,6 @@
     </ClInclude>
     <ClInclude Include="Script.h">
       <Filter>ProjectCore\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UI.h">
-      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Memory.h">
       <Filter>Launcher\Header Files</Filter>
@@ -475,9 +463,6 @@
     </ClInclude>
     <ClInclude Include="GTA\sysAllocator.h">
       <Filter>GTA\Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="Renderer.h">
-      <Filter>D3D\Renderer</Filter>
     </ClInclude>
     <ClInclude Include="GTA\CGraphics.h">
       <Filter>GTA\Header files</Filter>

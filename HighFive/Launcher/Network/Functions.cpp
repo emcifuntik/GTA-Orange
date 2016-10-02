@@ -6,7 +6,6 @@ namespace FPlayer
 	{
 		RakNet::RakString message;
 		bitStream->Read(message);
-		CUI::SendNotification(message.C_String());
 	}
 
 	void SendClientMessage(RakNet::BitStream *bitStream, RakNet::Packet *packet) // string message, color_t color

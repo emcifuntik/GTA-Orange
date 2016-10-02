@@ -128,5 +128,5 @@ int Utils::RoundToBytes(int bits)
 
 DWORD Utils::RGBAToHex(BYTE r, BYTE g, BYTE b, BYTE a)
 {
-	return ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((g & 0xff) << 8) + (a & 0xff);
+	return ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((b & 0xff) << 8) + (a & 0xff);
 }

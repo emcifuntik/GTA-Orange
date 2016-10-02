@@ -14,8 +14,6 @@ struct IDXGISwapChain;
 struct ID3D11RenderTargetView;
 struct ImFont;
 
-class Dx11Renderer;
-
 class CGlobals
 {
 	CGlobals() {}
@@ -48,7 +46,6 @@ public:
 	bool showChat = false;
 	bool blockquickswitch = true;
 	int currentGameState = -1;
-	Dx11Renderer *DX11Renderer = nullptr;
 	char serverIP[32] = "";
 	char nickName[32] = "";
 	int serverPort = 7788;

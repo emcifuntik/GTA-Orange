@@ -307,8 +307,6 @@ bool D3DHook::HookD3D11()
 	CGlobals::Get().d3dDevice = device;
 	CGlobals::Get().d3dDeviceContext = device_context;
 	auto gui_result = ImGui_ImplDX11_Init(CGlobals::Get().gtaHwnd, device, device_context);
-	CGlobals::Get().DX11Renderer = new Dx11Renderer();
-	CGlobals::Get().DX11Renderer->InitializeRenderClass(device, device_context, 14.f, "Arial", 0U);
 	ImGuiIO& io = ImGui::GetIO();
 	io.Fonts->AddFontDefault();
 	//io.ImeWindowHandle = CGlobals::Get().gtaHwnd;

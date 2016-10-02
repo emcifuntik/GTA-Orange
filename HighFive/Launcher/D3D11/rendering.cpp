@@ -63,7 +63,6 @@ void D3DHook::Render()
 		ImGui::PopFont();
 	}
 
-	ImGui::Render();
 
 #if _DEBUG
 	if (CGlobals::Get().isDebug)
@@ -73,7 +72,14 @@ void D3DHook::Render()
 			"Vehicles pool: " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Capacity() << std::endl <<
 			"Objects pool: " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Capacity() << std::endl <<
 			"Ped pos: " << CLocalPlayer::Get()->GetPosition().ToString();
-		CUI::PrintText(ss.str(), 0.23f, 0.85f, 0x21, 0x96, 0xF3, 0xFF, 0.3f);
+		auto viewPortGame = GTA::CViewportGame::Get();
+
+		ImGui::SetNextWindowPos(ImVec2(0.f, 0.f), ImGuiSetCond_Always);
+		ImGui::SetNextWindowSize(ImVec2(viewPortGame->Width, viewPortGame->Height), ImGuiSetCond_Always);
+		ImGui::Begin("Background", 0, ImVec2(viewPortGame->Width, viewPortGame->Height), 0.f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoInputs | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoSavedSettings);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 14.f, ImVec2(0.23f * viewPortGame->Width, 0.85f * viewPortGame->Height),
+			Utils::RGBAToHex(0x21, 0x96, 0xF3, 0xFF), ss.str().c_str());
+		ImGui::End();
 
 		//for (int i = 0, cnt = 0; i < ReplayInterfaces::Get()->ReplayInterfacePed->pool.Capacity(); ++i)
 		//{
@@ -173,5 +179,6 @@ void D3DHook::Render()
 		}*/
 	}
 #endif
-	//CNetworkPlayer::Render();
+	CNetworkPlayer::Render();
+	ImGui::Render();
 }

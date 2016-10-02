@@ -147,8 +147,6 @@
     <ClCompile Include="Network\CRPCPlugin.cpp" />
     <ClCompile Include="Network\CVehicle.cpp" />
     <ClCompile Include="Network\Functions.cpp" />
-    <ClCompile Include="Renderer.cpp" />
-    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Event.cpp" />
     <ClCompile Include="Memory.cpp" />
     <ClCompile Include="EventBeforeLoaded.cpp" />
@@ -209,7 +207,6 @@
     <ClInclude Include="GTA\CReplayInterface.h" />
     <ClInclude Include="GTA\sysAllocator.h" />
     <ClInclude Include="GTA\VTasks.h" />
-    <ClInclude Include="Renderer.h" />
     <ClInclude Include="Network\CConfig.h" />
     <ClInclude Include="Network\CEntity.h" />
     <ClInclude Include="Network\CLocalPlayer.h" />
@@ -221,7 +218,6 @@
     <ClInclude Include="Network\CVehicle.h" />
     <ClInclude Include="Network\Functions.h" />
     <ClInclude Include="thirdparty\dxgi1_2.h" />
-    <ClInclude Include="UI.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Memory.h" />
     <ClInclude Include="Game.h" />

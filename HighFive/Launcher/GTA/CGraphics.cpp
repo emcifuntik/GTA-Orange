@@ -64,12 +64,12 @@ bool CGraphics::WorldToScreen(CVector3 pos, CVector3 &out)
 	return true;
 }
 
-void CGraphics::Draw3DText(std::string text, float size, float x, float y, float z, color_t color)
+void CGraphics::Draw3DText(std::string text, float x, float y, float z, color_t color)
 {
 	CVector3 screenPos;
 	WorldToScreen(CVector3(x, y, z), screenPos);
 	auto viewPortGame = GTA::CViewportGame::Get();
-	CGlobals::Get().DX11Renderer->RenderText(screenPos.fX * viewPortGame->Width, screenPos.fY * viewPortGame->Height, color.red, color.green, color.blue, color.alpha, true, 14.f, FW1_CENTER, text.c_str());
+	ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 14.f, ImVec2(x, y), Utils::RGBAToHex(color.red, color.green, color.blue, color.alpha), text.c_str());
 }
 
 void CGraphics::Draw3DProgressBar(color_t bgColor, color_t frontColor, float width, float height, float x, float y, float z, float value)
@@ -82,7 +82,9 @@ void CGraphics::Draw3DProgressBar(color_t bgColor, color_t frontColor, float wid
 	auto viewPortGame = GTA::CViewportGame::Get();
 	DWORD colorOut = Utils::RGBAToHex(bgColor.red, bgColor.blue, bgColor.green, bgColor.alpha);
 	DWORD colorIn = Utils::RGBAToHex(bgColor.red, bgColor.blue, bgColor.green, bgColor.alpha);
-	CGlobals::Get().DX11Renderer->DrawHealthBox(screenPos.fX * viewPortGame->Width, screenPos.fY * viewPortGame->Height, colorOut, colorIn, width, height, value);
+	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + width, y + height), Utils::RGBAToHex(bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha), 1.f);
+	ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + (width * value), y + height), Utils::RGBAToHex(frontColor.red, frontColor.green, frontColor.blue, frontColor.alpha), 1.f);
+	ImGui::GetWindowDrawList()->AddRect(ImVec2(x - 1, y - 1), ImVec2(x + width + 2, y + height + 2), Utils::RGBAToHex(0, 0, 0, 150), 1.f);
 }
 
 CGraphics::~CGraphics()
