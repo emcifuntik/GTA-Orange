@@ -66,7 +66,7 @@ static HWND CreateWindowExWHook(_In_ DWORD dwExStyle,
 	_In_opt_ HINSTANCE hInstance,
 	_In_opt_ LPVOID lpParam)
 {
-	HWND hWnd = CreateWindowExW(dwExStyle, lpClassName, L"Grand Theft Auto V: Orange multiplayer", dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
+	HWND hWnd = CreateWindowExW(dwExStyle, lpClassName, L"Grand Theft Auto: Orange", dwStyle, X, Y, nWidth, nHeight, hWndParent, hMenu, hInstance, lpParam);
 	SendMessage(hWnd, WM_SETICON, ICON_BIG, Icon);
 	SendMessage(hWnd, WM_SETICON, ICON_SMALL, Icon);
 
