@@ -45,6 +45,7 @@ public:
 	bool renderer = false;
 	bool *hudDisabled = nullptr;
 	bool displayServerBrowser = false;
+	bool mainmenushown = false;
 	bool showChat = false;
 	bool blockquickswitch = true;
 	int currentGameState = -1;
@@ -52,6 +53,11 @@ public:
 	char nickName[32] = "";
 	int serverPort = 7788;
 	bool isDebug = false;
+
+	//VT Keymap
+    const DWORD KEYOPENCHAT = VK_F7;
+	const DWORD KEYMESSAGECHAT = VK_F6;
+
 	ForceCleanupForAllThreadsWithThisName_ ForceCleanupForAllThreadsWithThisName;
 	TerminateAllScriptsWithThisName_ TerminateAllScriptsWithThisName;
 	ShutdownLoadingScreen_ ShutdownLoadingScreen;

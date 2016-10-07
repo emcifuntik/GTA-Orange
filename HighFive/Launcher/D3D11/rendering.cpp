@@ -24,11 +24,53 @@ void CreateRenderTarget()
 	pBackBuffer->Release();
 }
 
+bool branding = true;
+
+static void ShowBranding(bool* p_open)
+{
+	ImGuiStyle::ImGuiStyle();
+	ImGui::SetNextWindowPos(ImVec2(1700, 10));
+	if (!ImGui::Begin("FO", p_open, ImVec2(0, 0), 0.3f, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoSavedSettings))
+	{
+		ImGui::End();
+		return;
+	}
+	ImGui::Text("GTA ORANGE\nThis is still in alpha");
+	ImGui::Separator();
+	ImGui::Text(__TIMESTAMP__);
+	ImGui::End();
+}
+
+static void DevToolsBar()
+{
+	if (ImGui::BeginMainMenuBar())
+	{
+		if (ImGui::BeginMenu("system"))
+		{
+			if (ImGui::MenuItem("Quit Game", "ALT + F4")) { ExitProcess(EXIT_SUCCESS); }
+			ImGui::EndMenu();
+		}
+		if (ImGui::BeginMenu("network"))
+		{
+			if (ImGui::MenuItem("Net graph", "")) {  }
+			ImGui::EndMenu();
+		}
+		ImGui::EndMainMenuBar();
+	}
+}
+
 void D3DHook::Render()
 {
 	ImGui_ImplDX11_NewFrame();
 	if(CGlobals::Get().showChat)
 		CChat::Get()->Render();
+
+	ShowBranding(&branding);
+
+	if (CGlobals::Get().isorangedev)
+	{
+		DevToolsBar();
+	}
 
 	if (CGlobals::Get().displayServerBrowser)
 	{

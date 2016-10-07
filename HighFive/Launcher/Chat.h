@@ -35,7 +35,11 @@ class CChat
 
 	const unsigned cuChatHistorySize = 100;
 	int(*_commandProcess)(std::string command) = nullptr;
+
+
 public:
+
+
 	static CChat* Get();
 
 	void RegisterCommandProcessor(int(*callback)(std::string));
