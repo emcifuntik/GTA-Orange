@@ -73,6 +73,9 @@
     <Filter Include="D3D\FW1">
       <UniqueIdentifier>{a5f3a96b-0e9d-4ef4-a415-0a4470656388}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Steam">
+      <UniqueIdentifier>{f4cabf72-422e-424b-94fe-e2feb5bcadb4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp">
@@ -297,6 +300,9 @@
     <ClCompile Include="D3D11\FW1FontWrapper\src\FW1Precompiled.cpp">
       <Filter>D3D\FW1</Filter>
     </ClCompile>
+    <ClCompile Include="ValveHelper.cpp">
+      <Filter>Steam</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -514,6 +520,9 @@
     </ClInclude>
     <ClInclude Include="D3D11\FW1FontWrapper\src\FW1Precompiled.h">
       <Filter>D3D\FW1</Filter>
+    </ClInclude>
+    <ClInclude Include="ValveHelper.h">
+      <Filter>Steam</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -131,7 +131,7 @@ using namespace RakNet;
 
 #include "Globals.h"
 
-#define WINDOWTITLE "GTAV : Orange multiplayer mod"
+#define WINDOWTITLE L"GTAV : Orange multiplayer mod"
 #define STEAMTITLE  "Grand Theft Auto V : OrangeMP Modification"
 
 
