@@ -26,6 +26,8 @@ public:
 		return *singleInstance;
 	}
 	LPVOID baseAddr = nullptr;
+	UINT64 textSectionOffset = 0;
+	UINT64 textSectionSize = 0;
 	std::string highFivePath;
 	bool alreadyRunned = false;
 	bool *canLangChange = nullptr;

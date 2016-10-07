@@ -64,7 +64,7 @@ void CNetworkConnection::Tick()
 				bsOut.Write(playerName);
 				CLocalPlayer::Get()->SetMoney(0);
 				Hash adder = Utils::Hash("adder");
-				//CNetworkVehicle *veh = new CNetworkVehicle(adder, 0.f, 0.f, 73.f, 0.f);
+				CNetworkVehicle *veh = new CNetworkVehicle(adder, -632.78f, -719.33f, 31.55f, 0.f);
 
 				CAM::RENDER_SCRIPT_CAMS(false, false, 0, false, false);
 				UI::DISPLAY_HUD(true);

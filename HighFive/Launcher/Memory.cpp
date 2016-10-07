@@ -99,6 +99,9 @@ CMemory& CMemory::Find(const char * pattern)
 	address = (UINT64)((uintptr_t)CGlobals::Get().baseAddr);
 	size = (UINT64)0x6000000i64;
 
+	/*address = (UINT64)((uintptr_t)CGlobals::Get().baseAddr + (uintptr_t)CGlobals::Get().textSectionOffset);
+	size = (UINT64)((uintptr_t)CGlobals::Get().textSectionSize);*/
+
 	DWORD offset;
 	if (CMemoryCache::Get().TryGetOffset(pattern, offset))
 	{

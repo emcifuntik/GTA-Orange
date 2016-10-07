@@ -768,7 +768,6 @@ void Initialize()
 	freopen_s(&unused, "CONOUT$", "w", stdout);
 	freopen_s(&unused, "CONOUT$", "w", stderr);
 #endif
-	HUDInit();
 	if (!ScriptEngine::Initialize())
 		log_error << "Failed to initialize ScriptEngine" << std::endl;
 	if (CGlobals::Get().d3dloaded)
@@ -808,6 +807,10 @@ void OnGameStateChange(int gameState)
 {
 	switch (gameState)
 	{
+	case GameStateIntro:
+		break;
+	case GameStateLicenseShit:
+		break;
 	case GameStatePlaying:
 		//CGlobals::Get().SetMenuState("MP_Celeb_Win");
 		log_info << "Game ready" << std::endl;
@@ -832,11 +835,18 @@ void OnGameStateChange(int gameState)
 static bool gameStateChange_(int gameState)
 {
 	OnGameStateChange(gameState);
+	CGlobals::Get().currentGameState = gameState;
 	return g_gameStateChange();
 }
 
 static bool OnLookAlive()
 {
+	static bool HUDInited = false;
+	if (!HUDInited)
+	{
+		HUDInit();
+		HUDInited = true;
+	}
 	if (!scriptsDisabled && IsAnyScriptLoaded())
 	{
 		DisableScripts();
@@ -952,8 +962,8 @@ class CEventBeforeLoaded :
 		mem = CMemory::Find("E8 ? ? ? ? 41 B8 ? ? ? ? 8B D0 89 05 ? ? ? ? 41 8D 48 FC"); //ISABLE_NORTH_BLIP
 		mem.nop(46);
 
-		mem = CMemory::Find("83 B9 ? ? ? ? ? 74 24 84 D2"); //ISABLE_AUTOMATIC_ENGINE_STOP
-		mem.retn();
+		//mem = CMemory::Find("83 B9 ? ? ? ? ? 74 24 84 D2"); //ISABLE_AUTOMATIC_ENGINE_STOP
+		//mem.retn();
 
 		mem = CMemory::Find("48 8B C4 48 89 58 08 57 48 83 EC 60 0F 29 70 E8 0F 29 78 D8 44 0F 29 40 ? 48 8B D9 44 0F 29 48 ?"); //ISABLE_VEHICLE_RESET_AT_SET_POSITION
 		mem.retn();
