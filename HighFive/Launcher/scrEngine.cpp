@@ -29,6 +29,7 @@ bool ScriptEngine::Initialize()
 	auto scrThreadCountPattern = CMemory::Find("FF 0D ? ? ? ? 48 8B F9 75 40");
 	auto registrationTablePattern = CMemory::Find("76 61 49 8B 7A 40 48 8D 0D") + 6;
 	auto g_scriptHandlerMgrPattern = CMemory::Find("74 17 48 8B C8 E8 ? ? ? ? 48 8D 0D") + 10;
+
 	auto getScriptIdBlock = CMemory::Find("80 78 32 00 75 34 B1 01 E8");
 
 	scrThreadCollection = reinterpret_cast<decltype(scrThreadCollection)>(scrThreadCollectionPattern.getOffset());
