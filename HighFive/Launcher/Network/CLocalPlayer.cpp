@@ -19,12 +19,12 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 		GAMEPLAY::DELETE_STUNT_JUMP(i);
 	}
 
-	aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
+	//aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
 
 	rageGlobals::SetPlayerColor(0x33, 0xFF, 0x33, 0xFF);
 
-	auto addr = CMemory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
-	addr.nop(20);
+	/*auto addr = CMemory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
+	addr.nop(20);*/
 
 	typedef int(*ShowAbilityBar)(bool);
 	((ShowAbilityBar)CMemory::Find("40 53 48 83 EC 30 41 83 C9 FF 8A D9 88 ? ? ? ? ? 8B ? ? ? ? ?")())(false);
@@ -50,7 +50,7 @@ void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 	onfoot.usArmour = GetArmour();
 	onfoot.ulWeapon = GetCurrentWeapon();
 	onfoot.uAmmo = GetCurrentWeaponAmmo();
-	onfoot.vecAim = *aimPosition;
+	//onfoot.vecAim = *aimPosition;
 	onfoot.bAiming = (CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimState == 2);
 	onfoot.bShooting = PED::IS_PED_SHOOTING(Handle) ? true : false;
 }

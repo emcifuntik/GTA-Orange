@@ -25,7 +25,7 @@ bool ScriptEngine::Initialize()
 	log_info << "Initializing ScriptEngine..." << std::endl;
 	auto scrThreadCollectionPattern = CMemory::Find("48 8B C8 EB 03 48 8B CB 48 8B 05") + 8;
 	auto activeThreadTlsOffsetPattern = CMemory::Find("48 8B 04 D0 4A 8B 14 00 48 8B 01 F3 44 0F 2C 42 20") - 4;
-	auto scrThreadIdPattern = CMemory::Find("89 15 ? ? ? ? 48 8B 0C D8");
+	auto scrThreadIdPattern = CMemory::Find("48 8B 0C D8 89 51 08 8B 05 ? ? ? ?") + 7;
 	auto scrThreadCountPattern = CMemory::Find("FF 0D ? ? ? ? 48 8B F9 75 40");
 	auto registrationTablePattern = CMemory::Find("76 61 49 8B 7A 40 48 8D 0D") + 6;
 	auto g_scriptHandlerMgrPattern = CMemory::Find("74 17 48 8B C8 E8 ? ? ? ? 48 8D 0D") + 10;

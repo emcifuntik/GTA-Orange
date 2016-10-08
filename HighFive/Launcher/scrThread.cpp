@@ -36,7 +36,7 @@ eThreadState ScriptThread::Run(uint32_t opsToExecute)
 void ScriptThreadInit(ScriptThread * thread)
 {
 	typedef void(__thiscall * ScriptThreadInit_t)(ScriptThread * ScriptThread);
-	auto scriptThreadInitPattern = CMemory::Find("83 89 38 01 00 00 FF 83 A1 50 01 00 00 F0");
+	auto scriptThreadInitPattern = CMemory::Find("83 89 38 01 00 00 FF 83 A1 50 01 00 00 F0");//problem
 	ScriptThreadInit_t ScriptThreadInit_ = (ScriptThreadInit_t)scriptThreadInitPattern();
 	return ScriptThreadInit_(thread);
 }
