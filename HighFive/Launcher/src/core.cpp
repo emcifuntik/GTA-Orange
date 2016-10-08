@@ -109,16 +109,6 @@ static int NoWindowsHookExA(int, HOOKPROC, HINSTANCE, DWORD)
 	return 1;
 }
 
-//later get procadress of something, for now is this enough!
-void CheckDev()
-{
-	if (_access("dev", 0) == 0)
-	{
-		CGlobals::Get().isorangedev = true;
-	//	MessageBoxA(NULL, "Dev mode toolinit!", "Orange-mp", MB_OK | MB_ICONWARNING);
-	}
-}
-
 BOOL FileExists(LPCTSTR szPath)
 {
 	DWORD dwAttrib = GetFileAttributes(szPath);
@@ -141,6 +131,17 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	HINSTANCE hPrevInstance,
 	LPSTR lpCmdLine,
 	int nCmdShow) {
+	
+	if (!_strcmpi(lpCmdLine, "-debug"))
+	{
+		CGlobals::Get().isDebug = true;
+	}
+	else if (!_strcmpi(lpCmdLine, "-developer"))
+	{
+		CGlobals::Get().isorangedev = true;
+	}
+
+
 	Icon = LPARAM(LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1)));
 
 	char _hfPath[MAX_PATH];
@@ -172,7 +173,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	}
 
 	InitializeDummies();
-	CheckDev();
 	loader.SetLibraryLoader([](const char* libName)
 	{
 		if (!_stricmp(libName, "xlive.dll"))

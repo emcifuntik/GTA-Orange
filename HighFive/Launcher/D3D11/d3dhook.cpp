@@ -314,6 +314,34 @@ bool D3DHook::HookD3D11()
 	swapchain->GetDevice(__uuidof(ID3D11Device), (void**)&device);
 	ID3D11DeviceContext* device_context;
 	device->GetImmediateContext(&device_context);
+
+	IDXGIDevice * pDXGIDevice;
+	device->QueryInterface(__uuidof(IDXGIDevice), (void **)&pDXGIDevice);
+	IDXGIAdapter * pDXGIAdapter;
+	pDXGIDevice->GetAdapter(&pDXGIAdapter);
+	DXGI_ADAPTER_DESC adapterDesc;
+	pDXGIAdapter->GetDesc(&adapterDesc);
+
+	std::wstring vendor;
+	switch (adapterDesc.VendorId)
+	{
+	case 0x10DE:
+		vendor = L"Nvidia";
+		break;
+	case 0x1002:
+	case 0x1022:
+		vendor = L"AMD";
+		break;
+	case 0x163C:
+	case 0x8086:
+	case 0x8087:
+		vendor = L"Intel";
+		break;
+	}
+	std::wstringstream ss;
+	ss << L"Vendor: " << vendor << std::endl << L"Description: " << std::wstring(adapterDesc.Description) << std::endl << L"VRAM: " << (adapterDesc.DedicatedVideoMemory/1024)/1024 << L"MB";
+	log_debug << ss.str().c_str() << std::endl;
+	
 	CGlobals::Get().d3dDevice = device;
 	CGlobals::Get().d3dDeviceContext = device_context;
 	auto gui_result = ImGui_ImplDX11_Init(CGlobals::Get().gtaHwnd, device, device_context);
