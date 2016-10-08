@@ -167,8 +167,9 @@ public:
 	CVector3 Position4; //0x0160 
 	char pad_0x016C[0x114]; //0x016C
 	float Health; //0x0280 
+	char unk1[28];
 	float MaxHealth; //0x0284 
-	char pad_0x0288[0xE0]; //0x0288
+	char pad_0x0284[0xE4]; //0x0284
 	float float_1; //0x0368 
 	float float_2; //0x036C 
 	float float_3; //0x0370 

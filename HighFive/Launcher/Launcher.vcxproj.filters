@@ -70,9 +70,6 @@
     <Filter Include="D3D\Source files">
       <UniqueIdentifier>{d463cdf2-f9ab-4c33-905c-f29828f6ba63}</UniqueIdentifier>
     </Filter>
-    <Filter Include="D3D\FW1">
-      <UniqueIdentifier>{a5f3a96b-0e9d-4ef4-a415-0a4470656388}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp">
@@ -221,81 +218,6 @@
     </ClCompile>
     <ClCompile Include="GTA\CGraphics.cpp">
       <Filter>GTA\Source files</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBAInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTargetInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1Factory.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FactoryInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1FontWrapperInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlasInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphProviderInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStatesInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheetInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawerInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextGeometryInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\CFW1TextRendererInterface.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.cpp">
-      <Filter>D3D\FW1</Filter>
-    </ClCompile>
-    <ClCompile Include="D3D11\FW1FontWrapper\src\FW1Precompiled.cpp">
-      <Filter>D3D\FW1</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -466,54 +388,6 @@
     </ClInclude>
     <ClInclude Include="GTA\CGraphics.h">
       <Filter>GTA\Header files</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1ColorRGBA.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1DWriteRenderTarget.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Factory.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1FontWrapper.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphAtlas.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphProvider.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphRenderStates.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphSheet.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1GlyphVertexDrawer.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1Object.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1StateSaver.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextGeometry.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\CFW1TextRenderer.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1CompileSettings.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1FontWrapper.h">
-      <Filter>D3D\FW1</Filter>
-    </ClInclude>
-    <ClInclude Include="D3D11\FW1FontWrapper\src\FW1Precompiled.h">
-      <Filter>D3D\FW1</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -131,8 +131,8 @@ using namespace RakNet;
 
 #include "Globals.h"
 
-#define WINDOWTITLE "GTAV : Orange multiplayer mod"
-#define STEAMTITLE  "Grand Theft Auto V : OrangeMP Modification"
+#define WINDOWTITLE L"Grand Theft Auto: Orange"
+#define STEAMTITLE  "Grand Theft Auto V: Orange"
 
 
 enum eGameState {
