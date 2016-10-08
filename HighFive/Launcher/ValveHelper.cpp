@@ -12,8 +12,8 @@ void SteamHelper::Initialize()
 		static char pathBuffer[65536];
 		GetEnvironmentVariableA("PATH", pathBuffer, sizeof(pathBuffer));
 
-		strcat(pathBuffer, ";");
-		strcat(pathBuffer, steamDirectory.c_str());
+		strcat_s(pathBuffer, ";");
+		strcat_s(pathBuffer, steamDirectory.c_str());
 
 		SetEnvironmentVariableA("PATH", pathBuffer);
 
