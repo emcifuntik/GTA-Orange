@@ -67,7 +67,7 @@ void D3DHook::Render()
 
 	ShowBranding(&branding);
 
-	if (CGlobals::Get().isorangedev)
+	if (CGlobals::Get().isDeveloper)
 	{
 		DevToolsBar();
 	}

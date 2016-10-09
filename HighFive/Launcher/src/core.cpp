@@ -138,7 +138,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	}
 	else if (!_strcmpi(lpCmdLine, "-developer"))
 	{
-		CGlobals::Get().isorangedev = true;
+		CGlobals::Get().isDeveloper = true;
 	}
 
 
