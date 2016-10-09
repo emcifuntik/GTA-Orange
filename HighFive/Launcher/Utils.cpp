@@ -130,3 +130,11 @@ DWORD Utils::RGBAToHex(BYTE r, BYTE g, BYTE b, BYTE a)
 {
 	return ((r & 0xff) << 24) + ((g & 0xff) << 16) + ((b & 0xff) << 8) + (a & 0xff);
 }
+
+std::string Utils::wideToString(const std::wstring& wstr)
+{
+	using convert_typeX = std::codecvt_utf8<wchar_t>;
+	std::wstring_convert<convert_typeX, wchar_t> converterX;
+
+	return converterX.to_bytes(wstr);
+}

@@ -25,22 +25,13 @@
     <ClInclude Include="CConsole.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="m_Python.h">
-      <Filter>Header Files\Python</Filter>
-    </ClInclude>
-    <ClInclude Include="CPyArgBuilder.h">
-      <Filter>Header Files\Python</Filter>
-    </ClInclude>
-    <ClInclude Include="World.h">
-      <Filter>Header Files\Python\Natives</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>Header Files\Python\Natives</Filter>
-    </ClInclude>
     <ClInclude Include="CLog.h">
       <Filter>Header Files\Common</Filter>
     </ClInclude>
-    <ClInclude Include="PluginLoad.h">
+    <ClInclude Include="API.h">
+      <Filter>Source Files\Plugins</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugin.h">
       <Filter>Source Files\Plugins</Filter>
     </ClInclude>
   </ItemGroup>
@@ -66,19 +57,10 @@
     <ClCompile Include="CConfig.cpp">
       <Filter>Source Files\Common</Filter>
     </ClCompile>
-    <ClCompile Include="m_Python.cpp">
-      <Filter>Source Files\Python</Filter>
+    <ClCompile Include="API.cpp">
+      <Filter>Source Files\Plugins</Filter>
     </ClCompile>
-    <ClCompile Include="CPyArgBuilder.cpp">
-      <Filter>Source Files\Python</Filter>
-    </ClCompile>
-    <ClCompile Include="World.cpp">
-      <Filter>Source Files\Python\Natives</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>Source Files\Python\Natives</Filter>
-    </ClCompile>
-    <ClCompile Include="PluginLoad.cpp">
+    <ClCompile Include="Plugin.cpp">
       <Filter>Source Files\Plugins</Filter>
     </ClCompile>
   </ItemGroup>
@@ -109,18 +91,6 @@
     </Filter>
     <Filter Include="Header Files\Network">
       <UniqueIdentifier>{2c21c506-a405-4d3e-84b6-eabd26d8f7f3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Python">
-      <UniqueIdentifier>{6dd90324-4028-4eff-aa80-2e813cf6414b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Python">
-      <UniqueIdentifier>{c2fe0f64-7de8-4d21-b7c6-775ba1802949}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Python\Natives">
-      <UniqueIdentifier>{9f78fbab-f3dc-4fdc-8517-4d5638473b55}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\Python\Natives">
-      <UniqueIdentifier>{e7e04126-21a4-4411-a04f-f68aa8f435bb}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\Plugins">
       <UniqueIdentifier>{06b428d5-f058-40f3-b870-0d75e6b1e7bb}</UniqueIdentifier>

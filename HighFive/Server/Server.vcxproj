@@ -19,26 +19,23 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="API.h" />
     <ClInclude Include="CLog.h" />
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="CNetworkConnection.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CNetworkVehicle.h" />
     <ClInclude Include="CConfig.h" />
-    <ClInclude Include="CPyArgBuilder.h" />
-    <ClInclude Include="m_Python.h" />
-    <ClInclude Include="Player.h" />
-    <ClInclude Include="PluginLoad.h" />
+    <ClInclude Include="Plugin.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="CRPCPlugin.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="World.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="API.cpp" />
     <ClCompile Include="CNetworkConnection.cpp" />
     <ClCompile Include="CNetworkPlayer.cpp" />
     <ClCompile Include="CConfig.cpp" />
-    <ClCompile Include="CPyArgBuilder.cpp" />
     <ClCompile Include="main.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Use</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -55,9 +52,7 @@
     </ClCompile>
     <ClCompile Include="CNetworkVehicle.cpp" />
     <ClCompile Include="CRPCPlugin.cpp" />
-    <ClCompile Include="m_Python.cpp" />
-    <ClCompile Include="Player.cpp" />
-    <ClCompile Include="PluginLoad.cpp" />
+    <ClCompile Include="Plugin.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
@@ -72,7 +67,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />
@@ -236,7 +230,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SERVER;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;..\..\Shared;..\python\include;..\tinyxml2-4.0.1;..\ScriptHookV;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
@@ -259,7 +253,7 @@
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_SERVER;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\;..\..\Shared;..\python\include;..\tinyxml2-4.0.1;..\ScriptHookV;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>false</MultiProcessorCompilation>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>

@@ -8,19 +8,8 @@ int main(void)
 	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
 	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
 	
-	for each (std::string scriptName in CConfig::Get()->Scripts)
-	{
-		if (Python::Get()->Connect(scriptName.c_str()))
-		{
-			log << "Script " << color::green << scriptName << color::white << " loaded" << std::endl;
-			Python::Get()->pCallFunc("onScriptInit", NULL);
-		}
-		else
-		{
-			log << "Script " << color::red << scriptName << color::white << " not loaded" << std::endl;
-			PyErr_Print();
-		}
-	}
+	Plugin::LoadPlugins();
+
 	auto netLoop = [=]()
 	{
 		CNetworkConnection::Get()->Start(CConfig::Get()->MaxPlayers, CConfig::Get()->Port);
@@ -58,12 +47,10 @@ int main(void)
 		}
 		else
 		{
-			CPyArgBuilder args;
-			args << msg;
-			Python::Get()->pCallFunc("OnServerCommand", args());
+			Plugin::ServerCommand(msg);
 		}
 	}
 	netThread.~thread();
-	delete Python::Get();
+	//delete Python::Get();
 	return 0;
 }

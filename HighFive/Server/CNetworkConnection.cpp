@@ -81,9 +81,7 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
 
-				CPyArgBuilder args;
-				args << playerID << 1;
-				Python::Get()->pCallFunc("onPlayerDisconnect", args());
+				Plugin::PlayerDisconnect(playerID, 1);
 
 				CNetworkPlayer::Remove(playerID);
 
@@ -105,9 +103,7 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = new CNetworkPlayer(packet->guid);
 				player->SetName(playerName.C_String());
 
-				CPyArgBuilder args;
-				args << player->GetID();
-				Python::Get()->pCallFunc("onPlayerConnect", args());
+				Plugin::PlayerConnect(player->GetID());
 
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
@@ -118,9 +114,7 @@ void CNetworkConnection::Tick()
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
 
-				CPyArgBuilder args;
-				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID() << playerText.C_String();
-				if (!Python::Get()->pCallFunc("onPlayerText", args()))
+				if (Plugin::PlayerText(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String()))
 				{
 					std::stringstream ss;
 					ss << CNetworkPlayer::GetByGUID(packet->guid)->GetName() << ": " << playerText.C_String();
@@ -140,17 +134,8 @@ void CNetworkConnection::Tick()
 				std::vector<std::string> cmdArgs = split(playerText.C_String(), ' ');
 				std::string cmd = cmdArgs[0].substr(1);
 				cmdArgs.erase(cmdArgs.begin(), cmdArgs.begin() + 1);
-				CPyArgBuilder args;
-				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID();
-				args << cmdArgs;
-				std::stringstream cmdFuncName;
-				cmdFuncName << "cmd_" << cmd;
-				if (Python::Get()->pCallFunc((char*)cmdFuncName.str().c_str(), args()))
-					break;
 
-				~args;
-				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID() << playerText.C_String();
-				if (!Python::Get()->pCallFunc("onPlayerCommand", args()))
+				if (Plugin::PlayerCommand(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String()))
 				{
 					RakNet::RakString toSend("Unknown command");
 					bsOut.Write(toSend);
@@ -167,9 +152,7 @@ void CNetworkConnection::Tick()
 				bsIn.Read(data);
 				player->SetOnFootData(data);
 				
-				CPyArgBuilder args;
-				args << CNetworkPlayer::GetByGUID(packet->guid)->GetID();
-				if (Python::Get()->pCallFunc("onPlayerUpdate", args.Finish()))
+				if (!Plugin::PlayerUpdate(CNetworkPlayer::GetByGUID(packet->guid)->GetID()))
 					continue;
 
 				bsOut.Write((unsigned char)ID_SEND_PLAYER_DATA);
@@ -243,9 +226,7 @@ void CNetworkConnection::Tick()
 				CNetworkPlayer *player = CNetworkPlayer::GetByGUID(packet->guid);
 				UINT playerID = player->GetID();
 
-				CPyArgBuilder args;
-				args << playerID << 2;
-				Python::Get()->pCallFunc("onPlayerDisconnect", args());
+				Plugin::PlayerDisconnect(playerID, 2);
 
 				CNetworkPlayer::Remove(playerID);
 

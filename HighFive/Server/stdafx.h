@@ -59,11 +59,9 @@ using namespace RakNet;
 // RPC
 #include "CRPCPlugin.h"
 
-// Python
-#include "m_Python.h"
-#include "World.h"
-#include "Player.h"
-#include "CPyArgBuilder.h"
+// API
+#include "Plugin.h"
+#include "API.h"
 
 
 // Network objects

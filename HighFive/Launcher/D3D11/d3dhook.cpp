@@ -322,24 +322,24 @@ bool D3DHook::HookD3D11()
 	DXGI_ADAPTER_DESC adapterDesc;
 	pDXGIAdapter->GetDesc(&adapterDesc);
 
-	std::wstring vendor;
+	std::string vendor;
 	switch (adapterDesc.VendorId)
 	{
 	case 0x10DE:
-		vendor = L"Nvidia";
+		vendor = "Nvidia";
 		break;
 	case 0x1002:
 	case 0x1022:
-		vendor = L"AMD";
+		vendor = "AMD";
 		break;
 	case 0x163C:
 	case 0x8086:
 	case 0x8087:
-		vendor = L"Intel";
+		vendor = "Intel";
 		break;
 	}
-	std::wstringstream ss;
-	ss << L"Vendor: " << vendor << std::endl << L"Description: " << std::wstring(adapterDesc.Description) << std::endl << L"VRAM: " << (adapterDesc.DedicatedVideoMemory/1024)/1024 << L"MB";
+	std::stringstream ss;
+	ss << "Vendor: " << vendor << std::endl << "Description: " << Utils::wideToString(std::wstring(adapterDesc.Description)) << std::endl << "VRAM: " << (adapterDesc.DedicatedVideoMemory/1024)/1024 << "MB";
 	log_debug << ss.str().c_str() << std::endl;
 	
 	CGlobals::Get().d3dDevice = device;

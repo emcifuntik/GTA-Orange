@@ -14,5 +14,6 @@ namespace Utils
 	bool IsSteam();*/
 	int RoundToBytes(int bits);
 	DWORD RGBAToHex(BYTE r, BYTE g, BYTE b, BYTE a);
+	std::string wideToString(const std::wstring& wstr);
 }
 
