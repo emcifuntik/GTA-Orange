@@ -13,9 +13,9 @@ CConfig::CConfig()
 	Port = serverNode->IntAttribute("port");
 	MaxPlayers = serverNode->IntAttribute("maxplayers");
 
-	tinyxml2::XMLElement * scripts = root->FirstChildElement("scripts");
+	/*tinyxml2::XMLElement * scripts = root->FirstChildElement("scripts");
 	for (tinyxml2::XMLElement* child = scripts->FirstChildElement("script"); child != NULL; child = child->NextSiblingElement())
-		Scripts.push_back(child->GetText());
+		Scripts.push_back(child->GetText());*/
 	tinyxml2::XMLElement * logtimeformat = root->FirstChildElement("logtime");
 	LogTimeFormat = logtimeformat->GetText();
 }

@@ -122,12 +122,12 @@ bool API::SetPlayerName(long playerid, const char * name)
 	return true;
 }
 
-const char * API::GetPlayerName(long playerid)
+std::string API::GetPlayerName(long playerid)
 {
 	auto player = CNetworkPlayer::GetByID(playerid);
 	if (!player)
 		return nullptr;
-	return player->GetName().c_str();
+	return player->GetName();
 }
 
 bool API::SetPlayerHealth(long playerid, float health)

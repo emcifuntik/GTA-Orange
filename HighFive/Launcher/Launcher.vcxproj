@@ -134,6 +134,8 @@
     <ClCompile Include="Registry.cpp" />
     <ClCompile Include="scrEngine.cpp" />
     <ClCompile Include="Script.cpp" />
+    <ClCompile Include="ScriptDispatcher.cpp" />
+    <ClCompile Include="ScriptInvoker.cpp" />
     <ClCompile Include="scrManager.cpp" />
     <ClCompile Include="scrThread.cpp" />
     <ClCompile Include="src\core.cpp" />
@@ -178,6 +180,7 @@
     <ClInclude Include="Network\CRPCPlugin.h" />
     <ClInclude Include="Network\CVehicle.h" />
     <ClInclude Include="Network\Functions.h" />
+    <ClInclude Include="ScriptInvoker.h" />
     <ClInclude Include="thirdparty\dxgi1_2.h" />
     <ClInclude Include="Event.h" />
     <ClInclude Include="Memory.h" />

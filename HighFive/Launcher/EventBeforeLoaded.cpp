@@ -768,11 +768,6 @@ void Initialize()
 	freopen_s(&unused, "CONOUT$", "w", stdout);
 	freopen_s(&unused, "CONOUT$", "w", stderr);
 #endif
-	if (!ScriptEngine::Initialize())
-		log_error << "Failed to initialize ScriptEngine" << std::endl;
-	if (CGlobals::Get().d3dloaded)
-		D3DHook::HookD3D11();
-	CChat::Get()->RegisterCommandProcessor(CommandProcessor);
 }
 
 static bool scriptsDisabled = false;
@@ -812,7 +807,12 @@ void OnGameStateChange(int gameState)
 	case GameStateLicenseShit:
 		break;
 	case GameStatePlaying:
-		//CGlobals::Get().SetMenuState("MP_Celeb_Win");
+		if (!ScriptEngine::Initialize())
+			log_error << "Failed to initialize ScriptEngine" << std::endl;
+		if (CGlobals::Get().d3dloaded)
+			D3DHook::HookD3D11();
+		CChat::Get()->RegisterCommandProcessor(CommandProcessor);
+
 		log_info << "Game ready" << std::endl;
 		CGlobals::Get().gtaWndProc = (WNDPROC)SetWindowLongPtr(CGlobals::Get().gtaHwnd, GWLP_WNDPROC, (LONG_PTR)WndProc);
 		if (CGlobals::Get().gtaWndProc == NULL)

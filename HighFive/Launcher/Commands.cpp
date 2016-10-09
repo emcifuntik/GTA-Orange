@@ -35,14 +35,28 @@ int CommandProcessor(std::string command)
 			CChat::Get()->AddChatMessage("USAGE: /vehicle [modelname]", 0xAAAAAAFF);
 			return true;
 		}
-		Vector3 spos = ENTITY::GET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 0);
 		Hash c = Utils::Hash(params[0].c_str());
-		int lol = VEHICLE::CREATE_VEHICLE(c,spos.x,spos.x,spos.z,0.0f,true,true);
-		//request vehicle as admin (once type was unlocked by this it can be spawned using the fake decors)
-		if (!STATS::STAT_GET_INT(GAMEPLAY::GET_HASH_KEY("MPPLY_VEHICLE_ID_ADMIN_WEB"), &lol, 1))
-		{
-			STATS::STAT_SET_INT(GAMEPLAY::GET_HASH_KEY("MPPLY_VEHICLE_ID_ADMIN_WEB"), lol, 1);
-		}
+		CScriptInvoker::Get().Push([=]() {
+			if (STREAMING::IS_MODEL_IN_CDIMAGE(c) && STREAMING::IS_MODEL_A_VEHICLE(c))
+			{
+				STREAMING::REQUEST_MODEL(c);
+				while (!STREAMING::HAS_MODEL_LOADED(c))
+					scriptWait(0);
+				Vector3 coords = ENTITY::GET_OFFSET_FROM_ENTITY_IN_WORLD_COORDS(PLAYER::PLAYER_PED_ID(), 0.0, 5.0, 0.0);
+				Vehicle veh = VEHICLE::CREATE_VEHICLE(c, coords.x, coords.y, coords.z, 0.0, 1, 1);
+				VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(veh);
+
+				/*if (featureVehWrapInSpawned)
+				{
+					ENTITY::SET_ENTITY_HEADING(veh, ENTITY::GET_ENTITY_HEADING(PLAYER::PLAYER_PED_ID()));
+					PED::SET_PED_INTO_VEHICLE(PLAYER::PLAYER_PED_ID(), veh, -1);
+				}*/
+
+				scriptWait(0);
+				STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(c);
+				ENTITY::SET_VEHICLE_AS_NO_LONGER_NEEDED(&veh);
+			}
+		});
 		return true;
 	}
 	if (!command.compare("/snow"))

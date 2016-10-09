@@ -131,9 +131,9 @@ void CNetworkConnection::Tick()
 				RakNet::RakString playerText;
 				bsIn.Read(playerText);
 
-				std::vector<std::string> cmdArgs = split(playerText.C_String(), ' ');
+				/*std::vector<std::string> cmdArgs = split(playerText.C_String(), ' ');
 				std::string cmd = cmdArgs[0].substr(1);
-				cmdArgs.erase(cmdArgs.begin(), cmdArgs.begin() + 1);
+				cmdArgs.erase(cmdArgs.begin(), cmdArgs.begin() + 1);*/
 
 				if (Plugin::PlayerCommand(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), playerText.C_String()))
 				{

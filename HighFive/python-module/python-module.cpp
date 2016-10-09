@@ -21,8 +21,9 @@ extern "C"
 	__declspec(dllexport) bool OnPlayerConnect(long playerid)
 	{
 		std::stringstream ss;
-		ss << "Player [" << playerid << "] connected to server";
+		ss << "Player " << API::Get().GetPlayerName(playerid) << "[" << playerid << "] connected to server";
 		API::Get().BroadcastClientMessage(ss.str().c_str(), 0x00AA00FF);
+		API::Get().SetPlayerPosition(playerid, -634.78f, -719.33f, 31.55f);
 		return true;
 	}
 

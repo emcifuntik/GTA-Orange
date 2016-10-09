@@ -114,7 +114,8 @@ void D3DHook::Render()
 		ss << "Peds pool: " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfacePed->pool.Capacity() << std::endl <<
 			"Vehicles pool: " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfaceVeh->pool.Capacity() << std::endl <<
 			"Objects pool: " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Count() << " / " << ReplayInterfaces::Get()->ReplayInterfaceObject->pool.Capacity() << std::endl <<
-			"Ped pos: " << CLocalPlayer::Get()->GetPosition().ToString();
+			"Ped pos: " << CLocalPlayer::Get()->GetPosition().ToString() << std::endl <<
+			"FPS: " << ImGui::GetIO().Framerate;
 		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 14.f, ImVec2(0.23f * viewPortGame->Width, 0.85f * viewPortGame->Height),
 			ImColor(0x21, 0x96, 0xF3, 0xFF), ss.str().c_str());
 	}

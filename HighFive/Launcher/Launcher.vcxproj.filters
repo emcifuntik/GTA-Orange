@@ -219,6 +219,15 @@
     <ClCompile Include="GTA\CGraphics.cpp">
       <Filter>GTA\Source files</Filter>
     </ClCompile>
+    <ClCompile Include="ValveHelper.cpp">
+      <Filter>Launcher\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptDispatcher.cpp">
+      <Filter>Scripts</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptInvoker.cpp">
+      <Filter>Launcher\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -388,6 +397,12 @@
     </ClInclude>
     <ClInclude Include="GTA\CGraphics.h">
       <Filter>GTA\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="ValveHelper.h">
+      <Filter>Launcher\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptInvoker.h">
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

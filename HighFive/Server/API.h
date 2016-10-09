@@ -17,7 +17,7 @@ public:
 	virtual bool SetPlayerModel(long playerid, long model) = 0;
 	virtual long GetPlayerModel(long playerid) = 0;
 	virtual bool SetPlayerName(long playerid, const char * name) = 0;
-	virtual const char * GetPlayerName(long playerid) = 0;
+	virtual std::string GetPlayerName(long playerid) = 0;
 	virtual bool SetPlayerHealth(long playerid, float health) = 0;
 	virtual float GetPlayerHealth(long playerid) = 0;
 	virtual bool SetPlayerArmour(long playerid, float armour) = 0;
@@ -50,7 +50,7 @@ public:
 	bool SetPlayerModel(long playerid, long model);
 	long GetPlayerModel(long playerid);
 	bool SetPlayerName(long playerid, const char * name);
-	const char * GetPlayerName(long playerid);
+	std::string GetPlayerName(long playerid);
 	bool SetPlayerHealth(long playerid, float health);
 	float GetPlayerHealth(long playerid);
 	bool SetPlayerArmour(long playerid, float armour);

@@ -130,6 +130,8 @@ using namespace RakNet;
 #pragma endregion
 
 #include "Globals.h"
+#include "ScriptInvoker.h"
+
 
 #define WINDOWTITLE L"Grand Theft Auto: Orange"
 #define STEAMTITLE  "Grand Theft Auto V: Orange"
