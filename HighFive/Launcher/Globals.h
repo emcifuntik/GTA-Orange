@@ -35,7 +35,7 @@ public:
 	WNDPROC gtaWndProc = nullptr;
 	Cam currentcam;
 	bool isSteam = false;
-	bool isorangedev = false;
+	bool isDeveloper = false;
 	bool d3dloaded = false;
 	ID3D11Device *d3dDevice = nullptr;
 	ID3D11DeviceContext *d3dDeviceContext = nullptr;
