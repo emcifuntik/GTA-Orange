@@ -1,5 +1,10 @@
 #include "stdafx.h"
 
+//just for 3d3 cuz its uniplattform!
+#include <sys/types.h>
+#include <sys/stat.h>
+
+struct stat info;
 std::vector<OnPlayerConnect_> Plugin::playerConnects;
 std::vector<OnServerCommand_> Plugin::serverCommands;
 std::vector<OnPlayerDisconnect_> Plugin::playerDisconnects;
@@ -24,6 +29,13 @@ void Plugin::LoadPlugins()
 
 	WIN32_FIND_DATAA filedat;
 	HANDLE fileh = FindFirstFileA(searchfolder.c_str(), &filedat);
+
+	if (stat(pfolder.c_str(), &info) != 0)
+	{
+		std::stringstream ss;
+		ss << "No Modules folder found ( " << pfolder << " )" << std::endl;
+		log_info << ss.str()  << std::endl;
+	}
 	if (fileh != INVALID_HANDLE_VALUE)
 	{
 		do {

@@ -72,13 +72,13 @@
     <IncludePath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\cef;..\HighFive\cef\include;$(IncludePath)</IncludePath>
     <TargetName>orangesub</TargetName>
     <OutDir>..\..\bin\Release\</OutDir>
-    <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\cef\lib;..\HighFive\cef\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\lib;C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\cef\lib;..\HighFive\cef\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\cef;..\HighFive\cef\include;$(IncludePath)</IncludePath>
     <TargetName>orangesub</TargetName>
     <OutDir>..\..\bin\Release\</OutDir>
-    <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\cef\lib;..\HighFive\cef\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\lib;C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\cef\lib;..\HighFive\cef\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

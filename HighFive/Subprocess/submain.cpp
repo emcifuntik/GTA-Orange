@@ -1,3 +1,9 @@
+
+#pragma comment (lib , "libcef64.lib")
+#pragma comment (lib , "libcef.lib")
+#pragma comment (lib, "cef_sandbox.lib")
+#pragma comment (lib , "libcef_dll_wrapper.lib")
+
 #include <include/views/cef_browser_view.h>
 #include <include/views/cef_window.h>
 #include <include/wrapper/cef_helpers.h>
