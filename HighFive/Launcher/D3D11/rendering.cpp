@@ -72,7 +72,7 @@ void D3DHook::Render()
 		DevToolsBar();
 	}
 
-	if (CGlobals::Get().displayServerBrowser)
+	if (CGlobals::Get().displayServerBrowser || CGlobals::Get().mainmenushown && CGlobals::Get().isDebug)
 	{
 		ShowCursor(TRUE);
 		CConfig::Get();
