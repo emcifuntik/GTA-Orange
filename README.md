@@ -33,3 +33,9 @@ gtaorange-mp.exe
 		 SEGUISBI.TFF
 		 SEGUISLI.TFF
 		 **
+		 
+# Build Server on Linux
+
+Dependcies: 
+
+apt-get install libpython2.7-dev libboost-dev libtinyxml2-dev
