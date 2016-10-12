@@ -38,4 +38,4 @@ gtaorange-mp.exe
 
 Dependcies: 
 
-apt-get install libpython2.7-dev libboost-dev libtinyxml2-dev
+* apt-get install libpython2.7-dev libboost-dev libtinyxml2-dev
