@@ -77,9 +77,13 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\LUA;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\LUA;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

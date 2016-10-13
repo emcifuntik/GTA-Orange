@@ -4,36 +4,8 @@
 
 Release Build Structure to run it : (Currently not in place but planned!!!)
 
+Build rules : (READ) Please link libs with #pragma comment (lib ,"libname.lib") instead of within vs settings!
 
-|basefolder
-**
-gtaorange-mp.exe
-**
----
-   |data
-    **
-   config.xml
-   (!Remove ?!)
-   memcache.xml
-   **
-    -----
-	     |fonts
-		 **
-		 (!Packed ?!)
-		 SEGOEUI.TFF
-		 SEGOEUIB.TFF
-		 SEGOEUII.TFF
-		 SEGOEUIL.TFF
-		 SEGOEUISL.TFF
-		 SEGOEUIZ.TFF
-		 SEGUIBL.TFF
-		 SEGUIBLI.TFF
-		 SEGUILI.TFF
-		 SEGUISB.TFF
-		 SEGUISBI.TFF
-		 SEGUISLI.TFF
-		 **
-		 
 # Build Server on Linux
 
 Dependcies: 
