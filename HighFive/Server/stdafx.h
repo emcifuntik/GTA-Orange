@@ -11,6 +11,7 @@
 #include <locale>
 #include <codecvt>
 #include <vector>
+#include <map>
 #include <sstream>
 #include <Psapi.h>
 #include <iostream>

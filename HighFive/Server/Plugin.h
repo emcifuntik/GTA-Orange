@@ -6,8 +6,11 @@ typedef bool(*OnPlayerDisconnect_)(long playerid, int reason);
 typedef bool(*OnPlayerUpdate_)(long playerid);
 typedef bool(*OnPlayerCommand_)(long playerid, const char * command);
 typedef bool(*OnPlayerText_)(long playerid, const char * text);
+typedef const char*(*OnResourceTypeRegister_)();
+typedef bool(*OnResourceLoad_)(const char*);
 
 class Plugin {
+	static std::map<std::string, OnResourceLoad_> resourceTypes;
 	static std::vector<OnPlayerConnect_> playerConnects;
 	static std::vector<OnServerCommand_> serverCommands;
 	static std::vector<OnPlayerDisconnect_> playerDisconnects;

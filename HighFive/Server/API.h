@@ -60,8 +60,18 @@ public:
 	void BroadcastClientMessage(const char * message, unsigned int color);
 	bool SendClientMessage(long playerid, const char * message, unsigned int color);
 
+	//Vehicle
+	bool CreateVehicle(long hash, float x, float y, float z, float heading);
+
+	bool SetVehiclePosition(const char * text, float x, float y, float z, float scale);
+
+	CVector3 GetVehiclePosition(const char * text, float x, float y, float z, float scale);
+
+	bool CreatePickup(int type, float x, float y, float z, float scale);
+
 	//World
 	void Print(const char * message);
+	bool Print3DText(const char * text, float x, float y, float z, float scale);
 	long Hash(const char * str);
 
 	static API * Get()

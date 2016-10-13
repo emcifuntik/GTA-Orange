@@ -182,6 +182,8 @@ unsigned int API::GetPlayerColor(long playerid)
 	return ((playerColor.red & 0xff) << 24) + ((playerColor.green & 0xff) << 16) + ((playerColor.blue & 0xff) << 8) + (playerColor.alpha & 0xff);
 }
 
+
+
 void API::BroadcastClientMessage(const char * message, unsigned int color)
 {
 	RakNet::BitStream bsOut;
@@ -214,9 +216,35 @@ bool API::SendClientMessage(long playerid, const char * message, unsigned int co
 	return true;
 }
 
+bool API::CreateVehicle(long hash, float x, float y, float z, float heading)
+{
+	log << "Not implemented" << std::endl;
+}
+
+bool API::SetVehiclePosition(const char* text, float x, float y, float z, float scale)
+{
+	log << "Not implemented" << std::endl;
+}
+
+CVector3 API::GetVehiclePosition(const char* text, float x, float y, float z, float scale)
+{
+	log << "Not implemented" << std::endl;
+	return CVector3(0, 0, 0);
+}
+
+bool API::CreatePickup(int type, float x, float y, float z, float scale)
+{
+	log << "Not implemented" << std::endl;
+}
+
 void API::Print(const char * message)
 {
 	log << message << std::endl;
+}
+
+bool API::Print3DText(const char* text, float x, float y, float z, float scale)
+{
+	log << "Not implemented" << std::endl;
 }
 
 long API::Hash(const char * str)

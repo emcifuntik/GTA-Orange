@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 
 struct stat info;
+std::map<std::string, OnResourceLoad_> Plugin::resourceTypes;
 std::vector<OnPlayerConnect_> Plugin::playerConnects;
 std::vector<OnServerCommand_> Plugin::serverCommands;
 std::vector<OnPlayerDisconnect_> Plugin::playerDisconnects;
@@ -79,11 +80,33 @@ void Plugin::LoadPlugins()
 						if (onPlayerUpdate) playerUpdates.push_back(onPlayerUpdate);
 						if (onPlayerCommand) playerCommands.push_back(onPlayerCommand);
 						if (onPlayerText) playerTexts.push_back(onPlayerText);
+
+						OnResourceTypeRegister_ onResourceTypeRegister = (OnResourceTypeRegister_)GetProcAddress(module, "OnResourceTypeRegister");
+						OnResourceLoad_ loadResource = (OnResourceLoad_)GetProcAddress(module, "OnResourceLoad");
+
+						if (onResourceTypeRegister&&loadResource) resourceTypes[std::string(onResourceTypeRegister())] = loadResource;
 					}
 				}
 			}
 		} while (FindNextFileA(fileh, &filedat));
 		FindClose(fileh);
+		
+		for each(auto resource in CConfig::Get()->Resources)
+		{
+			tinyxml2::XMLDocument doc;
+			char path[128];
+			sprintf_s(path, 128, "resources\\%s\\resource.xml", resource.c_str());
+			if (doc.LoadFile(path) != tinyxml2::XML_SUCCESS) log << "Error loading resource.xml for resource " << resource << std::endl;
+			else {
+				tinyxml2::XMLElement * root = doc.FirstChildElement("resource");
+				tinyxml2::XMLElement * typeNode = root->FirstChildElement("type");
+
+				if (resourceTypes[typeNode->GetText()]) {
+					resourceTypes[typeNode->GetText()](resource.c_str());
+				}
+				else log << "Unknown resource type: " << typeNode->GetText() << std::endl;
+			}
+		}
 	}
 }
 
