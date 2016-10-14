@@ -9,8 +9,7 @@ static const struct luaL_Reg gfunclib[] = {
 };
 
 static const struct luaL_Reg mfunclib[] = {
-	//{ "CreateVehicle", lua_createvehicle },
-	//{ "GetVehicleCoords", lua_getvehiclecoords },
+	{ "PlayerExists", lua_PlayerExists },
 	{ NULL, NULL }
 };
 
@@ -41,7 +40,7 @@ bool SResource::Start()
 
 	lua_newtable(m_lua);
 	luaL_setfuncs(m_lua, mfunclib, 0);
-	lua_setglobal(m_lua, "__MV");
+	lua_setglobal(m_lua, "__orange__");
 
 	if (luaL_dofile(m_lua, "modules//lua-module//API.lua")) {
 		std::stringstream ss;

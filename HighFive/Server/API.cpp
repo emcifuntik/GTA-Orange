@@ -216,17 +216,17 @@ bool API::SendClientMessage(long playerid, const char * message, unsigned int co
 	return true;
 }
 
-bool API::CreateVehicle(long hash, float x, float y, float z, float heading)
+int API::CreateVehicle(long hash, float x, float y, float z, float heading)
 {
 	log << "Not implemented" << std::endl;
 }
 
-bool API::SetVehiclePosition(const char* text, float x, float y, float z, float scale)
+bool API::SetVehiclePosition(int vehicleid, float x, float y, float z)
 {
 	log << "Not implemented" << std::endl;
 }
 
-CVector3 API::GetVehiclePosition(const char* text, float x, float y, float z, float scale)
+CVector3 API::GetVehiclePosition(int vehicleid)
 {
 	log << "Not implemented" << std::endl;
 	return CVector3(0, 0, 0);

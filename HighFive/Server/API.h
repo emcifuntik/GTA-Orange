@@ -29,6 +29,16 @@ public:
 	//World
 	virtual void Print(const char * message) = 0;
 	virtual long Hash(const char * str) = 0;
+
+	//TODO
+	virtual bool PlayerExists(long playerid) = 0;
+	virtual bool VehicleExists(long playerid) = 0;
+	virtual int CreateVehicle(long hash, float x, float y, float z, float pitch, float yaw, float roll) = 0;
+	virtual bool SetVehiclePosition(int vehicleid, float x, float y, float z) = 0;
+	virtual CVector3 GetVehiclePosition(int vehicleid) = 0;
+
+	virtual bool CreatePickup(int type, float x, float y, float z, float scale) = 0;
+	virtual bool Print3DText(const char * text, float x, float y, float z, float scale) = 0;
 };
 
 class API: 
@@ -61,11 +71,9 @@ public:
 	bool SendClientMessage(long playerid, const char * message, unsigned int color);
 
 	//Vehicle
-	bool CreateVehicle(long hash, float x, float y, float z, float heading);
-
-	bool SetVehiclePosition(const char * text, float x, float y, float z, float scale);
-
-	CVector3 GetVehiclePosition(const char * text, float x, float y, float z, float scale);
+	int CreateVehicle(long hash, float x, float y, float z, float heading);
+	bool SetVehiclePosition(int vehicleid, float x, float y, float z);
+	CVector3 GetVehiclePosition(int vehicleid);
 
 	bool CreatePickup(int type, float x, float y, float z, float scale);
 
