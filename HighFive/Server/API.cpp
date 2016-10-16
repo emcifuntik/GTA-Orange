@@ -219,11 +219,13 @@ bool API::SendClientMessage(long playerid, const char * message, unsigned int co
 int API::CreateVehicle(long hash, float x, float y, float z, float heading)
 {
 	log << "Not implemented" << std::endl;
+	return 1;
 }
 
 bool API::SetVehiclePosition(int vehicleid, float x, float y, float z)
 {
 	log << "Not implemented" << std::endl;
+	return true;
 }
 
 CVector3 API::GetVehiclePosition(int vehicleid)
@@ -235,6 +237,13 @@ CVector3 API::GetVehiclePosition(int vehicleid)
 bool API::CreatePickup(int type, float x, float y, float z, float scale)
 {
 	log << "Not implemented" << std::endl;
+	return true;
+}
+
+unsigned long API::CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite)
+{
+	CNetworkBlip * blip = new CNetworkBlip(x, y, z, scale, color, sprite);
+	return RakNetGUID::ToUint32(blip->rnGUID);
 }
 
 void API::Print(const char * message)
@@ -245,6 +254,7 @@ void API::Print(const char * message)
 bool API::Print3DText(const char* text, float x, float y, float z, float scale)
 {
 	log << "Not implemented" << std::endl;
+	return true;
 }
 
 long API::Hash(const char * str)

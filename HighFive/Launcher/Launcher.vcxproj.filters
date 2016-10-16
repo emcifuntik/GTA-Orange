@@ -228,6 +228,9 @@
     <ClCompile Include="ScriptInvoker.cpp">
       <Filter>Launcher\Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Network\CNetworkBlip.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -403,6 +406,9 @@
     </ClInclude>
     <ClInclude Include="ScriptInvoker.h">
       <Filter>Launcher\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CNetworkBlip.h">
+      <Filter>Network\Header files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

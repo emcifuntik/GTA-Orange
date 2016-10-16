@@ -95,5 +95,24 @@ namespace FPlayer
 		bitStream->Read(model);
 		CLocalPlayer::Get()->ChangeModel(model);
 	}
+
+	void CreateBlip(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		RakNet::RakNetGUID guid;
+		float x, y, z, scale;
+		int color, sprite;
+
+		bitStream->Read(guid);
+
+		bitStream->Read(x);
+		bitStream->Read(y);
+		bitStream->Read(z);
+
+		bitStream->Read(scale);
+		bitStream->Read(color);
+		bitStream->Read(sprite);
+		
+		new CNetworkBlip(guid, x, y, z, scale, color, sprite);
+	}
 }
 

@@ -28,6 +28,8 @@ extern "C"
 	__declspec(dllexport) void OnModuleInit()
 	{
 		API::Get().Print("Lua module loaded");
+		API::Get().CreatePickup(0, 0, 0, 0, 0);
+		API::Get().CreateBlipForAll(0, 0, 0, 0, 0, 0);
 	}
 
 	__declspec(dllexport) bool OnPlayerConnect(long playerid)

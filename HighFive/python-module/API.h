@@ -32,13 +32,14 @@ public:
 	virtual long Hash(const char * str) = 0;
 
 	//TODO
-	virtual bool PlayerExists(long playerid) = 0;
-	virtual bool VehicleExists(long playerid) = 0;
-	virtual int CreateVehicle(long hash, float x, float y, float z, float pitch, float yaw, float roll) = 0;
+	//virtual bool PlayerExists(long playerid) = 0;
+	//virtual bool VehicleExists(long playerid) = 0;
+	//virtual int CreateVehicle(long hash, float x, float y, float z, float pitch, float yaw, float roll) = 0;
 	virtual bool SetVehiclePosition(int vehicleid, float x, float y, float z) = 0;
 	virtual CVector3 GetVehiclePosition(int vehicleid) = 0;
 
 	virtual bool CreatePickup(int type, float x, float y, float z, float scale) = 0;
+	virtual unsigned long CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite) = 0;
 	virtual bool Print3DText(const char * text, float x, float y, float z, float scale) = 0;
 };
 

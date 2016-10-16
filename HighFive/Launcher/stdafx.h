@@ -109,6 +109,7 @@ using namespace RakNet;
 #include "Network\CPedestrian.h"
 #include "Network\CVehicle.h"
 #include "Network\CLocalPlayer.h"
+#include "Network\CNetworkBlip.h"
 #include "Network\CNetworkPlayer.h"
 #include "Network\CNetworkVehicle.h"
 #include "Network\CNetworkConnection.h"

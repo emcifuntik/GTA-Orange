@@ -15,6 +15,9 @@ namespace FPlayer
 	void SetPlayerHealth(RakNet::BitStream *bitStream, RakNet::Packet *packet);
 	void SetPlayerArmour(RakNet::BitStream *bitStream, RakNet::Packet *packet);
 	void SetPlayerModel(RakNet::BitStream *bitStream, RakNet::Packet *packet);
+
+	void CreateBlip(RakNet::BitStream *bitStream, RakNet::Packet *packet);
+
 }
 
 

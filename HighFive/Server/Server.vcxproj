@@ -22,6 +22,7 @@
     <ClInclude Include="API.h" />
     <ClInclude Include="CLog.h" />
     <ClInclude Include="CConsole.h" />
+    <ClInclude Include="CNetworkBlip.h" />
     <ClInclude Include="CNetworkConnection.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CNetworkVehicle.h" />
@@ -33,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="API.cpp" />
+    <ClCompile Include="CNetworkBlip.cpp" />
     <ClCompile Include="CNetworkConnection.cpp" />
     <ClCompile Include="CNetworkPlayer.cpp" />
     <ClCompile Include="CConfig.cpp" />

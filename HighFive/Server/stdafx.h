@@ -68,4 +68,4 @@ using namespace RakNet;
 // Network objects
 #include "CNetworkPlayer.h"
 #include "CNetworkVehicle.h"
-
+#include "CNetworkBlip.h"
