@@ -10,6 +10,7 @@ static const struct luaL_Reg gfunclib[] = {
 
 static const struct luaL_Reg mfunclib[] = {
 	{ "PlayerExists", lua_PlayerExists },
+	{ "CreateBlipForAll", lua_CreateBlipForAll },
 	{ NULL, NULL }
 };
 
