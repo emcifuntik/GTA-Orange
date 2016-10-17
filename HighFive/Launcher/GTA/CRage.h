@@ -655,81 +655,90 @@ public:
 
 }; //Size=0x001D
 
+typedef void*(*GetSyncTree_)(int64_t unused, int16_t id);
+class SyncTree
+{
+private:
+	static bool initialized;
+	static GetSyncTree_ GetSyncTree;
+public:
+	static CAutomobileSyncTree* GetAutomobileSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 0);
+	}
+	static CBikeSyncTree* GetBikeSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 1);
+	}
+	static CBoatSyncTree* GetBoatSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 2);
+	}
 
-//class SyncTree
-//{
-//private:
-//	static bool initialized;
-//public:
-//	static CAutomobileSyncTree* GetAutomobileSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CAutomobileSyncTree*>(0x26A4378, true);
-//	}
-//	static CBikeSyncTree* GetBikeSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CBikeSyncTree*>(0x26A43A0, true);
-//	}
-//	static CBoatSyncTree* GetBoatSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CBoatSyncTree*>(0x26A44A8, true);
-//	}
-//
-//	static CSubmarineSyncTree* GetSubmarineSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CSubmarineSyncTree*>(0x26A3FE8, true);
-//	}
-//	static CObjectSyncTree* GetObjectSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CObjectSyncTree*>(0x26A3F30, true);
-//	}
-//	static CPedSyncTree* GetPedSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CPedSyncTree*>(0x26A4370, true);
-//	}
-//	static CPickupSyncTree* GetPickupSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CPickupSyncTree*>(0x26A4368, true);
-//	}
-//	static CPickupPlacementSyncTree* GetPickupPlacementSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CPickupPlacementSyncTree*>(0x26A4358, true);
-//	}
-//	static CPlayerSyncTree* GetPlayerSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CPlayerSyncTree*>(0x26A40D0, true);
-//	}
-//	static CTrainSyncTree* GetTrainSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CTrainSyncTree*>(0x26A3F28, true);
-//	}
-//	static CPlaneSyncTree* GetPlaneSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CPlaneSyncTree*>(0x26A35A8, true);
-//	}
-//	static CDoorSyncTree* GetDoorSyncTree()
-//	{
-//		Init();
-//		return MemoryHook::value<CDoorSyncTree*>(0x26A4110, true);
-//	}
-//
-//	static void Init()
-//	{
-//		if (!initialized)
-//		{
-//			MemoryHook::call(0x1005DEC);
-//			initialized = true;
-//		}
-//	}
-//};
-//
+	static CSubmarineSyncTree* GetSubmarineSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 10);
+	}
+	static CHeliSyncTree* GetHeliSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 4);
+	}
+	static CObjectSyncTree* GetObjectSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 5);
+	}
+	static CPedSyncTree* GetPedSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 6);
+	}
+	static CPickupSyncTree* GetPickupSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 7);
+	}
+	static CPickupPlacementSyncTree* GetPickupPlacementSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 8);
+	}
+	static CPlayerSyncTree* GetPlayerSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 11);
+	}
+	static CTrainSyncTree* GetTrainSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 13);
+	}
+	static CPlaneSyncTree* GetPlaneSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 9);
+	}
+	static CDoorSyncTree* GetDoorSyncTree()
+	{
+		Init();
+		return GetSyncTree(0, 3);
+	}
+
+	static void Init()
+	{
+		if (!initialized)
+		{
+			typedef void(*InitSyncTrees_)();
+			InitSyncTrees_ initSyncTrees = (InitSyncTrees_)CMemory::Find("48 83 EC 28 E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? E8 ? ? ? ? 48 83 C4 28 E9 ? ? ? ?")();
+			initSyncTrees();
+			GetSyncTree = (GetSyncTree_)CMemory::Find("0F B7 CA 83 F9 07 7F 5E  74 54 85 C9 74 48")();
+			initialized = true;
+		}
+	}
+};
+

@@ -2,7 +2,9 @@
 
 PedFactoryHook* PedFactoryHook::singleInstance = nullptr;
 VehicleFactoryHook* VehicleFactoryHook::singleInstance = nullptr;
-//bool SyncTree::initialized = false;
+bool SyncTree::initialized = false;
+GetSyncTree_ SyncTree::GetSyncTree;
+
 
 namespace rageGlobals
 {

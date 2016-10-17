@@ -821,6 +821,9 @@ void OnGameStateChange(int gameState)
 			log_info << "Input hook attached: WndProc 0x" << std::hex << (DWORD_PTR)CGlobals::Get().gtaWndProc << std::endl;
 		ScriptEngine::CreateThread(&g_ScriptManagerThread);
 		CScript::RunAll();
+
+		SyncTree::Init();
+		log_debug << "CPlayerSyncTree: 0x" << std::hex << SyncTree::GetPlayerSyncTree() << std::endl;
 		break;
 	case GameStateMainMenu:
 		if (!initialized)

@@ -233,14 +233,19 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
 	}
 	
-
 	while (1)
 	{
 		SetCurrentDirectory(GamePath);
 		SetEnvironmentVariable("PATH", GamePath);
 		if (!FileExists("GTA5.exe"))
 		{
-			strcpy_s(GamePath, MAX_PATH, BrowseFolder("").c_str());
+			std::string fldr = BrowseFolder("");
+			if (!fldr.compare(""))
+			{
+				TerminateProcess(GetCurrentProcess(), 0);
+				return 0;
+			}
+			strcpy_s(GamePath, MAX_PATH, fldr.c_str());
 			continue;
 		}
 		else
