@@ -231,6 +231,9 @@
     <ClCompile Include="Network\CNetworkBlip.cpp">
       <Filter>Network\Source files</Filter>
     </ClCompile>
+    <ClCompile Include="Network\CNetworkUI.cpp">
+      <Filter>Network\Source files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -408,6 +411,9 @@
       <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Network\CNetworkBlip.h">
+      <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\CNetworkUI.h">
       <Filter>Network\Header files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -28,8 +28,12 @@ void CRPCPlugin::BindFunctions()
 
 	#pragma region Blip functions
 	rpc.RegisterSlot("CreateBlip", FPlayer::CreateBlip, 0);
+	rpc.RegisterSlot("SetBlipScale", FPlayer::SetBlipScale, 0);
 	#pragma endregion
 
+	#pragma region UI functions
+	rpc.RegisterSlot("SetInfoMsg", FPlayer::SetInfoMsg, 0);
+	#pragma endregion
 }
 
 CRPCPlugin * CRPCPlugin::Get()

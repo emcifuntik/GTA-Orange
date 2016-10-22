@@ -9,8 +9,11 @@ static const struct luaL_Reg gfunclib[] = {
 };
 
 static const struct luaL_Reg mfunclib[] = {
-	{ "PlayerExists", lua_PlayerExists },
 	{ "CreateBlipForAll", lua_CreateBlipForAll },
+	{ "GetPlayerCoords", lua_GetPlayerCoords },
+	{ "GetPlayerName", lua_GetPlayerName },
+	{ "PlayerExists", lua_PlayerExists },
+	{ "SetPlayerInfoMsg", lua_SetPlayerInfoMsg },
 	{ NULL, NULL }
 };
 
@@ -55,6 +58,29 @@ bool SResource::Start()
 		API::Get().Print(ss.str().c_str());
 		return false;
 	}
+}
+
+bool SResource::OnPlayerConnect(long playerid)
+{
+	lua_getglobal(m_lua, "__OnPlayerConnect");
+	lua_pushinteger(m_lua, playerid);
+
+	if (lua_pcall(m_lua, 1, 0, 0))
+	{
+		API::Get().Print("Error in OnPlayerConnect callback");
+		API::Get().Print(lua_tostring(m_lua, -1));
+	}
+
+	return true;
+}
+
+bool SResource::OnTick()
+{
+	lua_getglobal(m_lua, "__OnTick");
+
+	if (lua_pcall(m_lua, 0, 0, 0)) API::Get().Print("Error in OnTick callback");
+
+	return true;
 }
 
 SResource::~SResource()

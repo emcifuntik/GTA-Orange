@@ -8,9 +8,12 @@ class CNetworkBlip
 	float scale;
 	int color;
 	int sprite;
+	Blip Handle;
 public:
 	RakNet::RakNetGUID	m_GUID;
 	CNetworkBlip(RakNetGUID guid, float x, float y, float z, float scale, int color, int sprite);
+	void SetScale(float scale);
+
 	static std::vector<CNetworkBlip*> All();
 	static CNetworkBlip * GetByGUID(RakNet::RakNetGUID GUID);
 

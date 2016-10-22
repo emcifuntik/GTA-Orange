@@ -25,13 +25,27 @@ extern "C"
 		if (_res->Start()) Res.push_back(_res);
 		return true;
 	}
+
 	__declspec(dllexport) void OnModuleInit()
 	{
 		API::Get().Print("Lua module loaded");
 	}
 
+	__declspec(dllexport) bool OnTick()
+	{
+		for each (SResource *_res in Res)
+		{
+			_res->OnTick();
+		}
+		return true;
+	}
+
 	__declspec(dllexport) bool OnPlayerConnect(long playerid)
 	{
+		for each (SResource *_res in Res)
+		{
+			_res->OnPlayerConnect(playerid);
+		}
 		return true;
 	}
 

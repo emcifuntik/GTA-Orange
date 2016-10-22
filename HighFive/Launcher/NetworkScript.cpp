@@ -27,6 +27,7 @@ void NetworkAction()
 			}
 			lastSendTick = GetTickCount64();
 		}
+		CNetworkUI::Get()->Render();
 		scriptWait(0);
 	}
 }
