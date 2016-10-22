@@ -5,6 +5,7 @@ ULONGLONG lastSendTick = 0;
 
 void NetworkAction()
 {
+	CNetworkUI::Get()->SetScreenInfo("Hi! ~INPUT_CONTEXT~");
 	for (;;)
 	{
 		CLocalPlayer::Get()->Tick();
@@ -27,6 +28,7 @@ void NetworkAction()
 			}
 			lastSendTick = GetTickCount64();
 		}
+		CNetworkUI::Get()->Render();
 		scriptWait(0);
 	}
 }

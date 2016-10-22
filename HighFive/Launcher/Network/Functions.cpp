@@ -125,5 +125,22 @@ namespace FPlayer
 
 		CNetworkBlip::GetByGUID(guid)->SetScale(scale);
 	}
+
+	void SetInfoMsg(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		bool set;
+		bitStream->Read(set);
+
+		if (set)
+		{
+			RakNet::RakString msg;
+			bitStream->Read(msg);
+
+			CNetworkUI::Get()->SetScreenInfo(msg.C_String());
+		}
+		else {
+			CNetworkUI::Get()->UnsetScreenInfo();
+		}
+	}
 }
 

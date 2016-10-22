@@ -113,6 +113,7 @@ using namespace RakNet;
 #include "Network\CNetworkPlayer.h"
 #include "Network\CNetworkVehicle.h"
 #include "Network\CNetworkConnection.h"
+#include "Network\CNetworkUI.h"
 #include "Network\Functions.h"
 #include "Network\CRPCPlugin.h"
 #pragma endregion

@@ -41,6 +41,9 @@ public:
 	virtual unsigned long CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite) = 0;
 	virtual void SetBlipScale(unsigned long guid, float scale) = 0;
 
+	virtual bool SetInfoMsg(long playerid, const char * msg) = 0;
+	virtual bool UnsetInfoMsg(long playerid) = 0;
+
 	virtual bool Print3DText(const char * text, float x, float y, float z, float scale) = 0;
 };
 
@@ -82,6 +85,9 @@ public:
 
 	unsigned long CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite);
 	void SetBlipScale(unsigned long guid, float scale);
+
+	bool SetInfoMsg(long playerid, const char * msg);
+	bool UnsetInfoMsg(long playerid);
 
 	//World
 	void Print(const char * message);

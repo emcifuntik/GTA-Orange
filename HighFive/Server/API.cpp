@@ -258,6 +258,30 @@ void API::SetBlipScale(unsigned long _guid, float scale)
 	CRPCPlugin::Get()->Signal("SetBlipScale", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
 }
 
+bool API::SetInfoMsg(long playerid, const char* msg)
+{
+	auto player = CNetworkPlayer::GetByID(playerid);
+	if (!player)
+		return false;
+
+	RakNet::BitStream bsOut;
+	bsOut.Write(true);
+	bsOut.Write(RakNet::RakString(msg));
+
+	CRPCPlugin::Get()->Signal("SetInfoMsg", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, player->GetGUID(), false, false);
+}
+
+bool API::UnsetInfoMsg(long playerid)
+{
+	auto player = CNetworkPlayer::GetByID(playerid);
+	if (!player)
+		return false;
+
+	RakNet::BitStream bsOut;
+	bsOut.Write(false);
+
+	CRPCPlugin::Get()->Signal("SetInfoMsg", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, player->GetGUID(), false, false);
+}
 
 void API::Print(const char * message)
 {

@@ -119,6 +119,7 @@
     <ClCompile Include="Network\CNetworkBlip.cpp" />
     <ClCompile Include="Network\CNetworkConnection.cpp" />
     <ClCompile Include="Network\CNetworkPlayer.cpp" />
+    <ClCompile Include="Network\CNetworkUI.cpp" />
     <ClCompile Include="Network\CNetworkVehicle.cpp" />
     <ClCompile Include="Network\CPedestrian.cpp" />
     <ClCompile Include="Network\CRPCPlugin.cpp" />
@@ -177,6 +178,7 @@
     <ClInclude Include="Network\CNetworkBlip.h" />
     <ClInclude Include="Network\CNetworkConnection.h" />
     <ClInclude Include="Network\CNetworkPlayer.h" />
+    <ClInclude Include="Network\CNetworkUI.h" />
     <ClInclude Include="Network\CNetworkVehicle.h" />
     <ClInclude Include="Network\CPedestrian.h" />
     <ClInclude Include="Network\CRPCPlugin.h" />
