@@ -12,6 +12,7 @@ std::vector<OnPlayerDisconnect_> Plugin::playerDisconnects;
 std::vector<OnPlayerUpdate_> Plugin::playerUpdates;
 std::vector<OnPlayerCommand_> Plugin::playerCommands;
 std::vector<OnPlayerText_> Plugin::playerTexts;
+std::vector<OnTick_> Plugin::ticks;
 
 const std::string GetRunningExecutableFolder() {
 
@@ -73,6 +74,7 @@ void Plugin::LoadPlugins()
 						OnPlayerUpdate_ onPlayerUpdate = (OnPlayerUpdate_)				GetProcAddress(module, "OnPlayerUpdate");
 						OnPlayerCommand_ onPlayerCommand = (OnPlayerCommand_)			GetProcAddress(module, "OnPlayerCommand");
 						OnPlayerText_ onPlayerText = (OnPlayerText_)					GetProcAddress(module, "OnPlayerText");
+						OnTick_ onTick = (OnTick_)										GetProcAddress(module, "OnTick");
 
 						if (onPlayerConnect) playerConnects.push_back(onPlayerConnect);
 						if (onServerCommand) serverCommands.push_back(onServerCommand);
@@ -80,6 +82,7 @@ void Plugin::LoadPlugins()
 						if (onPlayerUpdate) playerUpdates.push_back(onPlayerUpdate);
 						if (onPlayerCommand) playerCommands.push_back(onPlayerCommand);
 						if (onPlayerText) playerTexts.push_back(onPlayerText);
+						if (onTick) ticks.push_back(onTick);
 
 						OnResourceTypeRegister_ onResourceTypeRegister = (OnResourceTypeRegister_)GetProcAddress(module, "OnResourceTypeRegister");
 						OnResourceLoad_ loadResource = (OnResourceLoad_)GetProcAddress(module, "OnResourceLoad");
@@ -108,6 +111,14 @@ void Plugin::LoadPlugins()
 			}
 		}
 	}
+}
+
+bool Plugin::Tick()
+{
+	for each (auto func in ticks)
+		if (!func())
+			return false;
+	return true;
 }
 
 bool Plugin::PlayerConnect(long playerid)

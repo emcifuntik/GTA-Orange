@@ -242,9 +242,22 @@ bool API::CreatePickup(int type, float x, float y, float z, float scale)
 
 unsigned long API::CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite)
 {
-	CNetworkBlip * blip = new CNetworkBlip(x, y, z, scale, color, sprite);
+	CNetworkBlip * blip = new CNetworkBlip(x, y, z, scale, color, sprite, -1);
 	return RakNetGUID::ToUint32(blip->rnGUID);
 }
+
+void API::SetBlipScale(unsigned long _guid, float scale)
+{
+	RakNet::BitStream bsOut;
+	RakNetGUID guid = RakNetGUID(_guid);
+	CNetworkBlip *blip = CNetworkBlip::GetByGUID(guid);
+	blip->SetScale(scale);
+
+	bsOut.Write(guid);
+	bsOut.Write(scale);
+	CRPCPlugin::Get()->Signal("SetBlipScale", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
+}
+
 
 void API::Print(const char * message)
 {

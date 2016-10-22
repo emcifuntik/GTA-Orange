@@ -7,7 +7,8 @@ typedef bool(*OnPlayerUpdate_)(long playerid);
 typedef bool(*OnPlayerCommand_)(long playerid, const char * command);
 typedef bool(*OnPlayerText_)(long playerid, const char * text);
 typedef const char*(*OnResourceTypeRegister_)();
-typedef bool(*OnResourceLoad_)(const char*);
+typedef bool(*OnResourceLoad_)(const char* resource);
+typedef bool(*OnTick_)();
 
 class Plugin {
 	static std::map<std::string, OnResourceLoad_> resourceTypes;
@@ -17,8 +18,10 @@ class Plugin {
 	static std::vector<OnPlayerUpdate_> playerUpdates;
 	static std::vector<OnPlayerCommand_> playerCommands;
 	static std::vector<OnPlayerText_> playerTexts;
+	static std::vector<OnTick_> ticks;
 public:
 	static void LoadPlugins();
+	static bool Tick();
 	static bool PlayerConnect(long playerid);
 	static bool ServerCommand(std::string command);
 	static bool PlayerDisconnect(long playerid, int reason);

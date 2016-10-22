@@ -7,6 +7,17 @@ int lua_PlayerExists(lua_State *L)
 	return 1;
 }
 
+int lua_GetPlayerName(lua_State *L)
+{
+	std::string name = API::Get().GetPlayerName(lua_tointeger(L, 1));
+
+	API::Get().Print(name.c_str());
+
+	lua_pushstring(L, name.c_str());
+
+	return 1;
+}
+
 int lua_GetPlayerCoords(lua_State *L)
 {
 	CVector3 pos = API::Get().GetPlayerPosition(lua_tointeger(L, 1));
@@ -17,3 +28,4 @@ int lua_GetPlayerCoords(lua_State *L)
 
 	return 3;
 }
+

@@ -1,13 +1,18 @@
 #include "stdafx.h"
 using namespace tinyxml2;
 
+struct pass
+{
+	template<typename ...T> pass(T...) {}
+};
+
 int main(void)
 {
 	log << "Starting the server..." << std::endl;
 	log << "Hostname: " << color::lred << CConfig::Get()->Hostname << std::endl;
 	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
 	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
-	
+
 	Plugin::LoadPlugins();
 
 	auto netLoop = [=]()
@@ -21,6 +26,7 @@ int main(void)
 			RakSleep(5);
 			CNetworkConnection::Get()->Tick();
 			CNetworkPlayer::Tick();
+			Plugin::Tick();
 
 			if ((GetTickCount() - lastTick) > 100)
 			{

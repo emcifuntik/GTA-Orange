@@ -114,5 +114,16 @@ namespace FPlayer
 		
 		new CNetworkBlip(guid, x, y, z, scale, color, sprite);
 	}
+
+	void SetBlipScale(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		RakNet::RakNetGUID guid;
+		float scale;
+
+		bitStream->Read(guid);
+		bitStream->Read(scale);
+
+		CNetworkBlip::GetByGUID(guid)->SetScale(scale);
+	}
 }
 
