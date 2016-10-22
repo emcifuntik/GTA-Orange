@@ -5,7 +5,6 @@ ULONGLONG lastSendTick = 0;
 
 void NetworkAction()
 {
-	CNetworkUI::Get()->SetScreenInfo("Hi! ~INPUT_CONTEXT~");
 	for (;;)
 	{
 		CLocalPlayer::Get()->Tick();
