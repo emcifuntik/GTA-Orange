@@ -807,6 +807,7 @@ void OnGameStateChange(int gameState)
 	case GameStateLicenseShit:
 		break;
 	case GameStatePlaying:
+	{
 		if (!ScriptEngine::Initialize())
 			log_error << "Failed to initialize ScriptEngine" << std::endl;
 		if (CGlobals::Get().d3dloaded)
@@ -824,7 +825,12 @@ void OnGameStateChange(int gameState)
 
 		SyncTree::Init();
 		log_debug << "CPlayerSyncTree: 0x" << std::hex << SyncTree::GetPlayerSyncTree() << std::endl;
+
+		typedef void(*InitNetStuff_t)();
+		InitNetStuff_t InitNetStuff = (InitNetStuff_t)(0x140F891E0);// CMemory::Find("48 89 5C 24 08 57 48 83 EC 40 33 FF 40 38 3D ? ? ? ?")();
+		InitNetStuff();
 		break;
+	}
 	case GameStateMainMenu:
 		if (!initialized)
 		{
