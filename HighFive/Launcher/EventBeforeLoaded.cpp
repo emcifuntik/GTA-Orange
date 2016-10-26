@@ -826,9 +826,11 @@ void OnGameStateChange(int gameState)
 		SyncTree::Init();
 		log_debug << "CPlayerSyncTree: 0x" << std::hex << SyncTree::GetPlayerSyncTree() << std::endl;
 
-		typedef void(*InitNetStuff_t)();
-		InitNetStuff_t InitNetStuff = (InitNetStuff_t)(0x140F891E0);// CMemory::Find("48 89 5C 24 08 57 48 83 EC 40 33 FF 40 38 3D ? ? ? ?")();
-		InitNetStuff();
+		//typedef void(*InitNetStuff_t)();
+		//InitNetStuff_t InitNetStuff = (InitNetStuff_t)(0x140F891E0);// CMemory::Find("48 89 5C 24 08 57 48 83 EC 40 33 FF 40 38 3D ? ? ? ?")();
+		//InitNetStuff();
+
+		(CMemory::Find("48 89 45 D7 48 8D 45 B7 48 89 5D B7 48 89 45 DF 4C 8D 45 D7 EB ?") + 35).nop(9);
 		break;
 	}
 	case GameStateMainMenu:

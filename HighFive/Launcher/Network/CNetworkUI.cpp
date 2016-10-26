@@ -23,7 +23,7 @@ bool CNetworkUI::Render()
 bool CNetworkUI::SetScreenInfo(const char* msg)
 {
 	screenInfo.shown = true;
-	screenInfo.msg = strdup(msg);
+	screenInfo.msg = _strdup(msg);
 	return true;
 }
 

@@ -215,23 +215,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		{
 			social = false;
 			if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\GTAV", "InstallFolderSteam", GamePath, MAX_PATH))
-			{
 				strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
-			}
 			else
-			{
 				CConfig::Get()->gtaPath = std::string(GamePath);
-			}
 		}
 		else
-		{
 			CConfig::Get()->gtaPath = std::string(GamePath);
-		}
 	}
 	else
-	{
 		strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
-	}
 	
 	while (1)
 	{
