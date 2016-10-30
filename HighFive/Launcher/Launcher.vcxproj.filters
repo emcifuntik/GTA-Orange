@@ -70,6 +70,9 @@
     <Filter Include="D3D\Source files">
       <UniqueIdentifier>{d463cdf2-f9ab-4c33-905c-f29828f6ba63}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Chromium">
+      <UniqueIdentifier>{5588eb07-022a-420c-b43f-8faf58bb8fd7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\core.cpp">
@@ -238,6 +241,9 @@
       <Filter>Launcher\Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UserLibrary.cpp">
+      <Filter>Launcher\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
       <Filter>Launcher\Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -426,6 +432,9 @@
       <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UserLibrary.h">
+      <Filter>Launcher\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
       <Filter>Launcher\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

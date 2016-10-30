@@ -156,7 +156,7 @@ template<> CefRefPtr<CefURLRequestClient> CefCppToC<CefURLRequestClientCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefURLRequestClientCppToC,
     CefURLRequestClient, cef_urlrequest_client_t>::DebugObjCt = 0;
 #endif

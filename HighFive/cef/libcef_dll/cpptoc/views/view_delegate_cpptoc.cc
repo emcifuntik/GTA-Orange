@@ -198,7 +198,7 @@ template<> CefRefPtr<CefViewDelegate> CefCppToC<CefViewDelegateCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefViewDelegateCppToC,
     CefViewDelegate, cef_view_delegate_t>::DebugObjCt = 0;
 #endif

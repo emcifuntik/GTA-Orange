@@ -340,6 +340,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	}
 
 	InitializeDummies();
+	CEF::Window::Init();
+	auto windows = new CEF::Window(
+		"https://google.com", 
+		{ 800, 600 }, 
+		{ 0, 0 }, 
+		true, 
+		true
+	);
+
 	loader.SetLibraryLoader([](const char* libName)
 	{
 		if (!_stricmp(libName, "xlive.dll"))

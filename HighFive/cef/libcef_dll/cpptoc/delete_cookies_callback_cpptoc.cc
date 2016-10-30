@@ -46,7 +46,7 @@ template<> CefRefPtr<CefDeleteCookiesCallback> CefCppToC<CefDeleteCookiesCallbac
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefDeleteCookiesCallbackCppToC,
     CefDeleteCookiesCallback, cef_delete_cookies_callback_t>::DebugObjCt = 0;
 #endif

@@ -302,7 +302,7 @@ template<> CefRefPtr<CefBrowserViewDelegate> CefCppToC<CefBrowserViewDelegateCpp
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefBrowserViewDelegateCppToC,
     CefBrowserViewDelegate, cef_browser_view_delegate_t>::DebugObjCt = 0;
 #endif

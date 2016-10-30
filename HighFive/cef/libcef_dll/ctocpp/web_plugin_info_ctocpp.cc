@@ -92,7 +92,7 @@ template<> cef_web_plugin_info_t* CefCToCpp<CefWebPluginInfoCToCpp,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefWebPluginInfoCToCpp,
     CefWebPluginInfo, cef_web_plugin_info_t>::DebugObjCt = 0;
 #endif

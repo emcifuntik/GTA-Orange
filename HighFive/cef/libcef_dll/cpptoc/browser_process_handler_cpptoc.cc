@@ -121,7 +121,7 @@ template<> CefRefPtr<CefBrowserProcessHandler> CefCppToC<CefBrowserProcessHandle
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefBrowserProcessHandlerCppToC,
     CefBrowserProcessHandler, cef_browser_process_handler_t>::DebugObjCt = 0;
 #endif

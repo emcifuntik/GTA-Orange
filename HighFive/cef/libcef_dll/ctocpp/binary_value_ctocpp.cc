@@ -168,7 +168,7 @@ template<> cef_binary_value_t* CefCToCpp<CefBinaryValueCToCpp, CefBinaryValue,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefBinaryValueCToCpp, CefBinaryValue,
     cef_binary_value_t>::DebugObjCt = 0;
 #endif

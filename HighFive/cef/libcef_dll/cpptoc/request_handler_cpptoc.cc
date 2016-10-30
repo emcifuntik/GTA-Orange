@@ -164,8 +164,7 @@ struct _cef_resource_handler_t* CEF_CALLBACK request_handler_get_resource_handle
 
 void CEF_CALLBACK request_handler_on_resource_redirect(
     struct _cef_request_handler_t* self, cef_browser_t* browser,
-    cef_frame_t* frame, cef_request_t* request,
-    struct _cef_response_t* response, cef_string_t* new_url) {
+    cef_frame_t* frame, cef_request_t* request, cef_string_t* new_url) {
   // AUTO-GENERATED CONTENT - DELETE THIS COMMENT BEFORE MODIFYING
 
   DCHECK(self);
@@ -183,10 +182,6 @@ void CEF_CALLBACK request_handler_on_resource_redirect(
   DCHECK(request);
   if (!request)
     return;
-  // Verify param: response; type: refptr_diff
-  DCHECK(response);
-  if (!response)
-    return;
   // Verify param: new_url; type: string_byref
   DCHECK(new_url);
   if (!new_url)
@@ -200,7 +195,6 @@ void CEF_CALLBACK request_handler_on_resource_redirect(
       CefBrowserCToCpp::Wrap(browser),
       CefFrameCToCpp::Wrap(frame),
       CefRequestCToCpp::Wrap(request),
-      CefResponseCToCpp::Wrap(response),
       new_urlStr);
 }
 
@@ -559,7 +553,7 @@ template<> CefRefPtr<CefRequestHandler> CefCppToC<CefRequestHandlerCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefRequestHandlerCppToC,
     CefRequestHandler, cef_request_handler_t>::DebugObjCt = 0;
 #endif

@@ -96,7 +96,7 @@ template<> CefRefPtr<CefDragHandler> CefCppToC<CefDragHandlerCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefDragHandlerCppToC, CefDragHandler,
     cef_drag_handler_t>::DebugObjCt = 0;
 #endif

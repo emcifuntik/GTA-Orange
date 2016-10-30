@@ -106,7 +106,7 @@ template<> cef_box_layout_t* CefCToCpp<CefBoxLayoutCToCpp, CefBoxLayout,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefBoxLayoutCToCpp, CefBoxLayout,
     cef_box_layout_t>::DebugObjCt = 0;
 #endif

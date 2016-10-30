@@ -344,7 +344,7 @@ template<> cef_context_menu_params_t* CefCToCpp<CefContextMenuParamsCToCpp,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefContextMenuParamsCToCpp,
     CefContextMenuParams, cef_context_menu_params_t>::DebugObjCt = 0;
 #endif

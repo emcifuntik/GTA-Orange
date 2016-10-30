@@ -57,7 +57,7 @@ template<> CefRefPtr<CefWebPluginInfoVisitor> CefCppToC<CefWebPluginInfoVisitorC
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefWebPluginInfoVisitorCppToC,
     CefWebPluginInfoVisitor, cef_web_plugin_info_visitor_t>::DebugObjCt = 0;
 #endif
