@@ -887,6 +887,8 @@ class CEventBeforeLoaded :
 			mem.nop(6);
 			(mem + 2).put(0xEBi8);
 		}
+		/**((DWORD*)0x142BC84A0) = 0;
+		CMemory::Find("83 3D 21 FC 8C 01 00").nop(19);*/
 
 		mem = CMemory::Find("48 85 C9 0F 84 ? 00 00 00 48 8D 55 A7 E8");
 		auto mem2 = mem + 13;
@@ -1057,6 +1059,8 @@ class CEventBeforeLoaded :
 		mem2.put(0x01i8);
 
 		CGlobals::Get().hudDisabled = (bool*)CMemory::Find("44 88 25 ? ? ? ? 40 88 3D ? ? ? ? 48 8D 05 ? ? ? ? BB ? ? ? ?").getOffset();
+
+		CMemory::Find("83 3D ? ? ? ? 01 75 5B 48 8D 15 ? ? ? ?").nop(100);
 		return true;
 	}
 } _ev;

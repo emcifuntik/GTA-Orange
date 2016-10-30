@@ -234,6 +234,12 @@
     <ClCompile Include="Network\CNetworkUI.cpp">
       <Filter>Network\Source files</Filter>
     </ClCompile>
+    <ClCompile Include="FakeSteam.cpp">
+      <Filter>Launcher\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UserLibrary.cpp">
+      <Filter>Launcher\Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -415,6 +421,12 @@
     </ClInclude>
     <ClInclude Include="Network\CNetworkUI.h">
       <Filter>Network\Header files</Filter>
+    </ClInclude>
+    <ClInclude Include="FakeSteam.h">
+      <Filter>Launcher\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UserLibrary.h">
+      <Filter>Launcher\Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

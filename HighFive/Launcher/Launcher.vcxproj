@@ -107,6 +107,7 @@
     <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde64.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\hook.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\trampoline.c" />
+    <ClCompile Include="FakeSteam.cpp" />
     <ClCompile Include="GTA\CGraphics.cpp" />
     <ClCompile Include="GTA\CRage.cpp" />
     <ClCompile Include="GTA\CReplayInterface.cpp" />
@@ -143,6 +144,7 @@
     <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\PELoader.cpp" />
     <ClCompile Include="TlsInit.cpp" />
+    <ClCompile Include="UserLibrary.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="ValveHelper.cpp" />
   </ItemGroup>
@@ -167,6 +169,7 @@
     <ClInclude Include="D3D11\stb_rect_pack.h" />
     <ClInclude Include="D3D11\stb_textedit.h" />
     <ClInclude Include="D3D11\stb_truetype.h" />
+    <ClInclude Include="FakeSteam.h" />
     <ClInclude Include="GTA\CGraphics.h" />
     <ClInclude Include="GTA\CRage.h" />
     <ClInclude Include="GTA\CReplayInterface.h" />
@@ -205,6 +208,7 @@
     <ClInclude Include="scrThread.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="types.h" />
+    <ClInclude Include="UserLibrary.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ValveHelper.h" />
   </ItemGroup>

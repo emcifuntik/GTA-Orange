@@ -36,6 +36,10 @@
 #include <cstdarg> 
 #include <cstddef>
 #include <cstring>
+#include "FakeSteam.h"
+#include "UserLibrary.h"
+#include <Winternl.h>
+#include "jitasm.h"
 #pragma endregion
 
 #pragma region D3D Stuff
