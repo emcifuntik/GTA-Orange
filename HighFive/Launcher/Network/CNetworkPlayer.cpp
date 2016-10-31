@@ -24,6 +24,16 @@ CNetworkPlayer* CNetworkPlayer::GetByGUID(RakNet::RakNetGUID GUID)
 	return _newPlayer;
 }
 
+bool CNetworkPlayer::Exists(RakNet::RakNetGUID GUID)
+{
+	for each (CNetworkPlayer *_player in PlayersPool)
+	{
+		if (_player->m_GUID == GUID)
+			return true;
+	}
+	return false;
+}
+
 CNetworkPlayer* CNetworkPlayer::GetByHandler(Entity handler)
 {
 	for each (CNetworkPlayer *_player in PlayersPool)

@@ -18,6 +18,9 @@ namespace FPlayer
 
 	void CreateBlip(RakNet::BitStream *bitStream, RakNet::Packet *packet);
 	void SetBlipScale(RakNet::BitStream * bitStream, RakNet::Packet *packet);
+	void SetBlipColor(RakNet::BitStream * bitStream, RakNet::Packet *packet);
+	void SetBlipSprite(RakNet::BitStream * bitStream, RakNet::Packet *packet);
+	void SetBlipAsShortRange(RakNet::BitStream * bitStream, RakNet::Packet *packet);
 
 	void SetInfoMsg(RakNet::BitStream *bitStream, RakNet::Packet *packet);
 }

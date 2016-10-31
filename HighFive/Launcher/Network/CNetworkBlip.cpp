@@ -12,8 +12,11 @@ CNetworkBlip::CNetworkBlip(RakNetGUID guid, float x, float y, float z, float sca
 	this->sprite = sprite;
 
 	Handle = UI::ADD_BLIP_FOR_COORD(x, y, z);
-	UI::SET_BLIP_SCALE(Handle, scale);
-	UI::SET_BLIP_AS_SHORT_RANGE(Handle, false);
+	
+	SetScale(scale);
+	SetColor(color);
+	SetSprite(sprite);
+	SetAsShortRange(false);
 
 	BlipPool.push_back(this);
 }
@@ -21,6 +24,35 @@ CNetworkBlip::CNetworkBlip(RakNetGUID guid, float x, float y, float z, float sca
 void CNetworkBlip::SetScale(float scale)
 {
 	UI::SET_BLIP_SCALE(Handle, scale);
+}
+
+void CNetworkBlip::SetColor(int color)
+{
+	UI::SET_BLIP_COLOUR(Handle, color);
+}
+
+void CNetworkBlip::SetAsShortRange(bool _short)
+{
+	UI::SET_BLIP_AS_SHORT_RANGE(Handle, _short);
+}
+
+void CNetworkBlip::SetSprite(int sprite)
+{
+	UI::SET_BLIP_SPRITE(Handle, sprite);
+}
+
+void CNetworkBlip::AttachToPlayer(RakNet::RakNetGUID GUID)
+{
+	if (CNetworkPlayer::Exists(GUID))
+	{
+		UI::REMOVE_BLIP(&Handle);
+		Handle = CNetworkPlayer::GetByGUID(GUID)->AddBlip();
+
+		SetScale(scale);
+		SetColor(color);
+		SetSprite(sprite);
+		SetAsShortRange(false);
+	}
 }
 
 CNetworkBlip::~CNetworkBlip()

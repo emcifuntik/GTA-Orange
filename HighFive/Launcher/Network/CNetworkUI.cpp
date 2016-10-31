@@ -39,6 +39,18 @@ CNetworkUI::~CNetworkUI()
 
 }
 
+void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore, BOOL isUpNow)
+{
+	RakNet::BitStream bsOut;
+
+	if (isUpNow || wasDownBefore) bsOut.Write(true);
+	else bsOut.Write(false);
+
+	bsOut.Write(key);
+
+	CRPCPlugin::Get()->rpc.Signal("KeyEvent", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
+}
+
 CNetworkUI * CNetworkUI::Get()
 {
 	if (!Instance)

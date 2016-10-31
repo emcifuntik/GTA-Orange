@@ -64,6 +64,7 @@ public:
 	static std::vector<CNetworkPlayer*> All();
 	static void DeleteByGUID(RakNet::RakNetGUID guid);
 	static CNetworkPlayer * GetByGUID(RakNet::RakNetGUID GUID);
+	static bool Exists(RakNet::RakNetGUID GUID);
 	static CNetworkPlayer * GetByHandler(Entity handler);
 	static void Clear();
 	static void Tick();

@@ -126,6 +126,39 @@ namespace FPlayer
 		CNetworkBlip::GetByGUID(guid)->SetScale(scale);
 	}
 
+	void SetBlipColor(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		RakNet::RakNetGUID guid;
+		int color;
+
+		bitStream->Read(guid);
+		bitStream->Read(color);
+
+		CNetworkBlip::GetByGUID(guid)->SetColor(color);
+	}
+
+	void SetBlipSprite(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		RakNet::RakNetGUID guid;
+		int sprite;
+
+		bitStream->Read(guid);
+		bitStream->Read(sprite);
+
+		CNetworkBlip::GetByGUID(guid)->SetSprite(sprite);
+	}
+
+	void SetBlipAsShortRange(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		RakNet::RakNetGUID guid;
+		bool _short;
+
+		bitStream->Read(guid);
+		bitStream->Read(_short);
+
+		CNetworkBlip::GetByGUID(guid)->SetAsShortRange(_short);
+	}
+
 	void SetInfoMsg(RakNet::BitStream *bitStream, RakNet::Packet *packet)
 	{
 		bool set;

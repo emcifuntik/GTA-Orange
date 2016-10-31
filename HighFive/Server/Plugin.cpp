@@ -75,6 +75,7 @@ void Plugin::LoadPlugins()
 						OnPlayerCommand_ onPlayerCommand = (OnPlayerCommand_)			GetProcAddress(module, "OnPlayerCommand");
 						OnPlayerText_ onPlayerText = (OnPlayerText_)					GetProcAddress(module, "OnPlayerText");
 						OnTick_ onTick = (OnTick_)										GetProcAddress(module, "OnTick");
+						OnKeyStateChanged_ onKeyStateChanged = (OnKeyStateChanged_)		GetProcAddress(module, "OnKeyStateChanged");
 
 						if (onPlayerConnect) playerConnects.push_back(onPlayerConnect);
 						if (onServerCommand) serverCommands.push_back(onServerCommand);
@@ -83,6 +84,7 @@ void Plugin::LoadPlugins()
 						if (onPlayerCommand) playerCommands.push_back(onPlayerCommand);
 						if (onPlayerText) playerTexts.push_back(onPlayerText);
 						if (onTick) ticks.push_back(onTick);
+						if (onKeyStateChanged) keyEvents.push_back(onKeyStateChanged);
 
 						OnResourceTypeRegister_ onResourceTypeRegister = (OnResourceTypeRegister_)GetProcAddress(module, "OnResourceTypeRegister");
 						OnResourceLoad_ loadResource = (OnResourceLoad_)GetProcAddress(module, "OnResourceLoad");
@@ -167,4 +169,16 @@ bool Plugin::PlayerText(long playerid, const char * text)
 		if (!func(playerid, text))
 			return false;
 	return true;
+}
+
+void Plugin::KeyEvent(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+{
+	int keycode;
+	bool keyUp;
+
+	bitStream->Read(keycode);
+	bitStream->Read(keyUp);
+
+	for each (auto func in keyEvents)
+		func(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), keycode, keyUp);
 }

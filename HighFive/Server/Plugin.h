@@ -9,6 +9,7 @@ typedef bool(*OnPlayerText_)(long playerid, const char * text);
 typedef const char*(*OnResourceTypeRegister_)();
 typedef bool(*OnResourceLoad_)(const char* resource);
 typedef bool(*OnTick_)();
+typedef bool(*OnKeyStateChanged_)(long playerid, int keycode, bool keyUp);
 
 class Plugin {
 	static std::map<std::string, OnResourceLoad_> resourceTypes;
@@ -19,6 +20,7 @@ class Plugin {
 	static std::vector<OnPlayerCommand_> playerCommands;
 	static std::vector<OnPlayerText_> playerTexts;
 	static std::vector<OnTick_> ticks;
+	static std::vector<OnKeyStateChanged_> keyEvents;
 public:
 	static void LoadPlugins();
 	static bool Tick();
@@ -28,4 +30,5 @@ public:
 	static bool PlayerUpdate(long playerid);
 	static bool PlayerCommand(long playerid, const char * command);
 	static bool PlayerText(long playerid, const char * text);
+	static void KeyEvent(RakNet::BitStream * bitStream, RakNet::Packet * packet);
 };
