@@ -899,7 +899,7 @@ template<> cef_panel_t* CefCToCpp<CefPanelCToCpp, CefPanel,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefPanelCToCpp, CefPanel,
     cef_panel_t>::DebugObjCt = 0;
 #endif

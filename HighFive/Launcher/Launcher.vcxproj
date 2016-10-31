@@ -58,7 +58,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\..\Shared;..\tinyxml2-4.0.1;.\;inc;$(SolutionDir)pe-loader\inc;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\cef;..\..\Shared;..\tinyxml2-4.0.1;.\;inc;$(SolutionDir)pe-loader\inc;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -76,7 +76,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;PROJECT_NAME="$(ProjectName)";%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Windows Kits\8.1\Include\shared;..\..\Shared;..\tinyxml2-4.0.1;.\;inc;$(SolutionDir)pe-loader\inc;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\cef;C:\Program Files %28x86%29\Windows Kits\8.1\Include\shared;..\..\Shared;..\tinyxml2-4.0.1;.\;inc;$(SolutionDir)pe-loader\inc;..\RakNet;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <IntrinsicFunctions>false</IntrinsicFunctions>
       <DebugInformationFormat>None</DebugInformationFormat>
@@ -107,6 +107,7 @@
     <ClCompile Include="D3D11\Memory\minhook\src\HDE\hde64.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\hook.c" />
     <ClCompile Include="D3D11\Memory\minhook\src\trampoline.c" />
+    <ClCompile Include="FakeSteam.cpp" />
     <ClCompile Include="GTA\CGraphics.cpp" />
     <ClCompile Include="GTA\CRage.cpp" />
     <ClCompile Include="GTA\CReplayInterface.cpp" />
@@ -143,8 +144,10 @@
     <ClCompile Include="src\core.cpp" />
     <ClCompile Include="src\PELoader.cpp" />
     <ClCompile Include="TlsInit.cpp" />
+    <ClCompile Include="UserLibrary.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="ValveHelper.cpp" />
+    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Shared\Console\CLog.h" />
@@ -167,6 +170,7 @@
     <ClInclude Include="D3D11\stb_rect_pack.h" />
     <ClInclude Include="D3D11\stb_textedit.h" />
     <ClInclude Include="D3D11\stb_truetype.h" />
+    <ClInclude Include="FakeSteam.h" />
     <ClInclude Include="GTA\CGraphics.h" />
     <ClInclude Include="GTA\CRage.h" />
     <ClInclude Include="GTA\CReplayInterface.h" />
@@ -205,8 +209,10 @@
     <ClInclude Include="scrThread.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="types.h" />
+    <ClInclude Include="UserLibrary.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ValveHelper.h" />
+    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />

@@ -826,9 +826,11 @@ void OnGameStateChange(int gameState)
 		SyncTree::Init();
 		log_debug << "CPlayerSyncTree: 0x" << std::hex << SyncTree::GetPlayerSyncTree() << std::endl;
 
-		typedef void(*InitNetStuff_t)();
-		InitNetStuff_t InitNetStuff = (InitNetStuff_t)(0x140F891E0);// CMemory::Find("48 89 5C 24 08 57 48 83 EC 40 33 FF 40 38 3D ? ? ? ?")();
-		InitNetStuff();
+		//typedef void(*InitNetStuff_t)();
+		//InitNetStuff_t InitNetStuff = (InitNetStuff_t)(0x140F891E0);// CMemory::Find("48 89 5C 24 08 57 48 83 EC 40 33 FF 40 38 3D ? ? ? ?")();
+		//InitNetStuff();
+
+		(CMemory::Find("48 89 45 D7 48 8D 45 B7 48 89 5D B7 48 89 45 DF 4C 8D 45 D7 EB ?") + 35).nop(9);
 		break;
 	}
 	case GameStateMainMenu:
@@ -885,6 +887,8 @@ class CEventBeforeLoaded :
 			mem.nop(6);
 			(mem + 2).put(0xEBi8);
 		}
+		/**((DWORD*)0x142BC84A0) = 0;
+		CMemory::Find("83 3D 21 FC 8C 01 00").nop(19);*/
 
 		mem = CMemory::Find("48 85 C9 0F 84 ? 00 00 00 48 8D 55 A7 E8");
 		auto mem2 = mem + 13;
@@ -1055,6 +1059,8 @@ class CEventBeforeLoaded :
 		mem2.put(0x01i8);
 
 		CGlobals::Get().hudDisabled = (bool*)CMemory::Find("44 88 25 ? ? ? ? 40 88 3D ? ? ? ? 48 8D 05 ? ? ? ? BB ? ? ? ?").getOffset();
+
+		CMemory::Find("83 3D ? ? ? ? 01 75 5B 48 8D 15 ? ? ? ?").nop(100);
 		return true;
 	}
 } _ev;

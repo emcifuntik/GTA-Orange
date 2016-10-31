@@ -285,7 +285,7 @@ template<> cef_image_t* CefCToCpp<CefImageCToCpp, CefImage,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefImageCToCpp, CefImage,
     cef_image_t>::DebugObjCt = 0;
 #endif

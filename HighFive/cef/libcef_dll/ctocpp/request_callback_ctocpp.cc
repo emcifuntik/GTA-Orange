@@ -51,7 +51,7 @@ template<> cef_request_callback_t* CefCToCpp<CefRequestCallbackCToCpp,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefRequestCallbackCToCpp,
     CefRequestCallback, cef_request_callback_t>::DebugObjCt = 0;
 #endif

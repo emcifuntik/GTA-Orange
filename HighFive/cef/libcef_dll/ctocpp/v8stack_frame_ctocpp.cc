@@ -147,7 +147,7 @@ template<> cef_v8stack_frame_t* CefCToCpp<CefV8StackFrameCToCpp,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefV8StackFrameCToCpp,
     CefV8StackFrame, cef_v8stack_frame_t>::DebugObjCt = 0;
 #endif

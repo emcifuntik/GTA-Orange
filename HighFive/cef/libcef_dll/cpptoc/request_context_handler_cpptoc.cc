@@ -89,7 +89,7 @@ template<> CefRefPtr<CefRequestContextHandler> CefCppToC<CefRequestContextHandle
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefRequestContextHandlerCppToC,
     CefRequestContextHandler, cef_request_context_handler_t>::DebugObjCt = 0;
 #endif

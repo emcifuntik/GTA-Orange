@@ -97,7 +97,6 @@ class CefBrowserHostCToCpp
   void DragTargetDrop(const CefMouseEvent& event) OVERRIDE;
   void DragSourceEndedAt(int x, int y, DragOperationsMask op) OVERRIDE;
   void DragSourceSystemDragEnded() OVERRIDE;
-  CefRefPtr<CefNavigationEntry> GetVisibleNavigationEntry() OVERRIDE;
 };
 
 #endif  // USING_CEF_SHARED

@@ -137,7 +137,7 @@ template<> CefRefPtr<CefLoadHandler> CefCppToC<CefLoadHandlerCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefLoadHandlerCppToC, CefLoadHandler,
     cef_load_handler_t>::DebugObjCt = 0;
 #endif

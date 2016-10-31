@@ -50,7 +50,9 @@
 
 #include "include/base/cef_atomic_ref_count.h"
 #include "include/base/cef_build.h"
+#ifndef NDEBUG
 #include "include/base/cef_logging.h"
+#endif
 #include "include/base/cef_thread_collision_warner.h"
 
 namespace base {
@@ -64,14 +66,14 @@ class RefCountedBase {
  protected:
   RefCountedBase()
       : ref_count_(0)
-  #if DCHECK_IS_ON()
+  #ifndef NDEBUG
       , in_dtor_(false)
   #endif
       {
   }
 
   ~RefCountedBase() {
-  #if DCHECK_IS_ON()
+  #ifndef NDEBUG
     DCHECK(in_dtor_) << "RefCounted object deleted without calling Release()";
   #endif
   }
@@ -82,7 +84,7 @@ class RefCountedBase {
     // Current thread books the critical section "AddRelease"
     // without release it.
     // DFAKE_SCOPED_LOCK_THREAD_LOCKED(add_release_);
-  #if DCHECK_IS_ON()
+  #ifndef NDEBUG
     DCHECK(!in_dtor_);
   #endif
     ++ref_count_;
@@ -94,11 +96,11 @@ class RefCountedBase {
     // Current thread books the critical section "AddRelease"
     // without release it.
     // DFAKE_SCOPED_LOCK_THREAD_LOCKED(add_release_);
-  #if DCHECK_IS_ON()
+  #ifndef NDEBUG
     DCHECK(!in_dtor_);
   #endif
     if (--ref_count_ == 0) {
-  #if DCHECK_IS_ON()
+  #ifndef NDEBUG
       in_dtor_ = true;
   #endif
       return true;
@@ -108,7 +110,7 @@ class RefCountedBase {
 
  private:
   mutable int ref_count_;
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
   mutable bool in_dtor_;
 #endif
 
@@ -132,7 +134,7 @@ class RefCountedThreadSafeBase {
 
  private:
   mutable AtomicRefCount ref_count_;
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
   mutable bool in_dtor_;
 #endif
 

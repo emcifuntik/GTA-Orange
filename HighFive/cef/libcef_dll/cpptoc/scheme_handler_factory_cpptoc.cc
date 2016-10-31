@@ -68,7 +68,7 @@ template<> CefRefPtr<CefSchemeHandlerFactory> CefCppToC<CefSchemeHandlerFactoryC
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefSchemeHandlerFactoryCppToC,
     CefSchemeHandlerFactory, cef_scheme_handler_factory_t>::DebugObjCt = 0;
 #endif

@@ -2,9 +2,9 @@
 #ifndef _IOLOG_
 #define _IOLOG_
 
-#define LOG_DEBUG "[Debug] "
-#define LOG_ERROR "[Error] "
-#define LOG_INFO "[Info] "
+#define _O_LOG_DEBUG "[Debug] "
+#define _O_LOG_ERROR "[Error] "
+#define _O_LOG_INFO "[Info] "
 
 #if !defined PROJECT_NAME
 #define PROJECT_NAME ""
@@ -21,19 +21,19 @@ public:
 
 	my_ostream& info()
 	{
-		std::cout << color::lblue << LOG_INFO << color::white;
+		std::cout << color::lblue << _O_LOG_INFO << color::white;
 		//my_fstream << LOG_INFO;
 		return *this;
 	}
 	my_ostream& debug()
 	{
-		std::cout << color::lyellow << LOG_DEBUG << color::white;
+		std::cout << color::lyellow << _O_LOG_DEBUG << color::white;
 		//my_fstream << LOG_DEBUG;
 		return *this;
 	}
 	my_ostream& error()
 	{
-		std::cout << color::lred << LOG_ERROR << color::white;
+		std::cout << color::lred << _O_LOG_ERROR << color::white;
 		//my_fstream << LOG_ERROR;
 		return *this;
 	}

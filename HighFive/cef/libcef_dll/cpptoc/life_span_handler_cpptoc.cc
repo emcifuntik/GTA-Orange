@@ -195,7 +195,7 @@ template<> CefRefPtr<CefLifeSpanHandler> CefCppToC<CefLifeSpanHandlerCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefLifeSpanHandlerCppToC,
     CefLifeSpanHandler, cef_life_span_handler_t>::DebugObjCt = 0;
 #endif

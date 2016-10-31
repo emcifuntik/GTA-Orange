@@ -15,6 +15,168 @@ static TCHAR szWindowClass[] = "highfive_app";
 
 void InitializeDummies();
 
+#pragma region antiAntiDebug
+static void* origCloseHandle;
+
+typedef struct _OBJECT_HANDLE_ATTRIBUTE_INFORMATION
+{
+	BOOLEAN Inherit;
+	BOOLEAN ProtectFromClose;
+} OBJECT_HANDLE_ATTRIBUTE_INFORMATION, *POBJECT_HANDLE_ATTRIBUTE_INFORMATION;
+
+#pragma comment(lib, "ntdll.lib")
+
+struct NtCloseHook : public jitasm::Frontend
+{
+	NtCloseHook()
+	{
+
+	}
+
+	static NTSTATUS ValidateHandle(HANDLE handle)
+	{
+		char info[16];
+
+		if (NtQueryObject(handle, (OBJECT_INFORMATION_CLASS)4, &info, sizeof(OBJECT_HANDLE_ATTRIBUTE_INFORMATION), nullptr) >= 0)
+		{
+			return 0;
+		}
+		else
+		{
+			return STATUS_INVALID_HANDLE;
+		}
+	}
+
+	void InternalMain()
+	{
+		push(rcx);
+
+		mov(rax, (uint64_t)&ValidateHandle);
+		call(rax);
+
+		pop(rcx);
+
+		cmp(eax, STATUS_INVALID_HANDLE);
+		je("doReturn");
+
+		mov(rax, (uint64_t)origCloseHandle);
+		push(rax); // to return here, as there seems to be no jump-to-rax in jitasm
+
+		L("doReturn");
+		ret();
+	}
+};
+
+class NtdllHooks
+{
+private:
+	UserLibrary m_ntdll;
+
+private:
+	void HookHandleClose();
+
+	void HookQueryInformationProcess();
+
+public:
+	NtdllHooks(const wchar_t* ntdllPath);
+
+	void Install();
+};
+
+NtdllHooks::NtdllHooks(const wchar_t* ntdllPath)
+	: m_ntdll(ntdllPath)
+{
+}
+
+void NtdllHooks::Install()
+{
+	HookHandleClose();
+	HookQueryInformationProcess();
+}
+
+void NtdllHooks::HookHandleClose()
+{
+	// hook NtClose (STATUS_INVALID_HANDLE debugger detection)
+	uint8_t* code = (uint8_t*)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "NtClose");
+
+	origCloseHandle = VirtualAlloc(nullptr, 1024, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	memcpy(origCloseHandle, m_ntdll.GetExportCode("NtClose"), 1024);
+
+	NtCloseHook* hook = new NtCloseHook;
+	hook->Assemble();
+
+	DWORD oldProtect;
+	VirtualProtect(code, 15, PAGE_EXECUTE_READWRITE, &oldProtect);
+
+	*(uint8_t*)code = 0x48;
+	*(uint8_t*)(code + 1) = 0xb8;
+
+	*(uint64_t*)(code + 2) = (uint64_t)hook->GetCode();
+
+	*(uint16_t*)(code + 10) = 0xE0FF;
+}
+
+static void* origQIP;
+static DWORD explorerPid;
+
+#include <ntstatus.h>
+
+typedef NTSTATUS(*NtQueryInformationProcessType)(IN HANDLE ProcessHandle, IN PROCESSINFOCLASS ProcessInformationClass, OUT PVOID ProcessInformation, IN ULONG ProcessInformationLength, OUT PULONG ReturnLength OPTIONAL);
+
+static NTSTATUS NtQueryInformationProcessHook(IN HANDLE ProcessHandle, IN PROCESSINFOCLASS ProcessInformationClass, OUT PVOID ProcessInformation, IN ULONG ProcessInformationLength, OUT PULONG ReturnLength OPTIONAL)
+{
+	NTSTATUS status = ((NtQueryInformationProcessType)origQIP)(ProcessHandle, ProcessInformationClass, ProcessInformation, ProcessInformationLength, ReturnLength);
+
+	if (NT_SUCCESS(status))
+	{
+		if (ProcessInformationClass == ProcessBasicInformation)
+		{
+			((PPROCESS_BASIC_INFORMATION)ProcessInformation)->Reserved3 = (PVOID)explorerPid;
+		}
+		else if (ProcessInformationClass == 30) // ProcessDebugObjectHandle
+		{
+			*(HANDLE*)ProcessInformation = 0;
+
+			return STATUS_PORT_NOT_SET;
+		}
+		else if (ProcessInformationClass == 7) // ProcessDebugPort
+		{
+			*(HANDLE*)ProcessInformation = 0;
+		}
+		else if (ProcessInformationClass == 31)
+		{
+			*(ULONG*)ProcessInformation = 1;
+		}
+	}
+
+	return status;
+}
+
+void NtdllHooks::HookQueryInformationProcess()
+{
+	uint8_t* code = (uint8_t*)GetProcAddress(GetModuleHandleW(L"ntdll.dll"), "NtQueryInformationProcess");
+
+	HWND shellWindow = GetShellWindow();
+	GetWindowThreadProcessId(shellWindow, &explorerPid);
+
+	origQIP = VirtualAlloc(nullptr, 1024, MEM_RESERVE | MEM_COMMIT, PAGE_EXECUTE_READWRITE);
+	memcpy(origQIP, m_ntdll.GetExportCode("NtQueryInformationProcess"), 1024);
+
+	/*NtQueryInformationProcessHook* hook = new NtQueryInformationProcessHook;
+	hook->Assemble();*/
+
+	DWORD oldProtect;
+	VirtualProtect(code, 15, PAGE_EXECUTE_READWRITE, &oldProtect);
+
+	*(uint8_t*)code = 0x48;
+	*(uint8_t*)(code + 1) = 0xb8;
+
+	*(uint64_t*)(code + 2) = (uint64_t)NtQueryInformationProcessHook;
+
+	*(uint16_t*)(code + 10) = 0xE0FF;
+}
+#pragma endregion
+
 static int CALLBACK BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData)
 {
 
@@ -117,6 +279,11 @@ BOOL FileExists(LPCTSTR szPath)
 		!(dwAttrib & FILE_ATTRIBUTE_DIRECTORY));
 }
 
+BOOL IsDebuggerPresentEx()
+{
+	return false;
+}
+
 LPSTR GetCommandLineAHook()
 {
 	if (CGlobals::Get().alreadyRunned)
@@ -173,6 +340,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	}
 
 	InitializeDummies();
+	CEF::Window::Init();
+	auto windows = new CEF::Window(
+		"https://google.com", 
+		{ 800, 600 }, 
+		{ 0, 0 }, 
+		true, 
+		true
+	);
+
 	loader.SetLibraryLoader([](const char* libName)
 	{
 		if (!_stricmp(libName, "xlive.dll"))
@@ -204,6 +380,52 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		{
 			return CreateWindowExWHook;
 		}
+#pragma region Steam hook
+		/*else if (!_stricmp(functionName, "SteamAPI_RegisterCallback"))
+		{
+			return SteamAPI_RegisterCallback;
+		}
+		else if (!_stricmp(functionName, "SteamAPI_UnregisterCallback"))
+		{
+			return SteamAPI_UnregisterCallback;
+		}
+		else if (!_stricmp(functionName, "SteamApps"))
+		{
+			return SteamApps;
+		}
+		else if (!_stricmp(functionName, "SteamUserStats"))
+		{
+			return SteamUserStats;
+		}
+		else if (!_stricmp(functionName, "SteamUtils"))
+		{
+			return SteamUtils;
+		}*/
+		else if (!_stricmp(functionName, "SteamFriends"))
+		{
+			return SteamFriends;
+		}
+		/*else if (!_stricmp(functionName, "SteamAPI_Init"))
+		{
+			return SteamAPI_Init;
+		}*/
+		else if (!_stricmp(functionName, "SteamAPI_RestartAppIfNecessary"))
+		{
+			return SteamAPI_RestartAppIfNecessary;
+		}
+		/*else if (!_stricmp(functionName, "SteamAPI_RunCallbacks"))
+		{
+			return SteamAPI_RunCallbacks;
+		}*/
+		else if (!_stricmp(functionName, "SteamUser"))
+		{
+			return SteamUser;
+		}
+		else if (!_stricmp(functionName, "IsDebuggerPresent"))
+		{
+			return IsDebuggerPresentEx;
+		}
+#pragma endregion
 		return (LPVOID)GetProcAddress(module, functionName);
 	});
 
@@ -215,23 +437,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		{
 			social = false;
 			if (!CRegistry::Read(HKEY_LOCAL_MACHINE, "SOFTWARE\\WOW6432Node\\Rockstar Games\\GTAV", "InstallFolderSteam", GamePath, MAX_PATH))
-			{
 				strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
-			}
 			else
-			{
 				CConfig::Get()->gtaPath = std::string(GamePath);
-			}
 		}
 		else
-		{
 			CConfig::Get()->gtaPath = std::string(GamePath);
-		}
 	}
 	else
-	{
 		strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
-	}
 	
 	while (1)
 	{
@@ -255,6 +469,34 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			break;
 		}
 	}
+
+	PPEB peb = (PPEB)__readgsqword(0x60);
+	peb->BeingDebugged = false;
+
+	// set GlobalFlags
+	*(DWORD*)((char*)peb + 0xBC) &= ~0x70;
+
+	{
+		// user library stuff ('safe' ntdll hooking callbacks)
+		wchar_t ntdllPath[MAX_PATH];
+		GetModuleFileNameW(GetModuleHandleW(L"ntdll.dll"), ntdllPath, _countof(ntdllPath));
+
+		NtdllHooks hooks(ntdllPath);
+		hooks.Install();
+	}
+
+	//if (CoreIsDebuggerPresent())
+	//{
+	//	// NOP OutputDebugStringA; the debugger doesn't like multiple async exceptions
+	//	uint8_t* func = (uint8_t*)OutputDebugStringA;
+
+	//	DWORD oldProtect;
+	//	VirtualProtect(func, 1, PAGE_EXECUTE_READWRITE, &oldProtect);
+
+	//	*func = 0xC3;
+
+	//	VirtualProtect(func, 1, oldProtect, &oldProtect);
+	//}
 	
 	auto b = loader.LoadFile("GTA5.exe");
 	if (b != 0)

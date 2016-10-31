@@ -36,6 +36,10 @@
 #include <cstdarg> 
 #include <cstddef>
 #include <cstring>
+#include "FakeSteam.h"
+#include "UserLibrary.h"
+#include <Winternl.h>
+#include "jitasm.h"
 #pragma endregion
 
 #pragma region D3D Stuff
@@ -116,6 +120,25 @@ using namespace RakNet;
 #include "Network\CNetworkUI.h"
 #include "Network\Functions.h"
 #include "Network\CRPCPlugin.h"
+#pragma endregion
+
+#pragma region CEF
+#include <include/cef_browser.h>
+#include <include/cef_command_line.h>
+#include <include/views/cef_browser_view.h>
+#include <include/views/cef_window.h>
+#include <include/wrapper/cef_helpers.h>
+#include <include/cef_parser.h>
+#include <include/cef_task.h>
+#include <include/cef_app.h>
+#include <include/cef_client.h>
+#include <include/cef_render_handler.h>
+#include <include/cef_life_span_handler.h>
+#include <include/internal/cef_types_wrappers.h>
+#include <include/internal/cef_win.h>
+#include <include/internal/cef_types.h>
+#include <include/cef_origin_whitelist.h>
+#include "Window.h"
 #pragma endregion
 
 #include "Registry.h"

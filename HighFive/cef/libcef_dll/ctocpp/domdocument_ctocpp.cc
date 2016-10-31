@@ -248,7 +248,7 @@ template<> cef_domdocument_t* CefCToCpp<CefDOMDocumentCToCpp, CefDOMDocument,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefDOMDocumentCToCpp, CefDOMDocument,
     cef_domdocument_t>::DebugObjCt = 0;
 #endif
