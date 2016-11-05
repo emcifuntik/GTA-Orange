@@ -83,6 +83,19 @@ bool SResource::OnTick()
 	return true;
 }
 
+bool SResource::OnKeyStateChanged(long playerid, int keycode, bool isUp)
+{
+	lua_getglobal(m_lua, "__OnKeyStateChanged");
+
+	lua_pushinteger(m_lua, playerid);
+	lua_pushinteger(m_lua, keycode);
+	lua_pushboolean(m_lua, isUp);
+
+	if (lua_pcall(m_lua, 3, 0, 0)) API::Get().Print("Error in OnKeyStateChanged callback");
+
+	return true;
+}
+
 SResource::~SResource()
 {
 }

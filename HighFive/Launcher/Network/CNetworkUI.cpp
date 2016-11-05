@@ -39,7 +39,7 @@ CNetworkUI::~CNetworkUI()
 
 }
 
-void CChat::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore, BOOL isUpNow)
+void CNetworkUI::ScriptKeyboardMessage(DWORD key, WORD repeats, BYTE scanCode, BOOL isExtended, BOOL isWithAlt, BOOL wasDownBefore, BOOL isUpNow)
 {
 	RakNet::BitStream bsOut;
 

@@ -13,6 +13,7 @@ std::vector<OnPlayerUpdate_> Plugin::playerUpdates;
 std::vector<OnPlayerCommand_> Plugin::playerCommands;
 std::vector<OnPlayerText_> Plugin::playerTexts;
 std::vector<OnTick_> Plugin::ticks;
+std::vector<OnKeyStateChanged_> Plugin::keyEvents;
 
 const std::string GetRunningExecutableFolder() {
 

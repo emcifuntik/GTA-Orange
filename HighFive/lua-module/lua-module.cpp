@@ -77,5 +77,14 @@ extern "C"
 
 		return true;
 	}
+
+	__declspec(dllexport) bool OnKeyStateChanged(long playerid, int keycode, bool isUp)
+	{
+		for each (SResource *_res in Res)
+		{
+			_res->OnKeyStateChanged(playerid, keycode, isUp);
+		}
+		return true;
+	}
 }
 
