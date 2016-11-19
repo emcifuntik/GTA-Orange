@@ -5,6 +5,7 @@
 #include <sys/stat.h>
 
 struct stat info;
+char* Plugin::HTTPResponse = NULL;
 std::map<std::string, OnResourceLoad_> Plugin::resourceTypes;
 std::vector<OnPlayerConnect_> Plugin::playerConnects;
 std::vector<OnServerCommand_> Plugin::serverCommands;
@@ -13,6 +14,7 @@ std::vector<OnPlayerUpdate_> Plugin::playerUpdates;
 std::vector<OnPlayerCommand_> Plugin::playerCommands;
 std::vector<OnPlayerText_> Plugin::playerTexts;
 std::vector<OnTick_> Plugin::ticks;
+std::vector<OnHTTPRequest_> Plugin::requests;
 
 const std::string GetRunningExecutableFolder() {
 
@@ -75,6 +77,7 @@ void Plugin::LoadPlugins()
 						OnPlayerCommand_ onPlayerCommand = (OnPlayerCommand_)			GetProcAddress(module, "OnPlayerCommand");
 						OnPlayerText_ onPlayerText = (OnPlayerText_)					GetProcAddress(module, "OnPlayerText");
 						OnTick_ onTick = (OnTick_)										GetProcAddress(module, "OnTick");
+						OnHTTPRequest_ onRequest = (OnHTTPRequest_)						GetProcAddress(module, "OnHTTPRequest");
 
 						if (onPlayerConnect) playerConnects.push_back(onPlayerConnect);
 						if (onServerCommand) serverCommands.push_back(onServerCommand);
@@ -83,6 +86,7 @@ void Plugin::LoadPlugins()
 						if (onPlayerCommand) playerCommands.push_back(onPlayerCommand);
 						if (onPlayerText) playerTexts.push_back(onPlayerText);
 						if (onTick) ticks.push_back(onTick);
+						if (onRequest) requests.push_back(onRequest);
 
 						OnResourceTypeRegister_ onResourceTypeRegister = (OnResourceTypeRegister_)GetProcAddress(module, "OnResourceTypeRegister");
 						OnResourceLoad_ loadResource = (OnResourceLoad_)GetProcAddress(module, "OnResourceLoad");
@@ -96,19 +100,21 @@ void Plugin::LoadPlugins()
 		
 		for each(auto resource in CConfig::Get()->Resources)
 		{
-			tinyxml2::XMLDocument doc;
 			char path[128];
-			sprintf_s(path, 128, "resources\\%s\\resource.xml", resource.c_str());
-			if (doc.LoadFile(path) != tinyxml2::XML_SUCCESS) log << "Error loading resource.xml for resource " << resource << std::endl;
-			else {
-				tinyxml2::XMLElement * root = doc.FirstChildElement("resource");
-				tinyxml2::XMLElement * typeNode = root->FirstChildElement("type");
+			sprintf_s(path, 128, "resources\\%s\\resource.yml", resource.c_str());
 
-				if (resourceTypes[typeNode->GetText()]) {
-					resourceTypes[typeNode->GetText()](resource.c_str());
-				}
-				else log << "Unknown resource type: " << typeNode->GetText() << std::endl;
-			}
+			std::ifstream fin(path);
+			YAML::Parser parser(fin);
+
+			YAML::Node doc;
+			parser.GetNextDocument(doc);
+			
+			std::string type;
+			doc["type"] >> type;
+
+			if (resourceTypes[type]) {
+				resourceTypes[type](resource.c_str());
+			} else log << "Unknown resource type: " << type << std::endl;
 		}
 	}
 }
@@ -167,4 +173,17 @@ bool Plugin::PlayerText(long playerid, const char * text)
 		if (!func(playerid, text))
 			return false;
 	return true;
+}
+
+const char* Plugin::HTTPRequest(const char* method, const char* url, const char* query, std::string body)
+{
+	HTTPResponse = NULL;
+	for each (auto func in requests)
+	{
+		HTTPResponse = func(method, url, query, body);
+		if (HTTPResponse != NULL) {
+			return HTTPResponse;
+		}
+	}
+	return NULL;
 }

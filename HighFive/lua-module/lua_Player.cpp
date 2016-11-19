@@ -30,7 +30,7 @@ int lua_SetPlayerInfoMsg(lua_State *L)
 
 int lua_PlayerExists(lua_State *L)
 {
-	lua_pushboolean(L, !!API::Get().GetPlayerModel(lua_tointeger(L, 1)));
+	lua_pushboolean(L, players[lua_tointeger(L, 1)].exists);
 
 	return 1;
 }

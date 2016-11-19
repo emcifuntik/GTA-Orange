@@ -9,8 +9,11 @@ typedef bool(*OnPlayerText_)(long playerid, const char * text);
 typedef const char*(*OnResourceTypeRegister_)();
 typedef bool(*OnResourceLoad_)(const char* resource);
 typedef bool(*OnTick_)();
+typedef char*(*OnHTTPRequest_)(const char* method, const char* url, const char* query, std::string body);
 
 class Plugin {
+	static char* HTTPResponse;
+
 	static std::map<std::string, OnResourceLoad_> resourceTypes;
 	static std::vector<OnPlayerConnect_> playerConnects;
 	static std::vector<OnServerCommand_> serverCommands;
@@ -19,6 +22,7 @@ class Plugin {
 	static std::vector<OnPlayerCommand_> playerCommands;
 	static std::vector<OnPlayerText_> playerTexts;
 	static std::vector<OnTick_> ticks;
+	static std::vector<OnHTTPRequest_> requests;
 public:
 	static void LoadPlugins();
 	static bool Tick();
@@ -28,4 +32,5 @@ public:
 	static bool PlayerUpdate(long playerid);
 	static bool PlayerCommand(long playerid, const char * command);
 	static bool PlayerText(long playerid, const char * text);
+	static const char * HTTPRequest(const char * method, const char * url, const char * query, std::string body);
 };

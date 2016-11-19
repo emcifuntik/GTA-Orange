@@ -1,5 +1,4 @@
 #include "stdafx.h"
-using namespace tinyxml2;
 
 struct pass
 {
@@ -13,8 +12,12 @@ int main(void)
 	log << "Port: " << color::lred << CConfig::Get()->Port << std::endl;
 	log << "Maximum players: " << color::lred << CConfig::Get()->MaxPlayers << std::endl;
 
-	Plugin::LoadPlugins();
+	Plugin::LoadPlugins();	
 
+	CHTTPServer::Get()->Start(88);
+	CHTTPHandler h_a;
+	CHTTPServer::g_server.addHandler("", h_a);
+	
 	auto netLoop = [=]()
 	{
 		CNetworkConnection::Get()->Start(CConfig::Get()->MaxPlayers, CConfig::Get()->Port);

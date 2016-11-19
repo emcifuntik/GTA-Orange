@@ -84,6 +84,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\HighFive\LUA;$(IncludePath)</IncludePath>
     <LibraryPath>C:\Users\Vincent\Desktop\orange-mp\GTA-Orange\lib;$(LibraryPath)</LibraryPath>
+    <OutDir>$(SolutionDir)..\bin\$(Configuration)\server\modules</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -136,7 +137,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;_USRDLL;LUAMODULE_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>..\LUA;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\LUA;.\mysql;.\mysql\include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -146,6 +147,7 @@
       <Version>
       </Version>
       <AdditionalLibraryDirectories>..\..\lib;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>libmysql.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -153,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="API.h" />
+    <ClInclude Include="luasql.h" />
     <ClInclude Include="lua_Main.h" />
     <ClInclude Include="SResource.h" />
     <ClInclude Include="stdafx.h" />
@@ -173,7 +176,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
       </PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ls_mysql.cpp" />
     <ClCompile Include="lua-module.cpp" />
+    <ClCompile Include="luasql.cpp" />
     <ClCompile Include="lua_Blips.cpp" />
     <ClCompile Include="lua_Player.cpp" />
     <ClCompile Include="lua_Main.cpp" />

@@ -5,22 +5,23 @@ CConfig* CConfig::singleInstance = nullptr;
 
 CConfig::CConfig()
 {
-	tinyxml2::XMLDocument doc;
-	doc.LoadFile("config.xml");
-	tinyxml2::XMLElement * root = doc.FirstChildElement("config");
-	tinyxml2::XMLElement * serverNode = root->FirstChildElement("server");
-	Hostname = serverNode->GetText();
-	Port = serverNode->IntAttribute("port");
-	MaxPlayers = serverNode->IntAttribute("maxplayers");
+	std::ifstream fin("config.yml");
+	YAML::Parser parser(fin);
 
-	tinyxml2::XMLElement * resources = root->FirstChildElement("resources");
-	for (tinyxml2::XMLElement* child = resources->FirstChildElement("resource"); child != NULL; child = child->NextSiblingElement())
-	{
-		Resources.push_back(child->GetText());
+	YAML::Node doc;
+	parser.GetNextDocument(doc);
+
+	doc["name"] >> Hostname;
+	doc["port"] >> Port;
+	doc["players"] >> MaxPlayers;
+
+	const YAML::Node& resources = doc["resources"];
+
+	for (unsigned i = 0; i < resources.size(); i++) {
+		std::string res;;
+		resources[i] >> res;
+		Resources.push_back(res);
 	}
-
-	tinyxml2::XMLElement * logtimeformat = root->FirstChildElement("logtime");
-	LogTimeFormat = logtimeformat->GetText();
 }
 
 CConfig* CConfig::Get()

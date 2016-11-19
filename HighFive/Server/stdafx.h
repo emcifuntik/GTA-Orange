@@ -21,9 +21,10 @@
 #include <thread>
 #include <iomanip>
 #pragma comment(lib, "winmm.lib")
+#pragma comment(lib, "libyaml-cppmd.lib")
 
-// XML
-#include <tinyxml2.h>
+// YAML
+#include "yaml-cpp\yaml.h"
 
 // Config
 #include "CConfig.h"
@@ -69,3 +70,7 @@ using namespace RakNet;
 #include "CNetworkPlayer.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkBlip.h"
+
+//Http Server
+#include "CivetServer.h"
+#include "CHTTPServer.h"

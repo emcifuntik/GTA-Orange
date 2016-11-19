@@ -37,6 +37,9 @@
     <ClInclude Include="CNetworkBlip.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="CHTTPServer.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -67,6 +70,15 @@
       <Filter>Source Files\Plugins</Filter>
     </ClCompile>
     <ClCompile Include="CNetworkBlip.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="CHTTPServer.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Civet\civetweb.c">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Civet\CivetServer.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
   </ItemGroup>

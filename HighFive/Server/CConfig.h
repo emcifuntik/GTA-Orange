@@ -10,8 +10,6 @@ public:
 	std::vector<std::string> Resources;
 	unsigned short Port;
 	unsigned short MaxPlayers;
-	//std::vector<std::string> Scripts;
-	std::string LogTimeFormat;
 	~CConfig();
 };
 
