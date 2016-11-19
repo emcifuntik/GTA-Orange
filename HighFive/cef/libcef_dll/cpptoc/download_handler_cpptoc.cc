@@ -102,7 +102,7 @@ template<> CefRefPtr<CefDownloadHandler> CefCppToC<CefDownloadHandlerCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefDownloadHandlerCppToC,
     CefDownloadHandler, cef_download_handler_t>::DebugObjCt = 0;
 #endif

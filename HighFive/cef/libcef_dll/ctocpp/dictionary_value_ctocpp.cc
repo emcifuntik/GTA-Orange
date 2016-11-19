@@ -634,7 +634,7 @@ template<> cef_dictionary_value_t* CefCToCpp<CefDictionaryValueCToCpp,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefDictionaryValueCToCpp,
     CefDictionaryValue, cef_dictionary_value_t>::DebugObjCt = 0;
 #endif

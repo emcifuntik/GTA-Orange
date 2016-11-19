@@ -52,7 +52,7 @@ template<> cef_scheme_registrar_t* CefCToCpp<CefSchemeRegistrarCToCpp,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefSchemeRegistrarCToCpp,
     CefSchemeRegistrar, cef_scheme_registrar_t>::DebugObjCt = 0;
 #endif

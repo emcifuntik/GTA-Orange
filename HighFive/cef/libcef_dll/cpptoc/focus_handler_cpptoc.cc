@@ -92,7 +92,7 @@ template<> CefRefPtr<CefFocusHandler> CefCppToC<CefFocusHandlerCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefFocusHandlerCppToC,
     CefFocusHandler, cef_focus_handler_t>::DebugObjCt = 0;
 #endif

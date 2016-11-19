@@ -109,7 +109,7 @@ char* SResource::OnHTTPRequest(const char* method, const char* url, const char* 
 	lua_pushstring(m_lua, url);
 	lua_pushstring(m_lua, query);
 	lua_pushstring(m_lua, body);
-	
+
 	if (lua_pcall(m_lua, 4, 1, 0)) API::Get().Print("Error in OnHTTPRequest callback");
 	if (lua_isnil(m_lua, -1)) {
 		lua_pop(m_lua, 1);
@@ -120,6 +120,19 @@ char* SResource::OnHTTPRequest(const char* method, const char* url, const char* 
 	lua_pop(m_lua, 1);
 
 	return res;
+}
+
+bool SResource::OnKeyStateChanged(long playerid, int keycode, bool isUp)
+{
+	lua_getglobal(m_lua, "__OnKeyStateChanged");
+
+	lua_pushinteger(m_lua, playerid);
+	lua_pushinteger(m_lua, keycode);
+	lua_pushboolean(m_lua, isUp);
+
+	if (lua_pcall(m_lua, 3, 0, 0)) API::Get().Print("Error in OnKeyStateChanged callback");
+
+	return true;
 }
 
 SResource::~SResource()

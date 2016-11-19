@@ -234,7 +234,7 @@ template<> cef_v8context_t* CefCToCpp<CefV8ContextCToCpp, CefV8Context,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefV8ContextCToCpp, CefV8Context,
     cef_v8context_t>::DebugObjCt = 0;
 #endif

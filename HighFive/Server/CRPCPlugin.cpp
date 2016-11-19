@@ -5,6 +5,8 @@ CRPCPlugin* CRPCPlugin::singleInstance = nullptr;
 CRPCPlugin::CRPCPlugin()
 {
 	CNetworkConnection::Get()->server->AttachPlugin(this);
+
+	RegisterSlot("KeyEvent", Plugin::KeyEvent, 0);
 }
 
 CRPCPlugin *CRPCPlugin::Get()

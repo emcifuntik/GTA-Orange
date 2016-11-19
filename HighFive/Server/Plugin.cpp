@@ -15,6 +15,7 @@ std::vector<OnPlayerCommand_> Plugin::playerCommands;
 std::vector<OnPlayerText_> Plugin::playerTexts;
 std::vector<OnTick_> Plugin::ticks;
 std::vector<OnHTTPRequest_> Plugin::requests;
+std::vector<OnKeyStateChanged_> Plugin::keyEvents;
 
 const std::string GetRunningExecutableFolder() {
 
@@ -78,6 +79,7 @@ void Plugin::LoadPlugins()
 						OnPlayerText_ onPlayerText = (OnPlayerText_)					GetProcAddress(module, "OnPlayerText");
 						OnTick_ onTick = (OnTick_)										GetProcAddress(module, "OnTick");
 						OnHTTPRequest_ onRequest = (OnHTTPRequest_)						GetProcAddress(module, "OnHTTPRequest");
+						OnKeyStateChanged_ onKeyStateChanged = (OnKeyStateChanged_)		GetProcAddress(module, "OnKeyStateChanged");
 
 						if (onPlayerConnect) playerConnects.push_back(onPlayerConnect);
 						if (onServerCommand) serverCommands.push_back(onServerCommand);
@@ -87,6 +89,7 @@ void Plugin::LoadPlugins()
 						if (onPlayerText) playerTexts.push_back(onPlayerText);
 						if (onTick) ticks.push_back(onTick);
 						if (onRequest) requests.push_back(onRequest);
+						if (onKeyStateChanged) keyEvents.push_back(onKeyStateChanged);
 
 						OnResourceTypeRegister_ onResourceTypeRegister = (OnResourceTypeRegister_)GetProcAddress(module, "OnResourceTypeRegister");
 						OnResourceLoad_ loadResource = (OnResourceLoad_)GetProcAddress(module, "OnResourceLoad");
@@ -186,4 +189,16 @@ const char* Plugin::HTTPRequest(const char* method, const char* url, const char*
 		}
 	}
 	return NULL;
+}
+
+void Plugin::KeyEvent(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+{
+	int keycode;
+	bool keyUp;
+
+	bitStream->Read(keycode);
+	bitStream->Read(keyUp);
+
+	for each (auto func in keyEvents)
+		func(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), keycode, keyUp);
 }

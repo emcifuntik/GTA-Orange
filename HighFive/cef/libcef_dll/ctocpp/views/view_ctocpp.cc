@@ -720,7 +720,7 @@ template<> cef_view_t* CefCToCpp<CefViewCToCpp, CefView,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefViewCToCpp, CefView,
     cef_view_t>::DebugObjCt = 0;
 #endif

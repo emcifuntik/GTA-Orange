@@ -78,7 +78,7 @@ template<> CefRefPtr<CefDialogHandler> CefCppToC<CefDialogHandlerCppToC,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefDialogHandlerCppToC,
     CefDialogHandler, cef_dialog_handler_t>::DebugObjCt = 0;
 #endif

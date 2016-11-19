@@ -45,7 +45,7 @@ template<> CefRefPtr<CefCompletionCallback> CefCppToC<CefCompletionCallbackCppTo
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefCompletionCallbackCppToC,
     CefCompletionCallback, cef_completion_callback_t>::DebugObjCt = 0;
 #endif

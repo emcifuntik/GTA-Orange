@@ -61,7 +61,7 @@ template<> cef_download_item_callback_t* CefCToCpp<CefDownloadItemCallbackCToCpp
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefDownloadItemCallbackCToCpp,
     CefDownloadItemCallback, cef_download_item_callback_t>::DebugObjCt = 0;
 #endif

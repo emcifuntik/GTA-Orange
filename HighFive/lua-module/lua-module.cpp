@@ -71,8 +71,12 @@ extern "C"
 
 	__declspec(dllexport) bool OnPlayerText(long playerid, const char * text)
 	{
-
 		return true;
+	}
+
+	__declspec(dllexport) bool OnKeyStateChanged(long playerid, int keycode, bool isUp)
+	{
+		return SResource::Get()->OnKeyStateChanged(playerid, keycode, isUp);
 	}
 }
 

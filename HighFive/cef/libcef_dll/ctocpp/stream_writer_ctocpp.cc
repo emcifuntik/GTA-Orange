@@ -146,7 +146,7 @@ template<> cef_stream_writer_t* CefCToCpp<CefStreamWriterCToCpp,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCToCpp<CefStreamWriterCToCpp,
     CefStreamWriter, cef_stream_writer_t>::DebugObjCt = 0;
 #endif

@@ -59,7 +59,7 @@ template<> CefRefPtr<CefNavigationEntryVisitor> CefCppToC<CefNavigationEntryVisi
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefNavigationEntryVisitorCppToC,
     CefNavigationEntryVisitor, cef_navigation_entry_visitor_t>::DebugObjCt =
     0;

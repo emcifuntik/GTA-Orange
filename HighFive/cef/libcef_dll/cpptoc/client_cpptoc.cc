@@ -313,7 +313,7 @@ template<> CefRefPtr<CefClient> CefCppToC<CefClientCppToC, CefClient,
   return NULL;
 }
 
-#if DCHECK_IS_ON()
+#ifndef NDEBUG
 template<> base::AtomicRefCount CefCppToC<CefClientCppToC, CefClient,
     cef_client_t>::DebugObjCt = 0;
 #endif
