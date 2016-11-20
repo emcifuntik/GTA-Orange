@@ -36,6 +36,7 @@ SResource::SResource()
 bool SResource::Init()
 {
 	m_lua = luaL_newstate();
+	luaJIT_setmode(m_lua, 0, LUAJIT_MODE_ENGINE | true);
 
 	luaL_openlibs(m_lua);
 
