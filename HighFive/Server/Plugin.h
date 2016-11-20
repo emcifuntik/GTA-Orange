@@ -34,6 +34,7 @@ public:
 	static bool PlayerUpdate(long playerid);
 	static bool PlayerCommand(long playerid, const char * command);
 	static bool PlayerText(long playerid, const char * text);
+	static const char * OnHTTPRequest(const char * method, const char * url, const char * query, std::string body);
 	static const char * HTTPRequest(const char * method, const char * url, const char * query, std::string body);
 	static void KeyEvent(RakNet::BitStream * bitStream, RakNet::Packet * packet);
 };

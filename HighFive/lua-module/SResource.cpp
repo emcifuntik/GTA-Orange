@@ -2,6 +2,7 @@
 
 lua_State *m_lua;
 std::function<void()> tick;
+std::function<char*(const char* method, const char* url, const char* query, const char* body)> http;
 SResource *SResource::singleInstance = nullptr;
 
 static const struct luaL_Reg gfunclib[] = {
@@ -16,6 +17,7 @@ static const struct luaL_Reg mfunclib[] = {
 	{ "PlayerExists", lua_PlayerExists },
 	{ "SetPlayerInfoMsg", lua_SetPlayerInfoMsg },
 	{ "OnTick", lua_tick },
+	{ "OnHTTPReq", lua_HTTPReq },
 	{ "SQLEnv", luaopen_luasql_mysql },
 	{ NULL, NULL }
 };
@@ -89,37 +91,25 @@ bool SResource::OnPlayerConnect(long playerid)
 	return true;
 }
 
+char* SResource::OnHTTPRequest(const char* method, const char* url, const char* query, const char* body)
+{
+	return http(method, url, query, body);
+}
+
 bool SResource::OnTick()
 {
 	tick();
-
 	return true;
+}
+
+void SResource::SetHTTP(const std::function<char*(const char* method, const char* url, const char* query, const char* body)>& t)
+{
+	http = t;
 }
 
 void SResource::SetTick(const std::function<void()>& t)
 {
 	tick = t;
-}
-
-char* SResource::OnHTTPRequest(const char* method, const char* url, const char* query, const char* body)
-{
-	lua_getglobal(m_lua, "__OnHTTPRequest");
-
-	lua_pushstring(m_lua, method);
-	lua_pushstring(m_lua, url);
-	lua_pushstring(m_lua, query);
-	lua_pushstring(m_lua, body);
-
-	if (lua_pcall(m_lua, 4, 1, 0)) API::Get().Print("Error in OnHTTPRequest callback");
-	if (lua_isnil(m_lua, -1)) {
-		lua_pop(m_lua, 1);
-		return NULL;
-	}
-
-	char* res = _strdup(lua_tostring(m_lua, -1));
-	lua_pop(m_lua, 1);
-
-	return res;
 }
 
 bool SResource::OnKeyStateChanged(long playerid, int keycode, bool isUp)

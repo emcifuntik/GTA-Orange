@@ -10,7 +10,7 @@ public:
 		mg_printf(conn,
 			"HTTP/1.1 200 OK\r\nContent-Type: "
 			"text/html\r\nConnection: close\r\n\r\n");
-		const char* res = Plugin::HTTPRequest("GET", req_info->request_uri, req_info->query_string ? req_info->query_string : "", "");
+		const char* res = Plugin::OnHTTPRequest("GET", req_info->request_uri, req_info->query_string ? req_info->query_string : "", "");
 		if (res != NULL) mg_printf(conn, res);
 		return true;
 	}
@@ -29,7 +29,7 @@ public:
 		mg_printf(conn,
 			"HTTP/1.1 200 OK\r\nContent-Type: "
 			"text/html\r\nConnection: close\r\n\r\n");
-		const char* res = Plugin::HTTPRequest("POST", req_info->request_uri, req_info->query_string ? req_info->query_string : "", data);
+		const char* res = Plugin::OnHTTPRequest("POST", req_info->request_uri, req_info->query_string ? req_info->query_string : "", data);
 		if(res != NULL) mg_printf(conn, res);
 		return true;
 	}

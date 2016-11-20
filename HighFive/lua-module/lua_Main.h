@@ -3,6 +3,7 @@
 //Main
 int lua_print(lua_State *L);
 int lua_tick(lua_State *L);
+int lua_HTTPReq(lua_State * L);
 
 //Player
 int lua_PlayerExists(lua_State *L);

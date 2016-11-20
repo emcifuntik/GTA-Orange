@@ -17,6 +17,16 @@ std::vector<OnTick_> Plugin::ticks;
 std::vector<OnHTTPRequest_> Plugin::requests;
 std::vector<OnKeyStateChanged_> Plugin::keyEvents;
 
+struct HTTPReq {
+	const char* method;
+	const char* url;
+	const char* query;
+	std::string body;
+	const char* result = NULL;
+};
+std::vector<HTTPReq*> reqquery;
+bool queryblocked = false;
+
 const std::string GetRunningExecutableFolder() {
 
 	char fileName[MAX_PATH];
@@ -110,20 +120,28 @@ void Plugin::LoadPlugins()
 			YAML::Parser parser(fin);
 
 			YAML::Node doc;
-			parser.GetNextDocument(doc);
-			
-			std::string type;
-			doc["type"] >> type;
+			if (!parser.GetNextDocument(doc)) {
+				log << "Cant find resource.yml for resource " << resource << std::endl;
+			}
+			else {
+				std::string type;
+				doc["type"] >> type;
 
-			if (resourceTypes[type]) {
-				resourceTypes[type](resource.c_str());
-			} else log << "Unknown resource type: " << type << std::endl;
+				if (resourceTypes[type]) {
+					resourceTypes[type](resource.c_str());
+				}
+				else log << "Unknown resource type: " << type << std::endl;
+			}
 		}
 	}
 }
 
 bool Plugin::Tick()
 {
+	for each (HTTPReq *req in reqquery) {
+		req->result = HTTPRequest(req->method, req->url, req->query, req->body);
+	}
+	reqquery.clear();
 	for each (auto func in ticks)
 		if (!func())
 			return false;
@@ -176,6 +194,21 @@ bool Plugin::PlayerText(long playerid, const char * text)
 		if (!func(playerid, text))
 			return false;
 	return true;
+}
+
+const char* Plugin::OnHTTPRequest(const char* method, const char* url, const char* query, std::string body)
+{
+	HTTPReq req;
+	req.method = method;
+	req.url = url;
+	req.query = query;
+	req.body = body;
+	while (queryblocked) RakSleep(1);
+	reqquery.push_back(&req);
+	while (req.result == NULL) {
+		RakSleep(1);
+	}
+	return req.result;
 }
 
 const char* Plugin::HTTPRequest(const char* method, const char* url, const char* query, std::string body)
