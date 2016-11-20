@@ -9,18 +9,31 @@ CConfig::CConfig()
 	YAML::Parser parser(fin);
 
 	YAML::Node doc;
-	parser.GetNextDocument(doc);
+	if (!parser.GetNextDocument(doc)) {
+		log << "Can`t load config.yml" << std::endl;
+		Hostname.append("Unnamed server");
+		Port = 7788;
+		MaxPlayers = 128;
+	}
+	else {
+		if(!doc.FindValue("name")) Hostname.append("Unnamed server");
+		else doc["name"] >> Hostname;
+		if (!doc.FindValue("port")) Port = 7788;
+		else doc["port"] >> Port;
+		if (!doc.FindValue("players")) MaxPlayers = 128;
+		else doc["players"] >> MaxPlayers;
 
-	doc["name"] >> Hostname;
-	doc["port"] >> Port;
-	doc["players"] >> MaxPlayers;
+		const YAML::Node& resources = doc["resources"];
 
-	const YAML::Node& resources = doc["resources"];
-
-	for (unsigned i = 0; i < resources.size(); i++) {
-		std::string res;;
-		resources[i] >> res;
-		Resources.push_back(res);
+		for (unsigned i = 0; i < resources.size(); i++) {
+			std::string res;;
+			resources[i] >> res;
+			Resources.push_back(res);
+		}
+	}
+	if (MaxPlayers > 256) {
+		log << "Only 256 players supported, set players to 256" << std::endl;
+		MaxPlayers = 256;
 	}
 }
 

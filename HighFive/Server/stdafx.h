@@ -21,7 +21,11 @@
 #include <thread>
 #include <iomanip>
 #pragma comment(lib, "winmm.lib")
-#pragma comment(lib, "libyaml-cppmd.lib")
+#ifdef _DEBUG
+#pragma comment(lib, "libyaml-cppmd_Debug_x64.lib")
+#else
+#pragma comment(lib, "libyaml-cppmd_Release_x64.lib")
+#endif
 
 // YAML
 #include "yaml-cpp\yaml.h"
