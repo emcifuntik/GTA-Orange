@@ -1060,7 +1060,7 @@ class CEventBeforeLoaded :
 
 		CGlobals::Get().hudDisabled = (bool*)CMemory::Find("44 88 25 ? ? ? ? 40 88 3D ? ? ? ? 48 8D 05 ? ? ? ? BB ? ? ? ?").getOffset();
 
-		CMemory::Find("83 3D ? ? ? ? 01 75 5B 48 8D 15 ? ? ? ?").nop(100);
+		//CMemory::Find("83 3D ? ? ? ? 01 75 5B 48 8D 15 ? ? ? ?").nop(100);
 		return true;
 	}
 } _ev;

@@ -243,9 +243,6 @@
     <ClCompile Include="UserLibrary.cpp">
       <Filter>Launcher\Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
-      <Filter>Launcher\Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\PELoader.h">
@@ -432,9 +429,6 @@
       <Filter>Launcher\Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UserLibrary.h">
-      <Filter>Launcher\Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Window.h">
       <Filter>Launcher\Header Files</Filter>
     </ClInclude>
   </ItemGroup>

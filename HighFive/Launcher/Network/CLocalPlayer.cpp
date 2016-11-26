@@ -21,7 +21,7 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 
 	//aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
 
-	rageGlobals::SetPlayerColor(0x33, 0xFF, 0x33, 0xFF);
+	//rageGlobals::SetPlayerColor(0x33, 0xFF, 0x33, 0xFF);
 
 	/*auto addr = CMemory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
 	addr.nop(20);*/

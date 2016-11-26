@@ -16,7 +16,7 @@ void NetworkAction()
 				if (CLocalPlayer::Get()->updateTasks)
 				{
 					CLocalPlayer::Get()->updateTasks ^= 1;
-					//CLocalPlayer::Get()->SendTasks();
+					CLocalPlayer::Get()->SendTasks();
 				}
 			}
 		}

@@ -147,7 +147,6 @@
     <ClCompile Include="UserLibrary.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="ValveHelper.cpp" />
-    <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Shared\Console\CLog.h" />
@@ -212,7 +211,6 @@
     <ClInclude Include="UserLibrary.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="ValveHelper.h" />
-    <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
