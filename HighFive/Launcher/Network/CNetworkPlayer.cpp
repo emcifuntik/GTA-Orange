@@ -355,7 +355,7 @@ void CNetworkPlayer::Interpolate()
 	UpdateTargetPosition();
 	SetMovementVelocity(m_vecMove);
 	PED::SET_PED_ACCURACY(Handle, 100);
-	BuildTasksQueue();
+	//BuildTasksQueue();
 }
 
 void CNetworkPlayer::SetMoveToDirection(CVector3 vecPos, CVector3 vecMove, float iMoveSpeed)

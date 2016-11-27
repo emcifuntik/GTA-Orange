@@ -10,13 +10,19 @@ void Action()
 		{
 			CGlobals::Get().InitializeOnline();
 			ENTITY::SET_ENTITY_COORDS(PLAYER::PLAYER_PED_ID(), 0.f, 0.f, 73.f, true, false, false, false);
-			/*auto model = Utils::Hash("mp_m_freemode_01");
+
+			auto model = Utils::Hash("mp_m_freemode_01");
 			if (STREAMING::IS_MODEL_IN_CDIMAGE(model) && STREAMING::IS_MODEL_VALID(model))
 				STREAMING::REQUEST_MODEL(model);
 			while (!STREAMING::HAS_MODEL_LOADED(model))
 				scriptWait(0);
 			PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
-			STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);*/
+			PED::SET_PED_DEFAULT_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID());
+			STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
+
+			typedef int(*ShowAbilityBar)(bool);
+			((ShowAbilityBar)CMemory::Find("40 53 48 83 EC 30 41 83 C9 FF 8A D9 88 ? ? ? ? ? 8B ? ? ? ? ?")())(false);
+
 			CGlobals::Get().currentcam = 
 		    CAM::CREATE_CAM("DEFAULT_SCRIPTED_CAMERA", false);
 			CAM::SET_CAM_COORD(CGlobals::Get().currentcam, 0.f, 0.f, 100.f);

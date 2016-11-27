@@ -208,14 +208,14 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\$(Configuration)\server\</OutDir>
-    <TargetName>orangemp_win64</TargetName>
+    <TargetName>orange_server</TargetName>
     <IncludePath>$(IncludePath)</IncludePath>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>..\..\bin\$(Configuration)\server\</OutDir>
-    <TargetName>HighFive</TargetName>
+    <TargetName>orange_server</TargetName>
     <IncludePath>$(IncludePath)</IncludePath>
     <IntDir>$(Platform)\$(Configuration)\$(ProjectName)\</IntDir>
   </PropertyGroup>
