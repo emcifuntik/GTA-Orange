@@ -81,6 +81,7 @@ void CLocalPlayer::ChangeModel(Hash model)
 	while (!STREAMING::HAS_MODEL_LOADED(model))
 		scriptWait(0);
 	PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
+	PED::SET_PED_DEFAULT_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID());
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	Handle = PLAYER::PLAYER_PED_ID();
 	typedef int(*ShowAbilityBar)(bool);
