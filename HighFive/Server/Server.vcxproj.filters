@@ -124,4 +124,7 @@
       <Filter>Header Files\Common</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\lua-module-make\Project1.vcxproj" />
+  </ItemGroup>
 </Project>

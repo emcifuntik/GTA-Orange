@@ -80,6 +80,9 @@
   <ItemGroup>
     <ResourceCompile Include="resources.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\lua-module-make\Project1.vcxproj" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{11DAC5C3-DF35-4E52-BCA3-65FE3FC08884}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

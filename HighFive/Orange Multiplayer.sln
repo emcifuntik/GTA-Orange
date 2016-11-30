@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Server", "Server\Server.vcxproj", "{11DAC5C3-DF35-4E52-BCA3-65FE3FC08884}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -26,6 +26,8 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "LUA", "LUA\LUA.vcxproj", "{E27DEB82-20F2-4A07-AEAC-48D8FB118DC6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "CefSubProcess", "CefSubProcess\CefSubProcess.vcxproj", "{BF8F50A2-3794-4D4A-8B03-10783A4AA4B5}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "lua-module-make", "lua-module-make\Project1.vcxproj", "{A5266DE6-73F1-46A1-8121-4B0A33A359CF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -234,6 +236,30 @@ Global
 		{BF8F50A2-3794-4D4A-8B03-10783A4AA4B5}.RelWithDebInfo|ARM.ActiveCfg = Release|x64
 		{BF8F50A2-3794-4D4A-8B03-10783A4AA4B5}.RelWithDebInfo|x64.ActiveCfg = Release|x64
 		{BF8F50A2-3794-4D4A-8B03-10783A4AA4B5}.RelWithDebInfo|x86.ActiveCfg = Release|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Debug|ARM.ActiveCfg = Debug|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Debug|ARM.Build.0 = Debug|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Debug|x64.ActiveCfg = Debug|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Debug|x64.Build.0 = Debug|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Debug|x86.ActiveCfg = Debug|x86
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Debug|x86.Build.0 = Debug|x86
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.MinSizeRel|ARM.ActiveCfg = Release|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.MinSizeRel|ARM.Build.0 = Release|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.MinSizeRel|x64.ActiveCfg = Release|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.MinSizeRel|x64.Build.0 = Release|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.MinSizeRel|x86.ActiveCfg = Release|x86
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.MinSizeRel|x86.Build.0 = Release|x86
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Release|ARM.ActiveCfg = Release|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Release|ARM.Build.0 = Release|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Release|x64.ActiveCfg = Release|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Release|x64.Build.0 = Release|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Release|x86.ActiveCfg = Release|x86
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.Release|x86.Build.0 = Release|x86
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.RelWithDebInfo|ARM.ActiveCfg = Release|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.RelWithDebInfo|ARM.Build.0 = Release|ARM
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.RelWithDebInfo|x64.ActiveCfg = Release|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.RelWithDebInfo|x64.Build.0 = Release|x64
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.RelWithDebInfo|x86.ActiveCfg = Release|x86
+		{A5266DE6-73F1-46A1-8121-4B0A33A359CF}.RelWithDebInfo|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

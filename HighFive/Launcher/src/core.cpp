@@ -340,14 +340,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	}
 
 	InitializeDummies();
-	CEF::Window::Init();
+	/*CEF::Window::Init();
 	auto windows = new CEF::Window(
 		"https://google.com", 
 		{ 800, 600 }, 
 		{ 0, 0 }, 
 		true, 
 		true
-	);
+	);*/
 
 	loader.SetLibraryLoader([](const char* libName)
 	{
@@ -501,6 +501,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	auto b = loader.LoadFile("GTA5.exe");
 	if (b != 0)
 	{
+		MessageBoxA(NULL, "PELoad failed", "PELoad failed", 0);
 		printf_s("PELoad failed");
 		TerminateProcess(GetCurrentProcess(), 0);
 		return 0;

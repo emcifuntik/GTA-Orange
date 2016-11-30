@@ -62,8 +62,8 @@ bool SResource::Start(const char* name)
 	char path[64];
 	char respath[64];
 
-	sprintf_s(path, 64, "resources//%s//", name);
-	sprintf_s(respath, 64, "%smain.lua", path);
+	sprintf(path, "resources//%s//", name);
+	sprintf(respath, "%smain.lua", path);
 
 	std::stringstream ss;
 	ss << "[LUA] Starting resource " << name;

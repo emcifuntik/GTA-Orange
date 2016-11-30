@@ -1,18 +1,18 @@
-// stdafx.h: включаемый файл дл€ стандартных системных включаемых файлов
-// или включаемых файлов дл€ конкретного проекта, которые часто используютс€, но
-// не часто измен€ютс€
-//
 
 #pragma once
 
+#ifdef _WINDOWS
 #include "targetver.h"
 
 #pragma comment (lib,"lua51.lib")
 
-#define WIN32_LEAN_AND_MEAN             // »сключите редко используемые компоненты из заголовков Windows
-// ‘айлы заголовков Windows:
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+
+#endif
+
 #include <string>
+#include <cstring>
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -20,12 +20,20 @@
 #include <functional>
 #include "API.h"
 
+#ifdef _WINDOWS
 #include "mysql.h"
+#else
+#include "orange/mysql/include/mysql.h"
+#endif
 
 #include "SResource.h"
 
 #include "lua.hpp"
 #include "lua_Main.h"
+
+#ifdef __linux__
+char *_strdup(const char *str);
+#endif
 
 static void luaL_setfuncs(lua_State *L, const luaL_Reg *l, int nup)
 {
@@ -70,9 +78,9 @@ public:
 	MValue(double val) { ptr = (long long)&val; type = M_DOUBLE; };
 
 	char* getString() { if (type == M_STRING) return *(char**)ptr; return NULL; };
-	int getInt() { if (type == M_INT) return *(int*)ptr; return NULL; };
-	int getBool() { if (type == M_BOOL) return *(bool*)ptr; return NULL; };
-	double getDouble() { if (type == M_DOUBLE) return *(double*)ptr; return NULL; };
+	int getInt() { if (type == M_INT) return *(int*)ptr; return 0; };
+	int getBool() { if (type == M_BOOL) return *(bool*)ptr; return false; };
+	double getDouble() { if (type == M_DOUBLE) return *(double*)ptr; return 0; };
 
 	bool isString() { return type == M_STRING; };
 	bool isInt() { return type == M_INT; };
@@ -81,7 +89,7 @@ public:
 
 	char type;
 private:
-	__int64 ptr;
+	long long ptr;
 };
 
 extern Player players[256];

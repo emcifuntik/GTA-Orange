@@ -1,6 +1,10 @@
 #pragma once
 #include <string>
-#include "../../Shared/CVector3.h"
+#ifdef _WINDOWS
+#include "CVector3.h"
+#else
+#include "orange/CVector3.h"
+#endif
 
 class APIBase {
 public:
