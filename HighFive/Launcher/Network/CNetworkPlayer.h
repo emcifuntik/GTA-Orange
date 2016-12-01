@@ -68,6 +68,7 @@ public:
 	static CNetworkPlayer * GetByHandler(Entity handler);
 	static void Clear();
 	static void Tick();
+	static void PreRender();
 	static void Render();
 
 	
@@ -110,6 +111,7 @@ public:
 
 	void BuildTasksQueue();
 
+	void MakeTag();
 	void DrawTag();
 
 	~CNetworkPlayer()

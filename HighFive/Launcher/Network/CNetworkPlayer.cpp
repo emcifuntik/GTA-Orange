@@ -1,5 +1,13 @@
 #include "stdafx.h"
 
+struct tag_t {
+	bool bVisible;
+	float health, distance;
+	int x, y;
+};
+
+tag_t tag;
+
 std::vector<CNetworkPlayer *> CNetworkPlayer::PlayersPool;
 Hash CNetworkPlayer::hFutureModel = 0;
 int CNetworkPlayer::ignoreTasks = 0;
@@ -61,6 +69,17 @@ void CNetworkPlayer::Tick()
 		if (player->IsSpawned())
 		{
 			player->Interpolate();
+		}
+	}
+}
+
+void CNetworkPlayer::PreRender()
+{
+	for each (CNetworkPlayer * player in PlayersPool)
+	{
+		if (player->IsSpawned())
+		{
+			player->MakeTag();
 		}
 	}
 }
@@ -439,9 +458,36 @@ void CNetworkPlayer::BuildTasksQueue()
 	}
 }
 
+void CNetworkPlayer::MakeTag()
+{
+	tag.bVisible = false;
+	if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(CLocalPlayer::Get()->GetHandle(), Handle, 17))
+	{
+		tag.bVisible = true;
+		CVector3 *vecCurPos = &pedHandler->Position;
+		tag.distance = ((*vecCurPos) - CWorld::Get()->CPedPtr->Position).Length();
+
+		if (tag.distance > 100.f)
+			return;
+
+		tag.health = ((((m_Health - 100.f) < pedHandler->MaxHealth ? (m_Health - 100.f) : pedHandler->MaxHealth)) / (pedHandler->MaxHealth - 100.f));
+		
+		if (tag.health > 1.f)
+			tag.health = 1.f;
+
+		CVector3 screenPos;
+		CGraphics::Get()->WorldToScreen(CVector3(vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (tag.distance * 0.04f)), screenPos);
+		auto viewPortGame = GTA::CViewportGame::Get();
+		tag.x = screenPos.fX * viewPortGame->Width;
+		tag.y = screenPos.fY * viewPortGame->Height;
+
+		tag.bVisible = true;
+	}
+}
+
 void CNetworkPlayer::DrawTag()
 {
-	if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(CLocalPlayer::Get()->GetHandle(), Handle, 17))
+	/*if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(CLocalPlayer::Get()->GetHandle(), Handle, 17))
 	{
 		CVector3 *vecCurPos = &pedHandler->Position;
 		//float health = (((m_Health < 100.f ? 100.f : m_Health) - 100.f) / (pedHandler->MaxHealth - 100.f));
@@ -464,6 +510,41 @@ void CNetworkPlayer::DrawTag()
 			CGraphics::Get()->Draw3DText(m_Name, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.04f), { 0xFF, 0xFF, 0xFF, 0xFF });
 			CGraphics::Get()->Draw3DProgressBar(bgColor, fgColor, 0.08f, 0.012f, vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (distance * 0.04f), health);
 		}
+	}*/
+	if (tag.bVisible) {
+		const char* _name = m_Name.c_str();
+		ImVec2 textSize = CGlobals::Get().chatFont->CalcTextSizeA(20.f, 1000.f, 1000.f, _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 - 1, tag.y - 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 + 1, tag.y + 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 + 1, tag.y - 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 - 1, tag.y + 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2, tag.y), ImColor(0xFF, 0xFF, 0xFF, 0xFF), _name);
+
+		color_t bgColor, fgColor;
+
+		if (tag.health > 0.2f)
+		{
+			bgColor = { 50, 100, 50, 150 };
+			fgColor = { 100, 200, 100, 150 };
+		}
+		else
+		{
+			bgColor = { 150, 30, 30, 150 };
+			fgColor = { 230, 70, 70, 150 };
+		}
+
+		DWORD colorOut = ImColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha);
+		DWORD colorIn = ImColor(fgColor.red, fgColor.green, fgColor.blue, fgColor.alpha);
+
+		float width = 0.08f * 800;
+		float height = 0.012f * 600;
+
+		float x = tag.x - (width / 2);
+		float y = tag.y + 24;
+
+		ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x - 2, y - 2), ImVec2(x + width + 2, y + height + 2), ImColor(0, 0, 0, 255), 0.f, 15);
+		ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + width, y + height), colorOut, 0.f);
+		ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + (width * tag.health), y + height), colorIn, 0.f);
 	}
 }
 

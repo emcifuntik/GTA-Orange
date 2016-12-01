@@ -13,11 +13,11 @@ void NetworkAction()
 			if (CNetworkConnection::Get()->IsConnectionEstablished())
 			{
 				CLocalPlayer::Get()->SendOnFootData();
-				if (CLocalPlayer::Get()->updateTasks)
+				/*if (CLocalPlayer::Get()->updateTasks)
 				{
 					CLocalPlayer::Get()->updateTasks ^= 1;
 					CLocalPlayer::Get()->SendTasks();
-				}
+				}*/
 			}
 		}
 		if (GetTickCount64() >= (lastSendTick+10))
@@ -28,6 +28,7 @@ void NetworkAction()
 			}
 			lastSendTick = GetTickCount64();
 		}
+		CNetworkPlayer::PreRender();
 		CNetworkUI::Get()->Render();
 		scriptWait(0);
 	}
