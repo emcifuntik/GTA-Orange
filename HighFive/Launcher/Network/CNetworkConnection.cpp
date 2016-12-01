@@ -132,7 +132,7 @@ void CNetworkConnection::Tick()
 			}
 			case ID_SEND_TASKS:
 			{
-				/*RakNet::RakNetGUID playerGUID;
+				RakNet::RakNetGUID playerGUID;
 				bsIn.Read(playerGUID);
 				CNetworkPlayer * player = CNetworkPlayer::GetByGUID(playerGUID);
 				std::vector<TaskPair> ClonedTasks;
@@ -193,7 +193,7 @@ void CNetworkConnection::Tick()
 						for each (auto cloned in ClonedTasks)
 							rage::sysMemAllocator::Get()->free((void*)cloned.task, rage::HEAP_TASK_CLONE);
 					}
-				}*/
+				}
 				break;
 			}
 			case ID_PLAYER_LEFT:

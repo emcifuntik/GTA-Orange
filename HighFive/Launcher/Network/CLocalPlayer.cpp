@@ -21,7 +21,7 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 
 	//aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
 
-	rageGlobals::SetPlayerColor(0x33, 0xFF, 0x33, 0xFF);
+	//rageGlobals::SetPlayerColor(0x33, 0xFF, 0x33, 0xFF);
 
 	/*auto addr = CMemory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
 	addr.nop(20);*/
@@ -81,6 +81,7 @@ void CLocalPlayer::ChangeModel(Hash model)
 	while (!STREAMING::HAS_MODEL_LOADED(model))
 		scriptWait(0);
 	PLAYER::SET_PLAYER_MODEL(PLAYER::PLAYER_ID(), model);
+	PED::SET_PED_DEFAULT_COMPONENT_VARIATION(PLAYER::PLAYER_PED_ID());
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	Handle = PLAYER::PLAYER_PED_ID();
 	typedef int(*ShowAbilityBar)(bool);

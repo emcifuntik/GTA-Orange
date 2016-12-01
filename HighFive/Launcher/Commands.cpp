@@ -46,12 +46,6 @@ int CommandProcessor(std::string command)
 				Vehicle veh = VEHICLE::CREATE_VEHICLE(c, coords.x, coords.y, coords.z, 0.0, 1, 1);
 				VEHICLE::SET_VEHICLE_ON_GROUND_PROPERLY(veh);
 
-				/*if (featureVehWrapInSpawned)
-				{
-					ENTITY::SET_ENTITY_HEADING(veh, ENTITY::GET_ENTITY_HEADING(PLAYER::PLAYER_PED_ID()));
-					PED::SET_PED_INTO_VEHICLE(PLAYER::PLAYER_PED_ID(), veh, -1);
-				}*/
-
 				scriptWait(0);
 				STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(c);
 				ENTITY::SET_VEHICLE_AS_NO_LONGER_NEEDED(&veh);

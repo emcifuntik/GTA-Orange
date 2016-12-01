@@ -122,7 +122,7 @@ using namespace RakNet;
 #include "Network\CRPCPlugin.h"
 #pragma endregion
 
-#pragma region CEF
+/*#pragma region CEF
 #include <include/cef_browser.h>
 #include <include/cef_command_line.h>
 #include <include/views/cef_browser_view.h>
@@ -139,7 +139,7 @@ using namespace RakNet;
 #include <include/internal/cef_types.h>
 #include <include/cef_origin_whitelist.h>
 #include "Window.h"
-#pragma endregion
+#pragma endregion*/
 
 #include "Registry.h"
 #include "Common.h"
