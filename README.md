@@ -1,10 +1,8 @@
 # GTA: Orange
 
-[![GTA:Orange](http://orange-mp.com/forum/images/flatty/logo.png)](http://orange-mp.com/)
+[![GTA:Orange](https://gta-orange.net/forums/uploads/monthly_2016_11/logo.png.d779a594873736d1760f72b681fa7f27.png)](https://gta-orange.net/)
 
 Release Build Structure to run it : (Currently not in place but planned!!!)
-
-Build rules : (READ) Please link libs with #pragma comment (lib ,"libname.lib") instead of within vs settings!
 
 # Build Server on Linux
 
