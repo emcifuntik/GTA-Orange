@@ -37,6 +37,10 @@ void CRPCPlugin::BindFunctions()
 	#pragma region UI functions
 	rpc.RegisterSlot("SetInfoMsg", FPlayer::SetInfoMsg, 0);
 	#pragma endregion
+
+	#pragma region Vehicle functions
+	rpc.RegisterSlot("CreateVehicle", FPlayer::CreateVehicle, 0);
+	#pragma endregion
 }
 
 CRPCPlugin * CRPCPlugin::Get()

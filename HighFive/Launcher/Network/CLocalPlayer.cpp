@@ -6,7 +6,6 @@ void __fastcall eventHook(GTA::CTask* task)
 	CLocalPlayer::Get()->updateTasks = true;
 }
 
-
 CLocalPlayer* CLocalPlayer::Instance = nullptr;
 
 CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
@@ -19,12 +18,16 @@ CLocalPlayer::CLocalPlayer():CPedestrian(PLAYER::PLAYER_PED_ID())
 		GAMEPLAY::DELETE_STUNT_JUMP(i);
 	}
 
-	//aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
+	CEntity::InitOffsetFunc();
+	
+	aimPosition = &CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimPosition;
 
 	//rageGlobals::SetPlayerColor(0x33, 0xFF, 0x33, 0xFF);
 
 	/*auto addr = CMemory::Find("74 25 B9 40 ? ? ? E8 ? ? C4 FF");
 	addr.nop(20);*/
+
+	GiveWeapon(Utils::Hash("weapon_smg"), 9999);
 
 	typedef int(*ShowAbilityBar)(bool);
 	((ShowAbilityBar)CMemory::Find("40 53 48 83 EC 30 41 83 C9 FF 8A D9 88 ? ? ? ? ? 8B ? ? ? ? ?")())(false);
@@ -50,9 +53,32 @@ void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 	onfoot.usArmour = GetArmour();
 	onfoot.ulWeapon = GetCurrentWeapon();
 	onfoot.uAmmo = GetCurrentWeaponAmmo();
-	//onfoot.vecAim = *aimPosition;
+	onfoot.vecAim = *aimPosition;
 	onfoot.bAiming = (CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimState == 2);
 	onfoot.bShooting = PED::IS_PED_SHOOTING(Handle) ? true : false;
+}
+
+void CLocalPlayer::GetVehicleSync(VehicleData& vehsync)
+{
+	CNetworkVehicle *veh = CNetworkVehicle::GetByHandle(PED::GET_VEHICLE_PED_IS_IN(Handle, false));
+	//log << "Steering ang: " << (*CMemory((uintptr_t)_entityAddressFunc(veh->GetHandle())).get<float>(0x8CC)) * (180.0 / PI) << std::endl;
+	if (!veh) {
+		//log << "Cant get vehData.." << std::endl;
+		return;
+	}
+	vehsync.hasDriver = true;
+	vehsync.GUID = veh->m_GUID;
+	CVector3 pos = veh->GetPosition();
+	pos.fZ -= 0.01;
+	vehsync.vecPos = pos;
+	vehsync.vecRot = veh->GetRotation();
+	vehsync.vecMoveSpeed = veh->GetMovementVelocity();
+
+	vehsync.RPM = *CMemory(veh->GetAddress()).get<float>(0x7F4);
+	vehsync.Burnout = VEHICLE::IS_VEHICLE_IN_BURNOUT(veh->GetHandle());
+
+	if (VEHICLE::IS_THIS_MODEL_A_CAR(veh->GetModel()) || VEHICLE::IS_THIS_MODEL_A_BIKE(veh->GetModel()) || VEHICLE::IS_THIS_MODEL_A_QUADBIKE(veh->GetModel()))
+		vehsync.steering = (*CMemory(veh->GetAddress()).get<float>(0x8CC)) * (180.0 / PI);
 }
 
 CLocalPlayer * CLocalPlayer::Get()
@@ -100,10 +126,19 @@ void CLocalPlayer::Connect()
 void CLocalPlayer::SendOnFootData()
 {
 	RakNet::BitStream bsOut;
-	bsOut.Write((MessageID)ID_SEND_PLAYER_DATA);
-	OnFootSyncData data;
-	GetOnFootSync(data);
-	bsOut.Write(data);
+	if (!PED::IS_PED_IN_ANY_VEHICLE(Handle, false))
+	{
+		bsOut.Write((MessageID)ID_SEND_PLAYER_DATA);
+		OnFootSyncData data;
+		GetOnFootSync(data);
+		bsOut.Write(data);
+	}
+	else {
+		bsOut.Write((MessageID)ID_SEND_VEHICLE_DATA);
+		VehicleData data;
+		GetVehicleSync(data);
+		bsOut.Write(data);
+	}
 	CNetworkConnection::Get()->client->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
 }
 

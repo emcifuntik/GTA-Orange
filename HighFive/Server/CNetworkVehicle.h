@@ -2,6 +2,8 @@
 class CNetworkVehicle
 {
 	static std::vector<CNetworkVehicle *> Vehicles;
+
+public:
 	RakNet::RakNetGUID rnGUID;
 	CNetworkPlayer* driver;				// vehicle driver
 	Hash hashModel;						// vehicle model
@@ -12,10 +14,18 @@ class CNetworkVehicle
 	bool bTaxiLights;					// vehicle taxi lights
 	bool bSirenState;					// vehicle siren state
 	float iDirtLevel;					// vehicle dirt level
-public:
+
+	RakNetGUID driverGUID;
+	bool hasDriver;
+
 	static std::vector<CNetworkVehicle *> All();
+	static void SendGlobal(RakNet::Packet * packet);
 	static int Count();
+	static CNetworkVehicle *GetByGUID(RakNetGUID);
+
 	CNetworkVehicle(Hash model, float x, float y, float z, float heading);
+
+	RakNetGUID GetGUID();
 
 	void SetPosition(CVector3 position);
 	void SetDriver(CNetworkPlayer* driver);

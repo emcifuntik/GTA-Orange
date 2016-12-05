@@ -218,8 +218,9 @@ bool API::SendClientMessage(long playerid, const char * message, unsigned int co
 
 int API::CreateVehicle(long hash, float x, float y, float z, float heading)
 {
-	log << "Not implemented" << std::endl;
-	return 1;
+	//log << "Not implemented" << std::endl;
+	new CNetworkVehicle(hash, x, y, z, heading);
+	return 1; // (new CNetworkVehicle(hash, x, y, z, heading));
 }
 
 bool API::SetVehiclePosition(int vehicleid, float x, float y, float z)

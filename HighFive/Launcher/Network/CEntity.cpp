@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+GetEntityOffsetFunc CEntity::_entityAddressFunc;
+
 Entity CEntity::GetHandle()
 {
 	return Handle;
@@ -127,6 +129,17 @@ void CEntity::SetVisible(bool toggle)
 void CEntity::DisableCollision(const CEntity &entity)
 {
 	ENTITY::SET_ENTITY_NO_COLLISION_ENTITY(Handle, entity.Handle, false);
+}
+
+uintptr_t CEntity::GetAddress()
+{
+	return _entityAddressFunc(Handle);
+}
+
+void CEntity::InitOffsetFunc()
+{
+	uintptr_t address = CMemory::Find("33 FF E8 ? ? ? ? 48 85 C0 74 58")();
+	_entityAddressFunc = reinterpret_cast<GetEntityOffsetFunc>(*reinterpret_cast<int *>(address + 3) + address + 7);
 }
 
 CEntity::CEntity(Entity handle) :Handle(handle)

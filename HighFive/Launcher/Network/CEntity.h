@@ -1,9 +1,12 @@
 #pragma once
 
+typedef uintptr_t(*GetEntityOffsetFunc)(int);
+
 class CEntity
 {
 protected:
 	Entity Handle;
+	static GetEntityOffsetFunc _entityAddressFunc;
 public:
 	Entity GetHandle();
 	CVector3 GetRotationVelocity();
@@ -35,6 +38,10 @@ public:
 	void SetVisible(bool toggle);
 
 	void DisableCollision(const CEntity & entity);
+
+	uintptr_t GetAddress();
+
+	static void InitOffsetFunc();
 	
 	CEntity(Entity handle);
 	~CEntity();

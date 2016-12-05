@@ -106,6 +106,7 @@ void CNetworkConnection::Tick()
 				Plugin::PlayerConnect(player->GetID());
 
 				CNetworkBlip::SendGlobal(packet);
+				CNetworkVehicle::SendGlobal(packet);
 				
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
 				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, false);
@@ -179,7 +180,39 @@ void CNetworkConnection::Tick()
 			}
 			case ID_SEND_VEHICLE_DATA:
 			{
-				server->Send(&bsIn, MEDIUM_PRIORITY, UNRELIABLE_SEQUENCED, 0, packet->systemAddress, true);
+				VehicleData data;
+				bsIn.Read(data);
+
+				if (data.GUID == UNASSIGNED_RAKNET_GUID) continue;
+
+				if(data.hasDriver) data.driver = packet->guid;
+
+				bsOut.Write((unsigned char)ID_SEND_VEHICLE_DATA);
+#if _DEBUG
+				data.vecPos.fX += 4;
+				data.vecPos.fY += 4;
+
+				for each(auto *veh in CNetworkVehicle::All())
+				{
+					if (veh->GetGUID() != data.GUID) {
+						data.GUID = veh->GetGUID();
+						break;
+					}
+				}
+#endif				
+				CNetworkVehicle *veh = CNetworkVehicle::GetByGUID(data.GUID);
+					
+				veh->SetVehicleData(data);
+				veh->GetVehicleData(data);
+
+				bsOut.Write(data);
+
+#if _DEBUG
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true);
+#else
+				server->Send(&bsOut, HIGH_PRIORITY, RELIABLE_ORDERED, 0, packet->systemAddress, true);
+#endif
+				bsOut.Reset();
 				break;
 			}
 			case ID_SEND_TASKS:

@@ -66,6 +66,10 @@ public:
 	bool bTaxiLights : 1;				// vehicle taxi lights
 	bool bSirenState : 1;				// vehicle siren state
 	float iDirtLevel;					// vehicle dirt level
+	bool hasDriver = false;
+	float steering;
+	bool Burnout;
+	float RPM;
 
 	std::string ToString()
 	{

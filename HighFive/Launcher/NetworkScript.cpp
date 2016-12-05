@@ -28,6 +28,7 @@ void NetworkAction()
 			}
 			lastSendTick = GetTickCount64();
 		}
+		CNetworkVehicle::Tick();
 		CNetworkPlayer::PreRender();
 		CNetworkUI::Get()->Render();
 		scriptWait(0);

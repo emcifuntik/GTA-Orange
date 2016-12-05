@@ -175,5 +175,12 @@ namespace FPlayer
 			CNetworkUI::Get()->UnsetScreenInfo();
 		}
 	}
+
+	void CreateVehicle(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		VehicleData data;
+		bitStream->Read(data);
+		CNetworkVehicle::GetByGUID(data.GUID)->SetVehicleData(data, 0);
+	}
 }
 

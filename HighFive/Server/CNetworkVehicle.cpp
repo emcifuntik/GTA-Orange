@@ -19,6 +19,11 @@ CNetworkVehicle::CNetworkVehicle(Hash model, float x, float y, float z, float he
 	Vehicles.push_back(this);
 }
 
+RakNetGUID CNetworkVehicle::GetGUID()
+{
+	return rnGUID;
+}
+
 void CNetworkVehicle::SetPosition(CVector3 position)
 {
 	vecPos = position;
@@ -45,8 +50,9 @@ void CNetworkVehicle::SetVehicleData(const VehicleData & data)
 	vecPos = data.vecPos;
 	vecRot = data.vecRot;
 	usHealth = data.usHealth;
-	hashModel = data.hashModel;
 	vecMoveSpeed = data.vecMoveSpeed;
+	hasDriver = data.hasDriver;
+	driverGUID = data.driver;
 }
 
 void CNetworkVehicle::GetVehicleData(VehicleData & data)
@@ -57,6 +63,8 @@ void CNetworkVehicle::GetVehicleData(VehicleData & data)
 	data.usHealth = usHealth;
 	data.hashModel = hashModel;
 	data.vecMoveSpeed = vecMoveSpeed;
+	data.hasDriver = hasDriver;
+	data.driver = driverGUID;
 }
 
 
@@ -68,4 +76,30 @@ CNetworkVehicle::~CNetworkVehicle()
 std::vector<CNetworkVehicle *> CNetworkVehicle::All()
 {
 	return Vehicles;
+}
+
+CNetworkVehicle * CNetworkVehicle::GetByGUID(RakNet::RakNetGUID GUID)
+{
+	for each (CNetworkVehicle *veh in Vehicles)
+		if (veh->rnGUID == GUID)
+			return veh;
+	return nullptr;
+}
+
+void CNetworkVehicle::SendGlobal(RakNet::Packet *packet)
+{
+	for each(auto *veh in Vehicles)
+	{
+		RakNet::BitStream bsOut;
+
+		VehicleData data;
+		veh->GetVehicleData(data);
+
+		data.RPM = 0.2;
+		data.Burnout = false;
+
+		bsOut.Write(data);
+
+		CRPCPlugin::Get()->Signal("CreateVehicle", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, packet->guid, false, false);
+	}
 }

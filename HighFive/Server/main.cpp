@@ -17,6 +17,17 @@ int main(void)
 	CHTTPServer::Get()->Start(88);
 	CHTTPHandler h_a;
 	CHTTPServer::g_server.addHandler("", h_a);
+
+	new CNetworkVehicle(API::Get()->Hash("t20"), 5, 10, 72, 0);
+	new CNetworkVehicle(API::Get()->Hash("shotaro"), 10, 10, 72, 0);
+	new CNetworkVehicle(API::Get()->Hash("adder"), 15, 10, 72, 0);
+	new CNetworkVehicle(API::Get()->Hash("besra"), 35, 10, 72, 0);
+	new CNetworkVehicle(API::Get()->Hash("swift"), 45, 5, 72, 0);
+	new CNetworkVehicle(API::Get()->Hash("jetmax"), -810, -1500, 5, 0);
+
+	new CNetworkVehicle(API::Get()->Hash("lazer"), -966, -2987, 14, 0);
+	new CNetworkVehicle(API::Get()->Hash("lazer"), -986, -2987, 14, 0);
+	new CNetworkVehicle(API::Get()->Hash("lazer"), -946, -2987, 14, 0);
 	
 	auto netLoop = [=]()
 	{
