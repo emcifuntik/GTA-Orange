@@ -878,6 +878,7 @@ class CEventBeforeLoaded :
 	}
 	bool Action()
 	{
+		UpdateSplash("Hooking launcher", 0.21);
 		// ignore launcher requirement
 		auto mem = CMemory::Find("E8 ? ? ? ? 84 C0 75 ? B2 01 B9 2F A9 C2 F4");
 		mem.put(0xEB90909090909090);
@@ -889,176 +890,235 @@ class CEventBeforeLoaded :
 		}
 		/**((DWORD*)0x142BC84A0) = 0;
 		CMemory::Find("83 3D 21 FC 8C 01 00").nop(19);*/
+		UpdateSplash("Searching patterns.", 0.22);
 
 		mem = CMemory::Find("48 85 C9 0F 84 ? 00 00 00 48 8D 55 A7 E8");
 		auto mem2 = mem + 13;
 		mem2.put(0x01B0i16);
 		mem2.nop(3);
 
+		UpdateSplash("Searching patterns..", 0.23);
 		mem = CMemory::Find("8D 4A 03 E8 ? ? ? ? E8 ? ? ? ? 84 C0 75 1E");
 		(mem + 2).put(0x08i8);
 
+		UpdateSplash("Searching patterns...", 0.24);
 		mem = CMemory::Find("A8 FC 75 06 80 7F 36 04");
 		(mem - 74).retn();
 
+		UpdateSplash("Searching patterns", 0.25);
 		mem = CMemory::Find("E8 ? ? ? ? 8B CB 40 88 2D ? ? ? ?");
 		mem.nop(5);
 
+		UpdateSplash("Searching patterns.", 0.26);
 		mem = CMemory::Find("48 83 EC 28 85 D2 78 71 75 0F");
+		UpdateSplash("Searching patterns..", 0.27);
 		mem2 = CMemory::Find("48 83 EC 28 B9 ? ? ? ? E8 ? ? ? ? B9 ? ? ? ? E8 ? ? ? ? B1 01");
 		(mem + 0x3B).put(DWORD(mem2.getFunc() - mem.getFunc() - 0x3F));
 
+		UpdateSplash("Searching patterns...", 0.28);
 		mem = CMemory::Find("48 89 5C 24 ? 57 48 83 EC 20 8B F9 8B DA");
 		mem.retn();
 
+		UpdateSplash("Searching patterns", 0.29);
 		auto unusedMem = CMemory::Find("48 89 5C 24 08 57 48 83 EC 20 48 8B 05 ? ? ? ? 33 DB 48 85 C0 74 39");
 		auto callToMem = unusedMem();
 		unusedMem.farJmp(OnLookAlive);
+		UpdateSplash("Searching patterns.", 0.30);
 		auto lookFrame = (CMemory::Find("48 81 EC 60 01 00 00 E8 ? ? ? ? 33 F6 48 8D") + 7);
 		auto lookMem = lookFrame();
 		g_origLookAlive = lookFrame.get_call<LookAlive>();
 		(lookFrame + 1).put(DWORD(callToMem - lookMem - 5));
 
+		UpdateSplash("Searching patterns..", 0.31);
 		mem = CMemory::Find("45 33 F6 41 8D 56 27 44 89") - 0x23;
 		HUDInit = InitHUD(mem.get<void>(0));
 
+		UpdateSplash("Searching patterns...", 0.32);
 		mem = CMemory::Find("E8 ? ? ? ? C6 05 ? ? ? ? ? EB 24"); //Esc freeze
 		mem.nop(5);
 
+		UpdateSplash("Searching patterns", 0.33);
 		mem = CMemory::Find("75 05 0F 28 E3 EB 03"); //UI Wheel slowmo
 		mem.nop(2);
+		UpdateSplash("Searching patterns.", 0.34);
 		mem = CMemory::Find("75 0A F3 0F 10 0D ? ? ? ? EB 08 F3 0F 10 0D ? ? ? ? E8 ? ? ? ?"); //UI Wheel slowmo 2
 		mem.nop(2);
 
+		UpdateSplash("Searching patterns..", 0.35);
 		mem = CMemory::Find("85 C0 78 F1 EB 10"); //Show cursor
 		mem.nop(4);
+		UpdateSplash("Searching patterns...", 0.36);
 		mem = CMemory::Find("85 C0 79 F4"); //Show cursor
 		mem.nop(4);
 
+		UpdateSplash("Searching patterns", 0.37);
 		mem = CMemory::Find("40 53 48 83 EC 20 48 83 3D ? ? ? ? ? 0F 85 ? ? ? ? 8B 05 ? ? ? ? 4C 8D 44 24 ? 48 8D 54 24 ? 48 8D 0D ? ? ? ? 89 44 "
 			"24 30 E8 ? ? ? ? 48 63 18 83 FB FF 0F 84 ? ? ? ?"); //Rockstar loading logo
 		mem.retn();
 
+		UpdateSplash("Searching patterns.", 0.38);
 		mem = CMemory::Find("48 89 5C 24 ? 48 89 74 24 ? 55 57 41 54 41 56 41 57 48 8D AC 24 ? ? ? ? 48 81 EC ? ? ? ? 45 8B E0"); //Tooltips
 		mem.retn();
 
+		UpdateSplash("Searching patterns..", 0.39);
 		mem = CMemory::Find("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 48 83 EC 20 33 ED 48 8B D9 40 38 69 1C"); //Social club news
 		mem.retn();
 
+		UpdateSplash("Searching patterns...", 0.40);
 		mem = CMemory::Find("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 56 41 57 48 83 EC 30 8B 05 ? ? ? ? 8B B9 ? ? ? ?"); //Disable wanted generation
 		mem.retn();
 		
+		UpdateSplash("Searching patterns.", 0.41);
 		mem = CMemory::Find("0F 84 ? ? ? ? 44 39 87 ? ? ? ? 0F 8E ? ? ? ?"); //Disable wanted generation 2
 		mem.put(0xE990i16);
 
+		UpdateSplash("Searching patterns..", 0.42);
 		mem = CMemory::Find("E8 ? ? ? ? 8B 0D ? ? ? ? E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 85 C9"); //Intentional crash
 		mem.nop(5);
 
+		UpdateSplash("Searching patterns...", 0.43);
 		mem = CMemory::Find("E8 ? ? ? ? 4C 8B 08 4C 8D 45 ? 48 8D 55 ? 48 8B C8 41 FF 51 60"); //RASH_LOAD_MODELS_TOO_QUICKLY
 		mem.nop(23);
 
+		UpdateSplash("Searching patterns", 0.44);
 		mem = CMemory::Find("48 83 EC 28 E8 ? ? ? ? 48 8B ? ? ? ? ? 4C 8D ? ? ? ? ? 4C 8D ? ? ? ? ? BA 03 00 00 00 E8 ? ? ? ?"); //REATE_NETWORK_EVENT_BINDINGS
 		mem.retn();
 
+		UpdateSplash("Searching patterns.", 0.45);
 		mem = CMemory::Find("40 53 48 83 EC 20 33 DB 8B CB E8 ? ? ? ? 84 C0 75 2C"); //OAD_NEW_GAME
 		mem.retn();
 
+		UpdateSplash("Searching patterns..", 0.46);
 		mem = CMemory::Find("33 C0 0F 57 C0 C7 05 ? ? ? ? ? ? ? ?"); //ESET_VEHICLE_DENSITY_LAST_FRAME
 		mem.retn();
 
+		UpdateSplash("Searching patterns...", 0.47);
 		auto varVehicleDensity = CMemory::Find("C7 05 ? ? ? ? ? ? ? ? C7 05 ? ? ? ? ? ? ? ? 88 05 ? ? ? ? F3 0F 11 05 ? ? ? ?").getOffset(2); //AR_VEHICLE_DENSITY
 		*(uint64_t*)varVehicleDensity = 0;
 
+		UpdateSplash("Searching patterns", 0.48);
 		mem = CMemory::Find("40 53 48 83 EC 20 48 8B D9 48 83 C1 10 E8 ? ? ? ? 48 8B CB 8B D0"); //ET_CLOCK_FORWARD_AFTER_DEATH
 		mem.retn();
 
+		UpdateSplash("Searching patterns.", 0.49);
 		mem = CMemory::Find("E8 ? ? ? ? 41 B8 ? ? ? ? 8B D0 89 05 ? ? ? ? 41 8D 48 FC"); //ISABLE_NORTH_BLIP
 		mem.nop(46);
 
 		//mem = CMemory::Find("83 B9 ? ? ? ? ? 74 24 84 D2"); //ISABLE_AUTOMATIC_ENGINE_STOP
 		//mem.retn();
 
+		UpdateSplash("Searching patterns..", 0.50);
 		mem = CMemory::Find("48 8B C4 48 89 58 08 57 48 83 EC 60 0F 29 70 E8 0F 29 78 D8 44 0F 29 40 ? 48 8B D9 44 0F 29 48 ?"); //ISABLE_VEHICLE_RESET_AT_SET_POSITION
 		mem.retn();
 		
+		UpdateSplash("Searching patterns...", 0.51);
 		mem = CMemory::Find("48 89 5C 24 ? 57 48 83 EC 20 8A 81 ? ? ? ? 8B FA"); //ISABLE_LOADING_MP_DLC_CONTENT
 		mem.retn();
 		
+		UpdateSplash("Searching patterns", 0.52);
 		mem = CMemory::Find("80 3D ? ? ? ? ? 0F 85 ? ? ? ? 48 8B 05 ? ? ? ? 48 8B 08"); //UNTIME_EXECUTABLE_IMPORTS_CHECK
 		mem.retn();
 
+		UpdateSplash("Searching patterns.", 0.53);
 		mem = CMemory::Find("48 89 5C 24 ? 48 89 6C 24 ? 48 89 74 24 ? 57 41 54 41 55 41 56 41 57 48 83 EC 20 E8 ? ? ? ? 45 33 E4"); //ISABLE_POPULATION_VEHICLES_10
 		mem.retn();
 		
+		UpdateSplash("Searching patterns..", 0.54);
 		mem = CMemory::Find("48 8B C4 48 89 58 08 F3 0F 11 50 ?"); //ISABLE_POPULATION_VEHICLES_8
 		mem.retn();
 
+		UpdateSplash("Searching patterns...", 0.55);
 		mem = CMemory::Find("41 FF C0 B8 ? ? ? ? 41 F7 E0"); //ISABLE_POPULATION_VEHICLES_11
 		mem.nop(3);
 
+		UpdateSplash("Searching patterns", 0.56);
 		mem = CMemory::Find("E8 ? ? ? ? 39 05 ? ? ? ? 7D C5"); //ISABLE_POPULATION_VEHICLES_11
 		mem.nop(5);
 		
+		UpdateSplash("Searching patterns.", 0.57);
 		mem = CMemory::Find("48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 55 41 54 41 55 41 56 41 57 48 8D 68 C8 48 81 EC ? ? ? ? 45 33 F6"); //ISABLE_POPULATION_PEDS_1
 		mem.retn();
 
+		UpdateSplash("Searching patterns..", 0.58);
 		mem = CMemory::Find("48 8B C4 48 89 58 18 55 56 57 41 54 41 55 41 56 41 57 48 8D 6C 24 ? 48 81 EC ? ? ? ? 0F 29 70 B8 0F 29 78 A8 44 0F 29 40 ? 44 0F 29 48 ?"); //ISABLE_POPULATION_PEDS_2
 		mem.retn();
 		
+		UpdateSplash("Searching patterns...", 0.59);
 		mem = CMemory::Find("C7 05 ? ? ? ? ? ? ? ? C7 05 ? ? ? ? ? ? ? ? 74 05"); //ISABLE_POPULATION_AMBIENT_PEDS
 		(mem + 6).put(0x0i32);
 		(mem + 16).put(0x0i32);
 
+		UpdateSplash("Searching patterns", 0.60);
 		mem = CMemory::Find("F3 0F 10 05 ? ? ? ? 0F 2F C1 72 08"); //ISABLE_POPULATION_PEDS_4
 		mem.nop(20);
 
+		UpdateSplash("Searching patterns.", 0.61);
 		mem = CMemory::Find("48 89 5C 24 ? 57 48 83 EC 20 48 8B D9 E8 ? ? ? ? 80 A3 ? ? ? ? ? 48 8B BB ? ? ? ?"); //ISABLE_COPS_AND_FIRE_TRUCKS_1
 		mem.retn();
 
+		UpdateSplash("Searching patterns..", 0.62);
 		mem = CMemory::Find("48 83 EC 28 B8 ? ? ? ? 3B C8"); //ISABLE_COPS_AND_FIRE_TRUCKS_2
 		mem.retn();
 		
+		UpdateSplash("Searching patterns...", 0.63);
 		mem = CMemory::Find("40 53 48 83 EC 20 8B 81 ? ? ? ? 48 8B D9 39 81 ? ? ? ?"); //ISABLE_COPS_AND_FIRE_TRUCKS_3
 		mem.retn();
 
 		callToMem = unusedMem();
 		unusedMem.farJmp(gameStateChange_);
+		UpdateSplash("Searching patterns", 0.64);
 		auto gameStateChange = CMemory::Find("E8 ? ? ? ? 84 C0 74 1D E8 ? ? ? ? 0F B6 0D ? ? ? ? BA 01 00 00 00 80 38 00"); // GameStateChange
 		auto gameStateMem = gameStateChange();
 		g_gameStateChange = gameStateChange.get_call<GameStateChange_>();
 		(gameStateChange + 1).put(long(callToMem - gameStateMem - 5));
 
+		UpdateSplash("Searching patterns.", 0.65);
 		CGlobals::Get().ForceCleanupForAllThreadsWithThisName = (ForceCleanupForAllThreadsWithThisName_)
 			CMemory::Find("48 89 5C 24 08 57 48 83 EC 20 8B FA 48 8B D9 E8 ? ? ? ? 41 83 C9 FF")(); //FORCE_CLEANUP_FOR_ALL_THREADS_WITH_THIS_NAME
+		UpdateSplash("Searching patterns..", 0.66);
 		CGlobals::Get().TerminateAllScriptsWithThisName = (TerminateAllScriptsWithThisName_)
 			CMemory::Find("40 53 48 83 EC 20 48 8B D9 E8 ? ? ? ? 48 8B D3 48 8B C8 E8 ? ? ? ? 85 C0 74 08")(); //TerminateAllScriptsWithThisName
+		UpdateSplash("Searching patterns...", 0.67);
 		CGlobals::Get().ShutdownLoadingScreen = (ShutdownLoadingScreen_)
 			CMemory::Find("40 57 48 83 EC 20 8B 05 ? ? ? ? 85 C0 0F 84 ? ? ? ?")(); //ShutdownLoadingScreen
+		UpdateSplash("Searching patterns", 0.68);
 		CGlobals::Get().DoScreenFadeIn = (DoScreenFadeIn_)
 			CMemory::Find("48 83 EC 28 48 8D 54 24 38 C7 44 24 38 00 00 00 FF")(); //DoScreenFadeIn
+		UpdateSplash("Searching patterns.", 0.69);
 		CGlobals::Get().HasScriptLoaded = (HasScriptLoaded_)
 			CMemory::Find("48 83 EC 28 4C 8B C1 48 8D 54 24 38 48 8D 0D ? ? ? ? E8 ? ? ? ? 8B 44 24 38")(); //HasScriptLoaded
 
+		UpdateSplash("Searching patterns..", 0.70);
 		CGlobals::Get().canLangChange = (bool*)((uintptr_t)CMemory::Find("C6 05 ? ? ? ? 01 8B 8F A0 04 00 00").getOffset(2) + 1);
 
+		UpdateSplash("Searching patterns...", 0.71);
 		CGlobals::Get().InitializeOnline = (InitializeOnline_)CMemory::Find("40 53 48 83 EC 50 80 3D ? ? ? ? ? C6 05 ? ? ? ? ?")();
 
+		UpdateSplash("Searching patterns", 0.72);
 		CGlobals::Get().SetMenuState = (SetMenuState_)CMemory::Find("48 83 EC 28 48 8B D1 33 C9 E8 ? ? ? ? 48 8B 0D ? ? ? ? 48 8D 54 24 ? 41 B8 ? ? ? ?")();
 
+		UpdateSplash("Searching patterns.", 0.73);
 		CMemory::Find("48 83 EC 28 33 D2 E8 ? ? ? ? CC").retn();
+		UpdateSplash("Searching patterns..", 0.74);
 		CMemory::Find("48 8B C4 48 89 58 08 48 89 70 10 48 89 78 18 4C 89 60 20 55 41 56 41 57 48 8D A8 ? ? ? ? 48 81 EC ? ? ? ? 0F B7 05 ? ? ? ?").retn();
 		//CMemory::Find("48 89 5C 24 ? 48 89 74 24 ? 57 48 83 EC 20 0F B6 81 ? ? ? ? 48 8D 79 18").retn();
+		UpdateSplash("Searching patterns...", 0.75);
 		CMemory::Find("80 3D ? ? ? ? ? 74 1B 84 DB 74 10 ? ? ? ? ? ? ? ? ? ? ? ? ? ? EB 39").nop(9);
+		UpdateSplash("Searching patterns", 0.76);
 		CMemory::Find("48 89 5C 24 ? 57 48 83 EC 40 33 FF 40 38 3D ? ? ? ?").retn();
+		UpdateSplash("Searching patterns.", 0.77);
 		(CMemory::Find("48 83 64 24 30 00 83 4C 24 28 FF 33 D2 48") - 4).retn();
 
+		UpdateSplash("Searching patterns..", 0.78);
 		mem = CMemory::Find("40 8A 35 ? ? ? ? 84 C0 74 05 45 84 FF"); //HECK_MULTIPLAYER_BYTE_DRAW_MAP_FRAME
 		mem2 = CMemory(mem);
 		mem.nop(7);
 		mem2.put(0xB640i16);
 		mem2.put(0x01i8);
 
+		UpdateSplash("Searching patterns...", 0.79);
 		CGlobals::Get().hudDisabled = (bool*)CMemory::Find("44 88 25 ? ? ? ? 40 88 3D ? ? ? ? 48 8D 05 ? ? ? ? BB ? ? ? ?").getOffset();
+		UpdateSplash("Loaded", 1);
 
 		//CMemory::Find("83 3D ? ? ? ? 01 75 5B 48 8D 15 ? ? ? ?").nop(100);
 		return true;

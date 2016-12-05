@@ -218,3 +218,5 @@ protected:\
 // USAGE: SCRIPT(name, function);
 
 #define TRACE() log_debug << __FILE__ << " -> Line " << __LINE__ << std::endl
+
+void UpdateSplash(std::string text, float progress);

@@ -216,6 +216,11 @@
   <ItemGroup>
     <ResourceCompile Include="Resource.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="D:\Desktop\orange_0000_logopng.bmp" />
+    <Image Include="D:\Desktop\orange_0000_logopng.png" />
+    <Image Include="orange.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

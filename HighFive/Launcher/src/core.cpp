@@ -1,6 +1,11 @@
 #include "stdafx.h"
+#include <gdiplus.h>
+
+#pragma comment(lib, "Gdiplus.lib")
+using namespace Gdiplus;
 
 PELoader loader;
+
 
 extern "C"
 {
@@ -12,6 +17,25 @@ extern "C"
 }
 
 static TCHAR szWindowClass[] = "highfive_app";
+Image* pBitmap = NULL;
+
+
+float loadProgress = 0.0;
+std::string splashText = "Starting launcher";
+HWND splashHwnd = NULL;
+
+void UpdateSplash(std::string text, float progress)
+{
+	splashText = text;
+	loadProgress = progress;
+	::RECT rect;
+	rect.left = 0;
+	rect.top = 200;
+	rect.right = 300;
+	rect.bottom = 226;
+	InvalidateRect(splashHwnd, &rect, false);
+}
+
 
 void InitializeDummies();
 
@@ -294,60 +318,108 @@ LPSTR GetCommandLineAHook()
 	return GetCommandLineA();
 }
 
-int WINAPI WinMain(HINSTANCE hInstance,
-	HINSTANCE hPrevInstance,
-	LPSTR lpCmdLine,
-	int nCmdShow) {
-	
-	if (!_strcmpi(lpCmdLine, "-debug"))
+LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	switch (message)
 	{
-		CGlobals::Get().isDebug = true;
-	}
-	else if (!_strcmpi(lpCmdLine, "-developer"))
+	case WM_COMMAND:
 	{
-		CGlobals::Get().isDeveloper = true;
+		int wmId = LOWORD(wParam);
+		// Разобрать выбор в меню:
+		switch (wmId)
+		{
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
 	}
+	break;
+	case WM_PAINT:
+	{
+		PAINTSTRUCT ps;
+		HDC hdc = BeginPaint(hWnd, &ps);
+		Graphics g(hdc);
+		g.DrawImage(pBitmap, 0, 0);
+		SolidBrush backPen(Gdiplus::Color(255, 192, 0));
+		SolidBrush frontPen(Gdiplus::Color(255, 130, 0));
+		g.FillRectangle(&backPen, 67, 220, 168, 6);
+		g.FillRectangle(&frontPen, 67, 220, (int)round(168 * loadProgress), 6);
+		::RECT rect;
+		rect.left = 0;
+		rect.top = 200;
+		rect.right = 300;
+		rect.bottom = 220;
 
+		HFONT font = CreateFont(18, 0, 0, 0, 300, false, false, false, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Segoe UI");
+		HFONT hFontOld = (HFONT)SelectObject(hdc, font);
+		DrawText(hdc, splashText.c_str(), splashText.length(), &rect, DT_CENTER | DT_VCENTER);
+		SelectObject(hdc, hFontOld);
+		EndPaint(hWnd, &ps);
+	}
+	break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
 
-	Icon = LPARAM(LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1)));
-
-	char _hfPath[MAX_PATH];
-	GetCurrentDirectory(MAX_PATH, _hfPath);
-	CGlobals::Get().highFivePath = std::string(_hfPath);
+ATOM MyRegisterClass(HINSTANCE hInstance)
+{
 	WNDCLASSEX wcex;
-
 	wcex.cbSize = sizeof(WNDCLASSEX);
 	wcex.style = CS_HREDRAW | CS_VREDRAW;
-	//wcex.lpfnWndProc = WndProc;
+	wcex.lpfnWndProc = WndProc2;
 	wcex.cbClsExtra = 0;
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = hInstance;
 	wcex.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
-	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
 	wcex.lpszMenuName = NULL;
 	wcex.lpszClassName = szWindowClass;
-	wcex.hIconSm = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
+	return RegisterClassEx(&wcex);
+}
 
-	if (!RegisterClassEx(&wcex))
+
+ULONG_PTR m_gdiplusToken;
+
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+	Gdiplus::GdiplusStartupInput gdiplusStartupInput;
+	Gdiplus::GdiplusStartup(&m_gdiplusToken, &gdiplusStartupInput, NULL);
+
+	pBitmap = Bitmap::FromResource(hInstance, MAKEINTRESOURCEW(IDB_BITMAP1));
+
+	splashHwnd = CreateWindow(szWindowClass, "", WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT, 0, 300, 300, nullptr, nullptr, hInstance, nullptr);
+	SetWindowLong(splashHwnd, GWL_STYLE, 0);
+
+	if (!splashHwnd)
 	{
-		MessageBox(NULL,
-			"Call to RegisterClassEx failed!",
-			"Fatal error",
-			NULL);
-
-		return 1;
+		return FALSE;
 	}
 
+	ShowWindow(splashHwnd, nCmdShow);
+	UpdateWindow(splashHwnd);
+
+	return TRUE;
+}
+
+void PELoad()
+{
 	InitializeDummies();
 	/*CEF::Window::Init();
 	auto windows = new CEF::Window(
-		"https://google.com", 
-		{ 800, 600 }, 
-		{ 0, 0 }, 
-		true, 
-		true
+	"https://google.com",
+	{ 800, 600 },
+	{ 0, 0 },
+	true,
+	true
 	);*/
+	UpdateSplash("Hooking libraries", 0.05);
 
 	loader.SetLibraryLoader([](const char* libName)
 	{
@@ -357,6 +429,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			CGlobals::Get().isSteam = true;
 		return LoadLibraryA(libName);
 	});
+
+	UpdateSplash("Hooking libraries functions", 0.1);
 
 	loader.SetFunctionResolver([](HMODULE module, const char* functionName) -> LPVOID
 	{
@@ -383,23 +457,23 @@ int WINAPI WinMain(HINSTANCE hInstance,
 #pragma region Steam hook
 		/*else if (!_stricmp(functionName, "SteamAPI_RegisterCallback"))
 		{
-			return SteamAPI_RegisterCallback;
+		return SteamAPI_RegisterCallback;
 		}
 		else if (!_stricmp(functionName, "SteamAPI_UnregisterCallback"))
 		{
-			return SteamAPI_UnregisterCallback;
+		return SteamAPI_UnregisterCallback;
 		}
 		else if (!_stricmp(functionName, "SteamApps"))
 		{
-			return SteamApps;
+		return SteamApps;
 		}
 		else if (!_stricmp(functionName, "SteamUserStats"))
 		{
-			return SteamUserStats;
+		return SteamUserStats;
 		}
 		else if (!_stricmp(functionName, "SteamUtils"))
 		{
-			return SteamUtils;
+		return SteamUtils;
 		}*/
 		else if (!_stricmp(functionName, "SteamFriends"))
 		{
@@ -407,7 +481,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		}
 		/*else if (!_stricmp(functionName, "SteamAPI_Init"))
 		{
-			return SteamAPI_Init;
+		return SteamAPI_Init;
 		}*/
 		else if (!_stricmp(functionName, "SteamAPI_RestartAppIfNecessary"))
 		{
@@ -415,7 +489,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		}
 		/*else if (!_stricmp(functionName, "SteamAPI_RunCallbacks"))
 		{
-			return SteamAPI_RunCallbacks;
+		return SteamAPI_RunCallbacks;
 		}*/
 		else if (!_stricmp(functionName, "SteamUser"))
 		{
@@ -428,6 +502,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 #pragma endregion
 		return (LPVOID)GetProcAddress(module, functionName);
 	});
+
+	UpdateSplash("Trying to find GTA5 folder", 0.15);
 
 	char GamePath[MAX_PATH] = { 0 };
 	bool social = true;
@@ -446,7 +522,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	}
 	else
 		strcpy_s(GamePath, CConfig::Get()->gtaPath.c_str());
-	
+
 	while (1)
 	{
 		SetCurrentDirectory(GamePath);
@@ -457,7 +533,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			if (!fldr.compare(""))
 			{
 				TerminateProcess(GetCurrentProcess(), 0);
-				return 0;
+				return;
 			}
 			strcpy_s(GamePath, MAX_PATH, fldr.c_str());
 			continue;
@@ -497,16 +573,64 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	//	VirtualProtect(func, 1, oldProtect, &oldProtect);
 	//}
-	
+	UpdateSplash("Loading GTA5.exe", 0.20);
+
 	auto b = loader.LoadFile("GTA5.exe");
 	if (b != 0)
 	{
 		MessageBoxA(NULL, "PELoad failed", "PELoad failed", 0);
 		printf_s("PELoad failed");
 		TerminateProcess(GetCurrentProcess(), 0);
-		return 0;
+		return;
 	}
-	
+
 	loader.Run();
-	return 0;
+}
+
+int WINAPI WinMain(HINSTANCE hInstance,
+	HINSTANCE hPrevInstance,
+	LPSTR lpCmdLine,
+	int nCmdShow) {
+	
+	if (!_strcmpi(lpCmdLine, "-debug"))
+	{
+		CGlobals::Get().isDebug = true;
+	}
+	else if (!_strcmpi(lpCmdLine, "-developer"))
+	{
+		CGlobals::Get().isDeveloper = true;
+	}
+
+
+	Icon = LPARAM(LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1)));
+
+	char _hfPath[MAX_PATH];
+	GetCurrentDirectory(MAX_PATH, _hfPath);
+	CGlobals::Get().highFivePath = std::string(_hfPath);
+	
+	std::thread(PELoad).detach();
+
+	MyRegisterClass(hInstance);
+
+	if (!InitInstance(hInstance, nCmdShow))
+	{
+		return FALSE;
+	}
+
+	HACCEL hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDR_ACCELERATOR1));
+
+	MSG msg;
+
+	// Цикл основного сообщения:
+	while (GetMessage(&msg, nullptr, 0, 0))
+	{
+		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
+	Gdiplus::GdiplusShutdown(m_gdiplusToken);
+
+	return (int)msg.wParam;
 };
