@@ -26,6 +26,11 @@ HWND splashHwnd = NULL;
 
 void UpdateSplash(std::string text, float progress)
 {
+	if (progress == 1.0)
+	{
+		SendMessage(splashHwnd, WM_CLOSE, 0, NULL);
+		return;
+	}
 	splashText = text;
 	loadProgress = progress;
 	::RECT rect;
@@ -337,6 +342,7 @@ LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	{
 		PAINTSTRUCT ps;
 		HDC hdc = BeginPaint(hWnd, &ps);
+		SwapBuffers(hdc);
 		Graphics g(hdc);
 		g.DrawImage(pBitmap, 0, 0);
 		SolidBrush backPen(Gdiplus::Color(255, 192, 0));
@@ -353,11 +359,12 @@ LRESULT CALLBACK WndProc2(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		HFONT hFontOld = (HFONT)SelectObject(hdc, font);
 		DrawText(hdc, splashText.c_str(), splashText.length(), &rect, DT_CENTER | DT_VCENTER);
 		SelectObject(hdc, hFontOld);
+		SwapBuffers(hdc);
 		EndPaint(hWnd, &ps);
 	}
 	break;
 	case WM_DESTROY:
-		PostQuitMessage(0);
+		//PostQuitMessage(0);
 		break;
 	default:
 		return DefWindowProc(hWnd, message, wParam, lParam);
