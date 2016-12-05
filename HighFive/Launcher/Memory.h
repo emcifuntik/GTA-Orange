@@ -58,6 +58,9 @@ public:
 	static CMemory& Find(const char* pattern);
 	static bool Check(std::string search, std::string mask, DWORD offset);
 	static void Init();
+
+	static uintptr_t GetPedAddrFunc();
+	static uintptr_t GetEntityAddress(int handle);
 };
 
 template<typename T>

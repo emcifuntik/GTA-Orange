@@ -46,6 +46,9 @@
 #include "D3D11\Include\d3d11.h"
 #include "D3D11\Include\d3dcompiler.h"
 #include "D3D11\Include\dxgi1_2.h"
+#include "D3D11\Include\D3D9Types.h"
+#include "D3D11\Include\D3dx9core.h"
+
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 #pragma endregion

@@ -5,7 +5,6 @@ VehicleFactoryHook* VehicleFactoryHook::singleInstance = nullptr;
 bool SyncTree::initialized = false;
 GetSyncTree_ SyncTree::GetSyncTree;
 
-
 namespace rageGlobals
 {
 	void SetPlayerColor(unsigned char r, unsigned char g, unsigned char b, unsigned char a)

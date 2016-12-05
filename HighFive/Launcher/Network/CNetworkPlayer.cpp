@@ -4,6 +4,8 @@ struct tag_t {
 	bool bVisible;
 	float health, distance;
 	int x, y;
+	float width, height;
+	float k;
 };
 
 tag_t tag;
@@ -145,6 +147,9 @@ void CNetworkPlayer::Spawn(const CVector3& vecPosition)
 #endif
 	pedHandler->Flags |= 1 << 6;
 	ENTITY::SET_ENTITY_PROOFS(Handle, true, true, true, true, true, true, true, true);
+
+	Blip blip = AddBlip();
+	UI::SET_BLIP_AS_SHORT_RANGE(blip, false);
 }
 
 void CNetworkPlayer::SetTargetPosition(const CVector3& vecPosition, unsigned long ulDelay)
@@ -419,7 +424,7 @@ void CNetworkPlayer::BuildTasksQueue()
 	}
 	if (m_Jumping)
 	{
-		TaskJump();
+		if(!IsJumping()) TaskJump();
 	}
 	else if (m_Aiming && !m_Shooting)
 	{
@@ -463,11 +468,10 @@ void CNetworkPlayer::MakeTag()
 	tag.bVisible = false;
 	if (ENTITY::HAS_ENTITY_CLEAR_LOS_TO_ENTITY(CLocalPlayer::Get()->GetHandle(), Handle, 17))
 	{
-		tag.bVisible = true;
 		CVector3 *vecCurPos = &pedHandler->Position;
 		tag.distance = ((*vecCurPos) - CWorld::Get()->CPedPtr->Position).Length();
 
-		if (tag.distance > 100.f)
+		if (tag.distance > 70.f)
 			return;
 
 		tag.health = ((((m_Health - 100.f) < pedHandler->MaxHealth ? (m_Health - 100.f) : pedHandler->MaxHealth)) / (pedHandler->MaxHealth - 100.f));
@@ -475,8 +479,13 @@ void CNetworkPlayer::MakeTag()
 		if (tag.health > 1.f)
 			tag.health = 1.f;
 
+		tag.width = 0.08f * 800;
+		tag.height = 0.012f * 600;
+
+		tag.k = 1.3 - tag.distance / 100;
+
 		CVector3 screenPos;
-		CGraphics::Get()->WorldToScreen(CVector3(vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1f + (tag.distance * 0.04f)), screenPos);
+		CGraphics::Get()->WorldToScreen(CVector3(vecCurPos->fX, vecCurPos->fY, vecCurPos->fZ + 1.1 * tag.k + (tag.distance * 0.04f)), screenPos);
 		auto viewPortGame = GTA::CViewportGame::Get();
 		tag.x = screenPos.fX * viewPortGame->Width;
 		tag.y = screenPos.fY * viewPortGame->Height;
@@ -513,12 +522,14 @@ void CNetworkPlayer::DrawTag()
 	}*/
 	if (tag.bVisible) {
 		const char* _name = m_Name.c_str();
-		ImVec2 textSize = CGlobals::Get().chatFont->CalcTextSizeA(20.f, 1000.f, 1000.f, _name);
-		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 - 1, tag.y - 1), ImColor(0, 0, 0, 255), _name);
-		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 + 1, tag.y + 1), ImColor(0, 0, 0, 255), _name);
-		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 + 1, tag.y - 1), ImColor(0, 0, 0, 255), _name);
-		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2 - 1, tag.y + 1), ImColor(0, 0, 0, 255), _name);
-		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, 20.f, ImVec2(tag.x - textSize.x / 2, tag.y), ImColor(0xFF, 0xFF, 0xFF, 0xFF), _name);
+		float font_size = 20.0f * tag.k;
+		ImVec2 textSize = CGlobals::Get().chatFont->CalcTextSizeA(font_size, 1000.f, 1000.f, _name);
+
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, font_size, ImVec2(tag.x - textSize.x / 2 - 1, tag.y - 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, font_size, ImVec2(tag.x - textSize.x / 2 + 1, tag.y + 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, font_size, ImVec2(tag.x - textSize.x / 2 + 1, tag.y - 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, font_size, ImVec2(tag.x - textSize.x / 2 - 1, tag.y + 1), ImColor(0, 0, 0, 255), _name);
+		ImGui::GetWindowDrawList()->AddText(CGlobals::Get().chatFont, font_size, ImVec2(tag.x - textSize.x / 2, tag.y), ImColor(0xFF, 0xFF, 0xFF, 0xFF), _name);
 
 		color_t bgColor, fgColor;
 
@@ -536,11 +547,11 @@ void CNetworkPlayer::DrawTag()
 		DWORD colorOut = ImColor(bgColor.red, bgColor.green, bgColor.blue, bgColor.alpha);
 		DWORD colorIn = ImColor(fgColor.red, fgColor.green, fgColor.blue, fgColor.alpha);
 
-		float width = 0.08f * 800;
-		float height = 0.012f * 600;
+		float width = tag.width * tag.k;
+		float height = tag.height * tag.k;
 
 		float x = tag.x - (width / 2);
-		float y = tag.y + 24;
+		float y = tag.y + 24 * tag.k;
 
 		ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x - 2, y - 2), ImVec2(x + width + 2, y + height + 2), ImColor(0, 0, 0, 255), 0.f, 15);
 		ImGui::GetWindowDrawList()->AddRectFilled(ImVec2(x, y), ImVec2(x + width, y + height), colorOut, 0.f);

@@ -23,4 +23,6 @@ namespace FPlayer
 	void SetBlipAsShortRange(RakNet::BitStream * bitStream, RakNet::Packet *packet);
 
 	void SetInfoMsg(RakNet::BitStream *bitStream, RakNet::Packet *packet);
+
+	void CreateVehicle(RakNet::BitStream *bitStream, RakNet::Packet *packet);
 }

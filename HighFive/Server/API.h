@@ -33,7 +33,7 @@ public:
 	//TODO
 	//virtual bool PlayerExists(long playerid) = 0;
 	//virtual bool VehicleExists(long playerid) = 0;
-	//virtual int CreateVehicle(long hash, float x, float y, float z, float pitch, float yaw, float roll) = 0;
+	virtual int CreateVehicle(long hash, float x, float y, float z, float heading) = 0;
 	virtual bool SetVehiclePosition(int vehicleid, float x, float y, float z) = 0;
 	virtual CVector3 GetVehiclePosition(int vehicleid) = 0;
 

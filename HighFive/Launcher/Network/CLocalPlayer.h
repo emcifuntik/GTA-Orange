@@ -19,6 +19,7 @@ public:
 	void Connect();
 	void Tick();
 	void GetOnFootSync(OnFootSyncData& onfoot);
+	void GetVehicleSync(VehicleData & vehsync);
 	void SendOnFootData();
 	void SendTasks();
 	void SetMoney(int money);
