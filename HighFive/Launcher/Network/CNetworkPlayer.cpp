@@ -575,6 +575,7 @@ void CNetworkPlayer::SetModel(Hash model)
 	pedHandler = CPed::GetFromScriptID(Handle);
 	log_debug << "pedHandler: 0x" << pedHandler << std::endl;
 
+	PED::SET_PED_DEFAULT_COMPONENT_VARIATION(Handle);
 	STREAMING::SET_MODEL_AS_NO_LONGER_NEEDED(model);
 	AI::TASK_SET_BLOCKING_OF_NON_TEMPORARY_EVENTS(Handle, true);
 	PED::SET_PED_CAN_RAGDOLL_FROM_PLAYER_IMPACT(Handle, false);

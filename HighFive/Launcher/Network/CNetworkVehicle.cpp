@@ -34,7 +34,7 @@ void CNetworkVehicle::UpdateModel()
 	Blip blip = AddBlip();
 	UI::SET_BLIP_AS_SHORT_RANGE(blip, false);
 	UI::SET_BLIP_COLOUR(blip, 0);
-	UI::SET_BLIP_SPRITE(blip, 318);
+	UI::SET_BLIP_SPRITE(blip, 225);
 }
 
 void CNetworkVehicle::UpdateTargetPosition()

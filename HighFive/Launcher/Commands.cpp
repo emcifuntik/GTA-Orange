@@ -70,6 +70,13 @@ int CommandProcessor(std::string command)
 		CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY((char*)(models[std::atoi(params[0].c_str())]));
 		return true;
 	}
+
+	if (!command.compare("/freemode"))
+	{
+		CChat::Get()->AddChatMessage("Changed!", 0xAAAAAAFF);
+		CLocalPlayer::Get()->newModel = GAMEPLAY::GET_HASH_KEY("mp_m_freemode_01");
+		return true;
+	}
 	
 #if _DEBUG
 	if (!command.compare("/model"))
