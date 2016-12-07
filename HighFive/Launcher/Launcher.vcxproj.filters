@@ -441,11 +441,5 @@
     <Image Include="orange.ico">
       <Filter>Resource Files</Filter>
     </Image>
-    <Image Include="D:\Desktop\orange_0000_logopng.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="D:\Desktop\orange_0000_logopng.bmp">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
