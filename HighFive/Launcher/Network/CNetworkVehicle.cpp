@@ -52,7 +52,7 @@ void CNetworkVehicle::UpdateTargetPosition()
 		CVector3 vecCompensation = Math::Lerp(CVector3(), fCurrentAlpha, m_interp.pos.vecError);
 
 		// If we finished compensating the error, finish it for the next pulse
-		if (fAlpha == 1.5f)
+		if (fAlpha == 1.0f)
 			m_interp.pos.ulFinishTime = 0;
 
 		// Get our position
@@ -62,7 +62,7 @@ void CNetworkVehicle::UpdateTargetPosition()
 		CVector3 vecNewPosition = (vecCurrentPosition + vecCompensation);
 
 		// Check if the distance to interpolate is too far
-		if ((vecCurrentPosition - m_interp.pos.vecTarget).Length() > 20)
+		if ((vecCurrentPosition - m_interp.pos.vecTarget).Length() > 10)
 		{
 			// Abort all interpolation
 			m_interp.pos.ulFinishTime = 0;
@@ -130,7 +130,7 @@ void CNetworkVehicle::SetTargetPosition(const CVector3& vecPosition, unsigned lo
 	// Calculate the relative error
 	m_interp.pos.vecError = (vecPosition - vecCurrentPosition);
 
-	// Apply error 
+	// Apply the error over 400ms (i.e. 1/4 per 100ms)
 	m_interp.pos.vecError *= Math::Lerp<const float>(0.25f, Math::UnlerpClamped(100, ulDelay, 400), 1.0f);
 
 	// Get the interpolation interval
@@ -153,8 +153,8 @@ void CNetworkVehicle::SetTargetRotation(const CVector3& vecRotation, unsigned lo
 	// Set the target position
 	m_interp.rot.vecTarget = vecRotation;
 
-	// Get the error
-	m_interp.rot.vecError = Math::GetOffsetDegrees(vecCurrentRotation, vecRotation);
+	// Calculate the relative error
+	m_interp.rot.vecError = (vecRotation - vecCurrentRotation);
 
 	// Get the interpolation interval
 	unsigned long ulTime = timeGetTime();
@@ -171,7 +171,7 @@ void CNetworkVehicle::Interpolate()
 	if (PED::GET_VEHICLE_PED_IS_IN(CLocalPlayer::Get()->GetHandle(), false) != Handle)
 	{
 		//if (!m_Shooting && !m_Aiming)
-		UpdateTargetRotation();
+		//UpdateTargetRotation();
 		UpdateTargetPosition();
 		//SetMovementVelocity(m_vecMove);
 		BuildTasksQueue();
