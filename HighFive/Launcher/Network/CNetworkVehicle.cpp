@@ -81,6 +81,9 @@ void CNetworkVehicle::UpdateTargetRotation()
 		unsigned long ulCurrentTime = timeGetTime();
 		float fAlpha = Math::UnlerpClamped(m_interp.rot.ulStartTime, ulCurrentTime, m_interp.rot.ulFinishTime);
 
+		// Don't let it to overcompensate the error
+		fAlpha = Math::Clamp(0.0f, fAlpha, 1.0f);
+
 		// Get the current error portion to compensate
 		float fCurrentAlpha = (fAlpha - m_interp.rot.fLastAlpha);
 		m_interp.rot.fLastAlpha = fAlpha;
@@ -154,7 +157,7 @@ void CNetworkVehicle::SetTargetRotation(const CVector3& vecRotation, unsigned lo
 	m_interp.rot.vecTarget = vecRotation;
 
 	// Calculate the relative error
-	m_interp.rot.vecError = (vecRotation - vecCurrentRotation);
+	m_interp.rot.vecError = Math::GetOffsetDegrees(vecCurrentRotation, vecRotation);
 
 	// Get the interpolation interval
 	unsigned long ulTime = timeGetTime();
@@ -171,7 +174,7 @@ void CNetworkVehicle::Interpolate()
 	if (PED::GET_VEHICLE_PED_IS_IN(CLocalPlayer::Get()->GetHandle(), false) != Handle)
 	{
 		//if (!m_Shooting && !m_Aiming)
-		//UpdateTargetRotation();
+		UpdateTargetRotation();
 		UpdateTargetPosition();
 		//SetMovementVelocity(m_vecMove);
 		BuildTasksQueue();
