@@ -42,6 +42,8 @@ public:
 	virtual unsigned long CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite) = 0;
 	virtual void SetBlipScale(unsigned long guid, float scale) = 0;
 
+	virtual unsigned long CreateMarkerForAll(float x, float y, float z, float height, float radius) = 0;
+
 	virtual bool SetInfoMsg(long playerid, const char * msg) = 0;
 	virtual bool UnsetInfoMsg(long playerid) = 0;
 

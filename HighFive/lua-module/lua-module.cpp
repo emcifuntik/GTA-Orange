@@ -51,7 +51,8 @@ extern "C"
 
 	EXPORT bool OnPlayerConnect(long playerid)
 	{
-		return SResource::Get()->OnPlayerConnect(playerid);
+		players[playerid].exists = true;
+		return true; //SResource::Get()->OnPlayerConnect(playerid);
 	}
 
 	EXPORT char* OnHTTPRequest(const char* method, const char* url, const char* query, std::string body)
@@ -99,6 +100,11 @@ extern "C"
 	EXPORT bool OnKeyStateChanged(long playerid, int keycode, bool isUp)
 	{
 		return SResource::Get()->OnKeyStateChanged(playerid, keycode, isUp);
+	}
+
+	EXPORT void OnEvent(const char* e, std::vector<MValue> *args)
+	{
+		SResource::Get()->OnEvent(e, args);
 	}
 }
 

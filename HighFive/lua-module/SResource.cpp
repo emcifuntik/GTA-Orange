@@ -3,6 +3,7 @@
 lua_State *m_lua;
 std::function<void()> tick;
 std::function<char*(const char* method, const char* url, const char* query, const char* body)> http;
+std::function<void(const char* e, std::vector<MValue> *args)> onevent;
 SResource *SResource::singleInstance = nullptr;
 
 static const struct luaL_Reg gfunclib[] = {
@@ -12,12 +13,15 @@ static const struct luaL_Reg gfunclib[] = {
 
 static const struct luaL_Reg mfunclib[] = {
 	{ "CreateBlipForAll", lua_CreateBlipForAll },
+	{ "CreateMarkerForAll", lua_CreateMarkerForAll },
+	{ "CreateVehicle", lua_CreateVehicle },
 	{ "GetPlayerCoords", lua_GetPlayerCoords },
 	{ "GetPlayerName", lua_GetPlayerName },
 	{ "PlayerExists", lua_PlayerExists },
 	{ "SetPlayerInfoMsg", lua_SetPlayerInfoMsg },
 	{ "OnTick", lua_tick },
 	{ "OnHTTPReq", lua_HTTPReq },
+	{ "OnEvent", lua_Event },
 	{ "SQLEnv", luaopen_luasql_mysql },
 	{ NULL, NULL }
 };
@@ -113,6 +117,12 @@ void SResource::SetTick(const std::function<void()>& t)
 	tick = t;
 }
 
+void SResource::SetEvent(const std::function<void(const char* e, std::vector<MValue> *args)>& t)
+{
+	onevent = t;
+}
+
+
 bool SResource::OnKeyStateChanged(long playerid, int keycode, bool isUp)
 {
 	lua_getglobal(m_lua, "__OnKeyStateChanged");
@@ -125,6 +135,8 @@ bool SResource::OnKeyStateChanged(long playerid, int keycode, bool isUp)
 
 	return true;
 }
+
+void SResource::OnEvent(const char* e, std::vector<MValue> *args) {	onevent(e, args); }
 
 SResource::~SResource()
 {

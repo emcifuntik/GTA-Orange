@@ -136,8 +136,7 @@ void CNetworkConnection::Tick()
 				if (data.GUID == UNASSIGNED_RAKNET_GUID) continue;
 
 				CNetworkVehicle *remoteVeh = CNetworkVehicle::GetByGUID(data.GUID);
-
-				remoteVeh->SetVehicleData(data, 100);
+				if (remoteVeh) remoteVeh->SetVehicleData(data, 100);
 				break;
 			}
 			case ID_SEND_TASKS:

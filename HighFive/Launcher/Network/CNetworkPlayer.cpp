@@ -219,25 +219,31 @@ void CNetworkPlayer::SetOnFootData(OnFootSyncData data, unsigned long ulDelay)
 		Spawn(data.vecPos);
 		pedJustDead = false;
 	}
-	if (data.hModel != m_Model)
-		SetModel(data.hModel);
-	m_MoveSpeed = data.fMoveSpeed;
-	m_vecMove = data.vecMoveSpeed;
-	m_Jumping = data.bJumping;
-	m_Aiming = data.bAiming;
-	m_Shooting = data.bShooting;
-	m_vecAim = data.vecAim;
-	SetTargetPosition(data.vecPos, ulDelay);
-	if(!m_Aiming && !m_Shooting)
-		SetTargetRotation(data.vecRot, ulDelay);
-	SetArmour(data.usArmour);
-	if(GetCurrentWeapon() != data.ulWeapon)
-		SetCurrentWeapon(data.ulWeapon, true);
-	//SetAmmo(data.ulWeapon, 9999);
-	SetDucking(data.bDuckState);
-	m_Ducking = data.bDuckState;
-	SetMovementVelocity(data.vecMoveSpeed);
-	pedHandler->MoveSpeed = data.fMoveSpeed;
+	m_InVehicle = data.bInVehicle;
+	if (!m_InVehicle)
+	{
+		if (data.hModel != m_Model)
+			SetModel(data.hModel);
+		m_MoveSpeed = data.fMoveSpeed;
+		m_vecMove = data.vecMoveSpeed;
+		m_Jumping = data.bJumping;
+		m_Aiming = data.bAiming;
+		m_Shooting = data.bShooting;
+		m_vecAim = data.vecAim;
+		SetTargetPosition(data.vecPos, ulDelay);
+		if (!m_Aiming && !m_Shooting)
+			SetTargetRotation(data.vecRot, ulDelay);
+		SetArmour(data.usArmour);
+		if (GetCurrentWeapon() != data.ulWeapon)
+			SetCurrentWeapon(data.ulWeapon, true);
+		//SetAmmo(data.ulWeapon, 9999);
+		SetDucking(data.bDuckState);
+		m_Ducking = data.bDuckState;
+		SetMovementVelocity(data.vecMoveSpeed);
+		pedHandler->MoveSpeed = data.fMoveSpeed;
+		m_Entering = false;
+	}
+	else m_Vehicle = data.vehicle;
 }
 
 void CNetworkPlayer::UpdateTargetPosition()
@@ -374,11 +380,14 @@ void CNetworkPlayer::Interpolate()
 		return;
 	}
 		
-	if(!m_Shooting && !m_Aiming)
-		UpdateTargetRotation();
-	UpdateTargetPosition();
-	SetMovementVelocity(m_vecMove);
-	PED::SET_PED_ACCURACY(Handle, 100);
+	if (!m_InVehicle)
+	{
+		if (!m_Shooting && !m_Aiming)
+			UpdateTargetRotation();
+		UpdateTargetPosition();
+		SetMovementVelocity(m_vecMove);
+		PED::SET_PED_ACCURACY(Handle, 100);
+	}
 	BuildTasksQueue();
 }
 
@@ -422,7 +431,20 @@ void CNetworkPlayer::BuildTasksQueue()
 		tasksToIgnore--;
 		return;
 	}
-	if (m_Jumping)
+	if (m_InVehicle && !m_Entering)
+	{
+		CNetworkVehicle *veh = CNetworkVehicle::GetByGUID(m_Vehicle);
+		if (veh)
+		{
+			m_Entering = true;
+			//AI::CLEAR_PED_TASKS(Handle);
+			//AI::CLEAR_PED_SECONDARY_TASK(Handle);
+			//AI::CLEAR_PED_TASKS_IMMEDIATELY(Handle);
+			//AI::TASK_ENTER_VEHICLE(Handle, veh->GetHandle(), -1, -1, 2, 0, 0);
+			PED::SET_PED_INTO_VEHICLE(Handle, veh->GetHandle(), -1);
+		}
+	}
+	else if (m_Jumping)
 	{
 		if(!IsJumping()) TaskJump();
 	}

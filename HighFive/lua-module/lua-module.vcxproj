@@ -181,8 +181,10 @@
     <ClCompile Include="lua-module.cpp" />
     <ClCompile Include="luasql.cpp" />
     <ClCompile Include="lua_Blips.cpp" />
+    <ClCompile Include="lua_Markers.cpp" />
     <ClCompile Include="lua_Player.cpp" />
     <ClCompile Include="lua_Main.cpp" />
+    <ClCompile Include="lua_Vehicle.cpp" />
     <ClCompile Include="SResource.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

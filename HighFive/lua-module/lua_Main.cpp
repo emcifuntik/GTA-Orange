@@ -68,3 +68,56 @@ int lua_HTTPReq(lua_State *L)
 
 	return 0;
 }
+
+int lua_Event(lua_State *L)
+{
+	lua_pushvalue(L, 1);
+
+	int ref = luaL_ref(L, LUA_REGISTRYINDEX);
+
+	SResource::Get()->SetEvent([=](const char* e, std::vector<MValue> *args)
+	{
+		lua_pushvalue(L, 1);
+
+		lua_rawgeti(L, LUA_REGISTRYINDEX, ref);
+
+		lua_pushstring(L, e);
+
+		int count = 1;
+
+		for(int i = 0; i < args->size(); i++)
+		{
+			count++;
+			MValue param = args->at(i);
+			switch (param.type)
+			{
+			case M_BOOL:
+				lua_pushboolean(L, param.getBool());
+				break;
+			case M_INT:
+				lua_pushinteger(L, param.getInt());
+				break;
+			case M_DOUBLE:
+				lua_pushnumber(L, param.getDouble());
+				break;
+			case M_ULONG:
+				lua_pushinteger(L, param.getULong());
+				break;
+			case M_STRING:
+				lua_pushstring(L, param.getString());
+				break;
+			}
+		}
+
+		if (lua_pcall(L, count, 0, 0)) {
+			std::string err = luaL_checkstring(L, -1);
+			lua_pop(L, 1);
+
+			API::Get().Print(err.c_str());
+		}
+
+		lua_pop(L, 1);
+	});
+
+	return 0;
+}

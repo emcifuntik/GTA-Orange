@@ -14,7 +14,7 @@ CNetworkVehicle::CNetworkVehicle():CVehicle(__adder, 0, 0, 0, 0)
 
 void CNetworkVehicle::UpdateModel()
 {
-	log << "Updating model: " << m_Model << " => " << m_futureModel << std::endl;
+	//log << "Updating model: " << m_Model << " => " << m_futureModel << std::endl;
 
 	m_Model = m_futureModel;
 	CVector3 curPos = GetPosition();
@@ -167,10 +167,8 @@ void CNetworkVehicle::Interpolate()
 	if (m_Model != m_futureModel) UpdateModel();
 	if (PED::GET_VEHICLE_PED_IS_IN(CLocalPlayer::Get()->GetHandle(), false) != Handle)
 	{
-		//if (!m_Shooting && !m_Aiming)
-		//UpdateTargetRotation();
+		UpdateTargetRotation();
 		UpdateTargetPosition();
-		//SetMovementVelocity(m_vecMove);
 		BuildTasksQueue();
 	}
 }
@@ -197,9 +195,10 @@ void CNetworkVehicle::BuildTasksQueue()
 					//VEHICLE::SET_VEHICLE_FORWARD_SPEED(Handle, m_MoveSpeed);
 
 				if (m_Burnout) {
-					AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 30, 2000);
+					AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 23, 2000);
+					//AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 30, 2000);
 					//AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 6, 2000);
-				} else if (m_RPM > 0.9 && m_MoveSpeed < 0.025) AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 31, 2000);
+				} //else if (m_RPM > 0.9 && m_MoveSpeed < 0.025) AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 31, 2000);
 			}
 			if (VEHICLE::IS_THIS_MODEL_A_PLANE(m_Model))
 			{
@@ -209,7 +208,8 @@ void CNetworkVehicle::BuildTasksQueue()
 	}
 	else
 	{
-		if (m_hasDriver) AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 1, 2000);
+		ENTITY::SET_ENTITY_VELOCITY(Handle, 0, 0, 0);
+		//if (m_hasDriver) AI::TASK_VEHICLE_TEMP_ACTION(m_Driver, Handle, 1, 2000);
 	}
 	*CMemory(GetAddress()).get<float>(0x8CC) = m_steering / 180 * PI;
 	*CMemory(GetAddress()).get<float>(0x7F4) = m_RPM;
@@ -220,10 +220,11 @@ void CNetworkVehicle::SetVehicleData(VehicleData data, unsigned long ulDelay)
 	m_hasDriver = data.hasDriver;
 	if (m_hasDriver && data.driver != UNASSIGNED_RAKNET_GUID) {
 		m_Driver = CNetworkPlayer::GetByGUID(data.driver)->GetHandle();
+		if (PED::GET_VEHICLE_PED_IS_IN(m_Driver, false) != Handle) m_hasDriver = false;
 		//log << "Driver...." << data.driver.ToString() << std::endl;
 		//AI::TASK_OPEN_VEHICLE_DOOR(m_Driver, Handle, 10, -1, 2.0f);
 		//AI::TASK_ENTER_VEHICLE(m_Driver, Handle, -1, -1, 2.0, 0, 0);
-		PED::SET_PED_INTO_VEHICLE(m_Driver, Handle, -1);
+		//PED::SET_PED_INTO_VEHICLE(m_Driver, Handle, -1);
 	}
 	else m_hasDriver = false;
 
@@ -268,9 +269,7 @@ CNetworkVehicle * CNetworkVehicle::GetByGUID(RakNet::RakNetGUID GUID)
 		if (_vehicle->m_GUID == GUID)
 			return _vehicle;
 	}
-	CNetworkVehicle *_new_vehicle = new CNetworkVehicle();
-	_new_vehicle->m_GUID = GUID;
-	return _new_vehicle;
+	return nullptr;
 }
 
 void CNetworkVehicle::Tick()

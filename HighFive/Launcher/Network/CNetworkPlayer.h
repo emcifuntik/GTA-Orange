@@ -46,6 +46,9 @@ private:
 	bool				m_TagVisible = true;
 	bool				m_Aiming = false;
 	bool				m_Shooting = false;
+	bool				m_InVehicle = false;
+	RakNetGUID			m_Vehicle;
+	bool				m_Entering = false;
 
 	bool				pedJustDead = false;
 	float				m_MoveSpeed;

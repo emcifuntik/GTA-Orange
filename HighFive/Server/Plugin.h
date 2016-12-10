@@ -11,6 +11,7 @@ typedef bool(*OnResourceLoad_)(const char* resource);
 typedef bool(*OnTick_)();
 typedef char*(*OnHTTPRequest_)(const char* method, const char* url, const char* query, std::string body);
 typedef bool(*OnKeyStateChanged_)(long playerid, int keycode, bool keyUp);
+typedef void(*OnEvent_)(const char* e, std::vector<MValue>* args);
 
 class Plugin {
 	static char* HTTPResponse;
@@ -25,6 +26,7 @@ class Plugin {
 	static std::vector<OnTick_> ticks;
 	static std::vector<OnHTTPRequest_> requests;
 	static std::vector<OnKeyStateChanged_> keyEvents;
+	static std::vector<OnEvent_> eHandlers;
 public:
 	static void LoadPlugins();
 	static bool Tick();
@@ -37,4 +39,10 @@ public:
 	static const char * OnHTTPRequest(const char * method, const char * url, const char * query, std::string body);
 	static const char * HTTPRequest(const char * method, const char * url, const char * query, std::string body);
 	static void KeyEvent(RakNet::BitStream * bitStream, RakNet::Packet * packet);
+
+	static void Trigger(const char * e, std::vector<MValue> args);
+	static void Trigger(const char * e);
+	static void Trigger(const char * e, MValue p0);
+	static void Trigger(const char * e, MValue p0, MValue p1);
+	static void Trigger(const char * e, MValue p0, MValue p1, MValue p2);
 };

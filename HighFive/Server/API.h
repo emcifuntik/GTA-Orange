@@ -1,6 +1,100 @@
 #pragma once
 #include <string>
 
+enum {
+	M_STRING,
+	M_INT,
+	M_BOOL,
+	M_DOUBLE,
+	M_ULONG
+};
+
+class MValue
+{
+public:
+	MValue(const char* val) {
+		string_val = _strdup(val);
+		type = M_STRING;
+	};
+	MValue(int val) {
+		int_val = val;
+		type = M_INT;
+	};
+	MValue(bool val) {
+		bool_val = val;
+		type = M_BOOL;
+	}
+	MValue(double val) {
+		double_val = val;
+		type = M_DOUBLE;
+	};
+	MValue(unsigned long val) {
+		ulong_val = val;
+		type = M_ULONG;
+	};
+
+	char* getString() { if (type == M_STRING) return string_val; return NULL; };
+	int getInt() { if (type == M_INT) return int_val; return 0; };
+	bool getBool() { if (type == M_BOOL) return bool_val; return false; };
+	double getDouble() { if (type == M_DOUBLE) return double_val; return 0; };
+	unsigned long getULong() { if (type == M_ULONG) return ulong_val; return 0; };
+
+	bool isString() { return type == M_STRING; };
+	bool isInt() { return type == M_INT; };
+	bool isBool() { return type == M_BOOL; };
+	bool isDouble() { return type == M_DOUBLE; };
+	bool isULong() { return type == M_ULONG; };
+
+	char type;
+private:
+	char* string_val;
+	int int_val;
+	bool bool_val;
+	double double_val;
+	unsigned long ulong_val;
+};
+
+/*class MValue
+{
+public:
+	MValue(const char* val) {
+		char* _val = _strdup(val);
+		ptr = (long long)&val; type = M_STRING;
+	};
+	MValue(int val) {
+		int _val = int(val);
+		ptr = (long long)&val; type = M_INT;
+	};
+	MValue(bool val) {
+		bool _val = bool(val);
+		ptr = (long long)&val; type = M_BOOL;
+	}
+	MValue(double val) {
+		double _val = double(val);
+		ptr = (long long)&val; type = M_DOUBLE;
+	};
+	MValue(unsigned long val) {
+		unsigned long _val = unsigned long(val);
+		ptr = (long long)&val; type = M_ULONG;
+	};
+
+	char* getString() { if (type == M_STRING) return *(char**)ptr; return NULL; };
+	int getInt() { if (type == M_INT) return *(int*)ptr; return 0; };
+	bool getBool() { if (type == M_BOOL) return *(bool*)ptr; return false; };
+	double getDouble() { if (type == M_DOUBLE) return *(double*)ptr; return 0; };
+	unsigned long getULong() { if (type == M_ULONG) return *(unsigned long*)ptr; return 0;  };
+
+	bool isString() { return type == M_STRING; };
+	bool isInt() { return type == M_INT; };
+	bool isBool() { return type == M_BOOL; };
+	bool isDouble() { return type == M_DOUBLE; };
+	bool isULong() { return type == M_ULONG; };
+
+	char type;
+private:
+	long long ptr;
+};*/
+
 class APIBase {
 public:
 	//Player
@@ -40,6 +134,8 @@ public:
 	virtual bool CreatePickup(int type, float x, float y, float z, float scale) = 0;
 	virtual unsigned long CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite) = 0;
 	virtual void SetBlipScale(unsigned long guid, float scale) = 0;
+
+	virtual unsigned long CreateMarkerForAll(float x, float y, float z, float height, float radius) = 0;
 
 	virtual bool SetInfoMsg(long playerid, const char * msg) = 0;
 	virtual bool UnsetInfoMsg(long playerid) = 0;
@@ -85,6 +181,8 @@ public:
 
 	unsigned long CreateBlipForAll(float x, float y, float z, float scale, int color, int sprite);
 	void SetBlipScale(unsigned long guid, float scale);
+
+	unsigned long CreateMarkerForAll(float x, float y, float z, float height, float radius);
 
 	bool SetInfoMsg(long playerid, const char * msg);
 	bool UnsetInfoMsg(long playerid);

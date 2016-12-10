@@ -219,8 +219,8 @@ bool API::SendClientMessage(long playerid, const char * message, unsigned int co
 int API::CreateVehicle(long hash, float x, float y, float z, float heading)
 {
 	//log << "Not implemented" << std::endl;
-	new CNetworkVehicle(hash, x, y, z, heading);
-	return 1; // (new CNetworkVehicle(hash, x, y, z, heading));
+	CNetworkVehicle *veh = new CNetworkVehicle(hash, x, y, z, heading);
+	return RakNetGUID::ToUint32(veh->GetGUID()); // (new CNetworkVehicle(hash, x, y, z, heading));
 }
 
 bool API::SetVehiclePosition(int vehicleid, float x, float y, float z)
@@ -257,6 +257,12 @@ void API::SetBlipScale(unsigned long _guid, float scale)
 	bsOut.Write(guid);
 	bsOut.Write(scale);
 	CRPCPlugin::Get()->Signal("SetBlipScale", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, RakNet::UNASSIGNED_SYSTEM_ADDRESS, true, false);
+}
+
+unsigned long API::CreateMarkerForAll(float x, float y, float z, float height, float radius)
+{
+	CNetworkMarker * marker = new CNetworkMarker(x, y, z, height, radius, -1);
+	return RakNetGUID::ToUint32(marker->rnGUID);
 }
 
 bool API::SetInfoMsg(long playerid, const char* msg)

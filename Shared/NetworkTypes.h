@@ -29,6 +29,8 @@ public:
 	bool bShooting : 1;
 	bool bReloading : 1;
 	CVector3 vecAim;
+	bool bInVehicle;
+	RakNetGUID vehicle;
 
 	std::string ToString()
 	{

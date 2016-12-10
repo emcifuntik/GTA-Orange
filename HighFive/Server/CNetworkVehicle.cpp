@@ -13,10 +13,23 @@ int CNetworkVehicle::Count()
 	return _count;
 }
 
-CNetworkVehicle::CNetworkVehicle(Hash model, float x, float y, float z, float heading):hashModel(model),vecPos(x,y,z)
+CNetworkVehicle::CNetworkVehicle(Hash model, float x, float y, float z, float heading):hashModel(model),vecPos(x,y,z),vecRot(0, 0, heading)
 {
 	rnGUID = RakNetGUID::RakNetGUID(rand());
 	Vehicles.push_back(this);
+
+	RakNet::BitStream bsOut;
+
+	VehicleData data;
+	GetVehicleData(data);
+
+	data.RPM = 0.2;
+	data.Burnout = false;
+	data.steering = 0;
+
+	bsOut.Write(data);
+
+	CRPCPlugin::Get()->Signal("CreateVehicle", &bsOut, HIGH_PRIORITY, RELIABLE_SEQUENCED, 0, UNASSIGNED_RAKNET_GUID, false, false);
 }
 
 RakNetGUID CNetworkVehicle::GetGUID()
@@ -97,6 +110,7 @@ void CNetworkVehicle::SendGlobal(RakNet::Packet *packet)
 
 		data.RPM = 0.2;
 		data.Burnout = false;
+		data.steering = 0;
 
 		bsOut.Write(data);
 

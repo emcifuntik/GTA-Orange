@@ -16,6 +16,7 @@ std::vector<OnPlayerText_> Plugin::playerTexts;
 std::vector<OnTick_> Plugin::ticks;
 std::vector<OnHTTPRequest_> Plugin::requests;
 std::vector<OnKeyStateChanged_> Plugin::keyEvents;
+std::vector<OnEvent_> Plugin::eHandlers;
 
 struct HTTPReq {
 	const char* method;
@@ -90,6 +91,7 @@ void Plugin::LoadPlugins()
 						OnTick_ onTick = (OnTick_)										GetProcAddress(module, "OnTick");
 						OnHTTPRequest_ onRequest = (OnHTTPRequest_)						GetProcAddress(module, "OnHTTPRequest");
 						OnKeyStateChanged_ onKeyStateChanged = (OnKeyStateChanged_)		GetProcAddress(module, "OnKeyStateChanged");
+						OnEvent_ onEvent = (OnEvent_)									GetProcAddress(module, "OnEvent");
 
 						if (onPlayerConnect) playerConnects.push_back(onPlayerConnect);
 						if (onServerCommand) serverCommands.push_back(onServerCommand);
@@ -100,6 +102,7 @@ void Plugin::LoadPlugins()
 						if (onTick) ticks.push_back(onTick);
 						if (onRequest) requests.push_back(onRequest);
 						if (onKeyStateChanged) keyEvents.push_back(onKeyStateChanged);
+						if (onEvent) eHandlers.push_back(onEvent);
 
 						OnResourceTypeRegister_ onResourceTypeRegister = (OnResourceTypeRegister_)GetProcAddress(module, "OnResourceTypeRegister");
 						OnResourceLoad_ loadResource = (OnResourceLoad_)GetProcAddress(module, "OnResourceLoad");
@@ -235,3 +238,49 @@ void Plugin::KeyEvent(RakNet::BitStream *bitStream, RakNet::Packet *packet)
 	for each (auto func in keyEvents)
 		func(CNetworkPlayer::GetByGUID(packet->guid)->GetID(), keycode, keyUp);
 }
+
+void Plugin::Trigger(const char* e, std::vector<MValue> args)
+{
+	for each (auto func in eHandlers)
+	{
+		func(e, &args);
+	}
+}
+
+void Plugin::Trigger(const char* e)
+{
+	std::vector<MValue> params;
+
+	Trigger(e, params);
+}
+
+void Plugin::Trigger(const char* e, MValue p0)
+{
+	std::vector<MValue> params;
+
+	params.push_back(p0);
+
+	Trigger(e, params);
+}
+
+void Plugin::Trigger(const char* e, MValue p0, MValue p1)
+{
+	std::vector<MValue> params;
+
+	params.push_back(p0);
+	params.push_back(p1);
+
+	Trigger(e, params);
+}
+
+void Plugin::Trigger(const char* e, MValue p0, MValue p1, MValue p2)
+{
+	std::vector<MValue> params;
+
+	params.push_back(p0);
+	params.push_back(p1);
+	params.push_back(p2);
+
+	Trigger(e, params);
+}
+

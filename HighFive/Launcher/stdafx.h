@@ -117,6 +117,7 @@ using namespace RakNet;
 #include "Network\CVehicle.h"
 #include "Network\CLocalPlayer.h"
 #include "Network\CNetworkBlip.h"
+#include "Network\CNetworkMarker.h"
 #include "Network\CNetworkPlayer.h"
 #include "Network\CNetworkVehicle.h"
 #include "Network\CNetworkConnection.h"

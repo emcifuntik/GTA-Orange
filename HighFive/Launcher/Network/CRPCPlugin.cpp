@@ -34,6 +34,10 @@ void CRPCPlugin::BindFunctions()
 	rpc.RegisterSlot("SetBlipAsShortRange", FPlayer::SetBlipAsShortRange, 0);
 	#pragma endregion
 
+	#pragma region Marker functions
+	rpc.RegisterSlot("CreateMarker", FPlayer::CreateMarker, 0);
+	#pragma endregion
+
 	#pragma region UI functions
 	rpc.RegisterSlot("SetInfoMsg", FPlayer::SetInfoMsg, 0);
 	#pragma endregion

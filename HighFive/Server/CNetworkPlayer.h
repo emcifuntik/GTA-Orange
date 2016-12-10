@@ -21,6 +21,9 @@ class CNetworkPlayer
 	bool bJumping = false;
 	bool bAiming = false;
 	bool bShooting = false;
+	bool bInVehicle = false;
+	bool bEnteringVeh = false;
+	RakNetGUID vehicle;
 	CVector3 vecPosition;
 	CVector3 vecRotation;
 	CVector3 vecMoveSpeed;

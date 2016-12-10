@@ -66,14 +66,15 @@ using namespace RakNet;
 #include "CRPCPlugin.h"
 
 // API
-#include "Plugin.h"
 #include "API.h"
+#include "Plugin.h"
 
 
 // Network objects
 #include "CNetworkPlayer.h"
 #include "CNetworkVehicle.h"
 #include "CNetworkBlip.h"
+#include "CNetworkMarker.h"
 
 //Http Server
 #include "CivetServer.h"

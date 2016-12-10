@@ -1,5 +1,4 @@
 #include "stdafx.h"
-#include "CNetworkBlip.h"
 
 std::vector<CNetworkBlip *> CNetworkBlip::BlipPool;
 
@@ -12,7 +11,7 @@ CNetworkBlip::CNetworkBlip(RakNetGUID guid, float x, float y, float z, float sca
 	this->sprite = sprite;
 
 	Handle = UI::ADD_BLIP_FOR_COORD(x, y, z);
-	
+
 	SetScale(scale);
 	SetColor(color);
 	SetSprite(sprite);

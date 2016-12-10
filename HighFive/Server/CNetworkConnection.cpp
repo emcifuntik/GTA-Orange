@@ -104,8 +104,10 @@ void CNetworkConnection::Tick()
 				player->SetName(playerName.C_String());
 
 				Plugin::PlayerConnect(player->GetID());
+				Plugin::Trigger("PlayerConnect", (unsigned long)player->GetID());
 
 				CNetworkBlip::SendGlobal(packet);
+				CNetworkMarker::SendGlobal(packet);
 				CNetworkVehicle::SendGlobal(packet);
 				
 				bsOut.Write((unsigned char)ID_CONNECT_TO_SERVER);
@@ -167,6 +169,15 @@ void CNetworkConnection::Tick()
 #if _DEBUG
 				data.vecPos.fX += 1.f;
 				data.vecPos.fY += 1.f;
+
+				if(data.bInVehicle)
+					for each(auto *veh in CNetworkVehicle::All())
+					{
+						if (veh->GetGUID() != data.vehicle) {
+							data.vehicle = veh->GetGUID();
+							break;
+						}
+					}
 #endif
 				bsOut.Write(data);
 #if _DEBUG
@@ -262,6 +273,7 @@ void CNetworkConnection::Tick()
 				UINT playerID = player->GetID();
 
 				Plugin::PlayerDisconnect(playerID, 2);
+				Plugin::Trigger("PlayerConnect", (unsigned long)playerID, 2);
 
 				CNetworkPlayer::Remove(playerID);
 

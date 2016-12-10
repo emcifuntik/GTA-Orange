@@ -25,6 +25,7 @@
     <ClInclude Include="CConsole.h" />
     <ClInclude Include="CNetworkBlip.h" />
     <ClInclude Include="CNetworkConnection.h" />
+    <ClInclude Include="CNetworkMarker.h" />
     <ClInclude Include="CNetworkPlayer.h" />
     <ClInclude Include="CNetworkVehicle.h" />
     <ClInclude Include="CConfig.h" />
@@ -38,6 +39,7 @@
     <ClCompile Include="..\Civet\civetweb.c" />
     <ClCompile Include="API.cpp" />
     <ClCompile Include="CHTTPServer.cpp" />
+    <ClCompile Include="CNetwokMarker.cpp" />
     <ClCompile Include="CNetworkBlip.cpp" />
     <ClCompile Include="CNetworkConnection.cpp" />
     <ClCompile Include="CNetworkPlayer.cpp" />

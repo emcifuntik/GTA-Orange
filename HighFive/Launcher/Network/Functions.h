@@ -25,4 +25,6 @@ namespace FPlayer
 	void SetInfoMsg(RakNet::BitStream *bitStream, RakNet::Packet *packet);
 
 	void CreateVehicle(RakNet::BitStream *bitStream, RakNet::Packet *packet);
+
+	void CreateMarker(RakNet::BitStream *bitStream, RakNet::Packet *packet);
 }

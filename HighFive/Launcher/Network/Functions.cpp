@@ -180,7 +180,27 @@ namespace FPlayer
 	{
 		VehicleData data;
 		bitStream->Read(data);
-		CNetworkVehicle::GetByGUID(data.GUID)->SetVehicleData(data, 0);
+		CNetworkVehicle *veh = new CNetworkVehicle();
+		veh->m_GUID = data.GUID;
+		veh->SetVehicleData(data, 0);
+	}
+
+	void CreateMarker(RakNet::BitStream *bitStream, RakNet::Packet *packet)
+	{
+		RakNet::RakNetGUID guid;
+		float x, y, z, height, radius;
+		int color, sprite;
+
+		bitStream->Read(guid);
+
+		bitStream->Read(x);
+		bitStream->Read(y);
+		bitStream->Read(z);
+
+		bitStream->Read(height);
+		bitStream->Read(radius);
+
+		new CNetworkMarker(guid, x, y, z, height, radius);
 	}
 }
 

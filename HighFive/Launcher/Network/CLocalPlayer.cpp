@@ -56,6 +56,13 @@ void CLocalPlayer::GetOnFootSync(OnFootSyncData& onfoot)
 	onfoot.vecAim = *aimPosition;
 	onfoot.bAiming = (CWorld::Get()->CPedPtr->CPlayerInfoPtr->AimState == 2);
 	onfoot.bShooting = PED::IS_PED_SHOOTING(Handle) ? true : false;
+	if (PED::IS_PED_IN_ANY_VEHICLE(Handle, true)) {
+		onfoot.bInVehicle = true;
+		onfoot.vehicle = CNetworkVehicle::GetByHandle(PED::GET_VEHICLE_PED_IS_TRYING_TO_ENTER(Handle))->m_GUID;
+	}
+	else {
+		onfoot.bInVehicle = false;
+	}
 }
 
 void CLocalPlayer::GetVehicleSync(VehicleData& vehsync)
@@ -69,13 +76,13 @@ void CLocalPlayer::GetVehicleSync(VehicleData& vehsync)
 	vehsync.hasDriver = true;
 	vehsync.GUID = veh->m_GUID;
 	CVector3 pos = veh->GetPosition();
-	pos.fZ -= 0.01;
+	pos.fZ -= 0.02;
 	vehsync.vecPos = pos;
 	vehsync.vecRot = veh->GetRotation();
 	vehsync.vecMoveSpeed = veh->GetMovementVelocity();
 
 	vehsync.RPM = *CMemory(veh->GetAddress()).get<float>(0x7F4);
-	vehsync.Burnout = VEHICLE::IS_VEHICLE_IN_BURNOUT(veh->GetHandle());
+	vehsync.Burnout = VEHICLE::IS_VEHICLE_IN_BURNOUT(veh->GetHandle()) != 0;
 
 	if (VEHICLE::IS_THIS_MODEL_A_CAR(veh->GetModel()) || VEHICLE::IS_THIS_MODEL_A_BIKE(veh->GetModel()) || VEHICLE::IS_THIS_MODEL_A_QUADBIKE(veh->GetModel()))
 		vehsync.steering = (*CMemory(veh->GetAddress()).get<float>(0x8CC)) * (180.0 / PI);

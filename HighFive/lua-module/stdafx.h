@@ -59,37 +59,6 @@ struct Player
 {
 	bool exists = false;
 	CVector3 pos;
-	std::map<char*, Meta> metadata;
-};
-
-enum {
-	M_STRING,
-	M_INT,
-	M_BOOL,
-	M_DOUBLE
-};
-
-class MValue
-{
-public:
-	MValue(const char* val) { ptr = (long long)&val; type = M_STRING; };
-	MValue(int val) { ptr = (long long)&val; type = M_INT; };
-	MValue(bool val) { ptr = (long long)&val; type = M_BOOL; }
-	MValue(double val) { ptr = (long long)&val; type = M_DOUBLE; };
-
-	char* getString() { if (type == M_STRING) return *(char**)ptr; return NULL; };
-	int getInt() { if (type == M_INT) return *(int*)ptr; return 0; };
-	int getBool() { if (type == M_BOOL) return *(bool*)ptr; return false; };
-	double getDouble() { if (type == M_DOUBLE) return *(double*)ptr; return 0; };
-
-	bool isString() { return type == M_STRING; };
-	bool isInt() { return type == M_INT; };
-	bool isBool() { return type == M_BOOL; };
-	bool isDouble() { return type == M_DOUBLE; };
-
-	char type;
-private:
-	long long ptr;
 };
 
 extern Player players[256];

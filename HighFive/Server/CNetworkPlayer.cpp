@@ -75,6 +75,8 @@ void CNetworkPlayer::SetOnFootData(const OnFootSyncData& data)
 	vecAim = data.vecAim;
 	bAiming = data.bAiming;
 	bShooting = data.bShooting;
+	bInVehicle = data.bInVehicle;
+	vehicle = data.vehicle;
 }
 
 void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
@@ -94,6 +96,13 @@ void CNetworkPlayer::GetOnFootData(OnFootSyncData& data)
 	data.vecAim = vecAim;
 	data.bAiming = bAiming;
 	data.bShooting = bShooting;
+	data.bInVehicle = bInVehicle;
+	data.vehicle = vehicle;
+	if (!bInVehicle) bEnteringVeh = false;
+	else if (!bEnteringVeh) {
+		Plugin::Trigger("EnterVehicle", (unsigned long)GetID(), RakNetGUID::ToUint32(vehicle));
+		bEnteringVeh = true;
+	}
 }
 
 void CNetworkPlayer::SetPosition(const CVector3 & position)

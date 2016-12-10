@@ -40,6 +40,9 @@
     <ClInclude Include="CHTTPServer.h">
       <Filter>Header Files\Network</Filter>
     </ClInclude>
+    <ClInclude Include="CNetworkMarker.h">
+      <Filter>Header Files\Network</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -79,6 +82,9 @@
       <Filter>Source Files\Net</Filter>
     </ClCompile>
     <ClCompile Include="..\Civet\CivetServer.cpp">
+      <Filter>Source Files\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="CNetwokMarker.cpp">
       <Filter>Source Files\Net</Filter>
     </ClCompile>
   </ItemGroup>
